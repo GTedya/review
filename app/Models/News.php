@@ -36,6 +36,7 @@ class News extends Model implements HasMedia
         'content',
         'start_date',
         'end_date',
+        'meta',
     ];
 
     protected $casts = [
