@@ -33,6 +33,7 @@ class Page extends Model implements HasMedia
         'title',
         'slug',
         'content',
+        'meta',
     ];
 
     protected $casts = [

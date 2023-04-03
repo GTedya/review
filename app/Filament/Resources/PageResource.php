@@ -102,7 +102,7 @@ class PageResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('title')->label('Название')->sortable()->searchable(),
-                TextColumn::make('end_date')->label('Дата конца')->sortable(),
+                TextColumn::make('created_at')->label('Дата создания')->sortable(),
                 SpatieMediaLibraryImageColumn::make('media')->label('Изображение')->collection('image'),
             ])
             ->filters([
