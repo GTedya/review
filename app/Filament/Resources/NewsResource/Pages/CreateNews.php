@@ -11,6 +11,6 @@ class CreateNews extends CreateRecord
 
     public function getTitle(): string
     {
-        return 'Создание новости';
+        return 'Создать новость';
     }
 }

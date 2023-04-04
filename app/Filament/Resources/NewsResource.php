@@ -44,7 +44,8 @@ class NewsResource extends Resource
                             ->afterStateUpdated(static::getNameChangedCallback()),
 
                         TextInput::make('slug')
-                            ->label('Ссылка')
+                            ->label('Slug')
+                            ->unique(ignoreRecord: true)
                             ->required(),
                     ]),
 

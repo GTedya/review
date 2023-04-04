@@ -21,7 +21,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property ?Carbon $end_date
  * @property ?Carbon $created_at
  * @property ?Carbon $updated_at
- * @property ?Json $meta
+ * @property ?array $meta
  * @property Collection<File> $files
  * @property ?Media $media
  */
@@ -36,6 +36,7 @@ class News extends Model implements HasMedia
         'content',
         'start_date',
         'end_date',
+        'created_at',
         'meta',
     ];
 
