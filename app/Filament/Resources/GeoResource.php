@@ -26,7 +26,7 @@ class GeoResource extends Resource
         return $form
             ->schema([
                 Grid::make()->columnSpan(2)->schema([
-                    TextInput::make('title')
+                    TextInput::make('name')
                         ->label('Название')
                         ->required()
                 ])
