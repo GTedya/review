@@ -12,6 +12,6 @@ class CreatePage extends CreateRecord
 
     public function getTitle(): string
     {
-        return 'Создание страницы';
+        return 'Создать страницу';
     }
 }
