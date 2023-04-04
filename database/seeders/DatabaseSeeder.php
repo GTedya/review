@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // Необходимые сидеры
             UserSeeder::class,
+            StatusSeeder::class,
         ]);
     }
 }

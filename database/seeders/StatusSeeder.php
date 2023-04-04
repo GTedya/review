@@ -20,7 +20,7 @@ class StatusSeeder extends Seeder
             ],
             [
                 'id' => 2,
-                'name' => 'В рассмотрении',
+                'name' => 'На рассмотрении',
             ],
             [
                 'id' => 3,
