@@ -11,6 +11,6 @@ class CreateGeo extends CreateRecord
 
     public function getTitle(): string
     {
-        return 'Создать ГЕО';
+        return 'Создать область';
     }
 }

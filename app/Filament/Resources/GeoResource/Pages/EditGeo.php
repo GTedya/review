@@ -19,6 +19,6 @@ class EditGeo extends EditRecord
 
     public function getTitle(): string
     {
-        return 'Редактирование ГЕО';
+        return 'Редактирование области';
     }
 }
