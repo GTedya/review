@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @property string $password
      * @property ?Carbon $created_at
      * @property ?Carbon $updated_at
-     * @property Collection <Order> $orders
+     * @property Collection<Order> $orders
      *
      */
     protected $fillable = [
