@@ -64,7 +64,7 @@ class OrderResource extends Resource
                 ]),
 
                 Grid::make()->columnSpan(1)->schema([
-                    Section::make('Данные пользователя')->columns(1)->schema([
+                    Card::make()->schema([
                         TextInput::make('user_id')
                             ->label('Пользователь')
                             ->numeric()
@@ -73,6 +73,11 @@ class OrderResource extends Resource
                         Select::make('geo_id')
                             ->label('Область')
                             ->relationship('geo', 'name'),
+
+                        DateTimePicker::make('created_at')
+                            ->label('Дата создания')
+                            ->default('now')
+                            ->displayFormat('Y-m-d H:i:s'),
                     ]),
 
                     Section::make('Дополнительная информация')->columns(1)->schema([
@@ -96,7 +101,7 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')->label('ФИО')->sortable()->searchable(),
+                TextColumn::make('fio')->label('ФИО')->sortable()->searchable(),
                 TextColumn::make('end_date')->label('Дата окончания')->sortable(),
                 TextColumn::make('geo.name')->label('Область')
                     ->searchable(query: function (Builder $query, string $search) {

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -20,14 +21,13 @@ class User extends Authenticatable
      * @property string $password
      * @property ?Carbon $created_at
      * @property ?Carbon $updated_at
-     * @property Order $orders
+     * @property Collection <Order> $orders
      *
      */
     protected $fillable = [
         'name',
         'email',
         'password',
-        'created_at',
     ];
 
     /**

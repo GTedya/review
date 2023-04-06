@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 /**
  * @property int $id
  * @property int $user_id
+ * @property ?int $geo_id
+ * @property int $status_id
  * @property ?string $inn
  * @property ?string $org_name
  * @property ?string $admin_comment
@@ -21,7 +23,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property ?Carbon $created_at
  * @property ?Carbon $updated_at
  * @property User $user
- * @property Geo $geo
+ * @property ?Geo $geo
  * @property Collection<File> $files
  * @property Status $status
  */
