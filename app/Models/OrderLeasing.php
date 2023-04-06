@@ -7,6 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int $id
+ * @property ?int $order_id
+ * @property ?float $advance
+ * @property ?int $months
+ * @property ?string $current_lessors
+ * @property ?string $user_comment
+ * @property ?Order $order
+ * @property ?OrderLeasingVehicle $vehicles
+ */
 class OrderLeasing extends Model
 {
     use HasFactory;

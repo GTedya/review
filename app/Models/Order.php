@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
@@ -56,6 +57,11 @@ class Order extends Model
     public function geo(): BelongsTo
     {
         return $this->belongsTo(Geo::class, 'geo_id');
+    }
+
+    public function leasing(): HasOne
+    {
+        return $this->hasOne(OrderLeasing::class);
     }
 
     public function files(): MorphMany

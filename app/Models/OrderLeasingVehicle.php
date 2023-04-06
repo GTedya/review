@@ -6,6 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property ?int $order_leasing_id
+ * @property ?int $vehicle_type_id
+ * @property ?string $vehicle_brand
+ * @property ?string $vehicle_model
+ * @property ?string $vehicle_state
+ * @property ?int $vehicle_count
+ * @property ?VehicleType $type
+ */
 class OrderLeasingVehicle extends Model
 {
     use HasFactory;
@@ -21,13 +31,8 @@ class OrderLeasingVehicle extends Model
         'vehicle_state',
     ];
 
-    public function vehicles(): BelongsTo
+    public function type(): BelongsTo
     {
-        return $this->belongsTo(VehicleType::class, 'id', 'vehicle_type_id');
-    }
-
-    public function orderLeasings(): BelongsTo
-    {
-        return $this->belongsTo(OrderLeasing::class, 'id', 'order_leasing_id');
+        return $this->belongsTo(VehicleType::class, 'vehicle_type_id');
     }
 }
