@@ -19,6 +19,6 @@ class EditOrder extends EditRecord
 
     public function getTitle(): string
     {
-        return 'Редактирование заказ';
+        return 'Редактирование заказа';
     }
 }
