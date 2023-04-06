@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\GeoResource\Pages;
 use App\Models\Geo;
+use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
@@ -25,10 +26,12 @@ class GeoResource extends Resource
     {
         return $form
             ->schema([
-                Grid::make()->columnSpan(2)->schema([
-                    TextInput::make('name')
-                        ->label('Название')
-                        ->required()
+                Grid::make()->columns(1)->schema([
+                    Card::make()->schema([
+                        TextInput::make('name')
+                            ->label('Название')
+                            ->required(),
+                    ]),
                 ])
             ]);
     }
