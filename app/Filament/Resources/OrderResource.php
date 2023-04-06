@@ -9,6 +9,7 @@ use App\Utilities\Helpers;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -93,7 +94,28 @@ class OrderResource extends Resource
                     ]),
                 ]),
 
+                Section::make('Лизинг')->relationship('leasing')
+                    ->schema([
+                        TextInput::make('advance')->label('Аванс')->numeric()->nullable(),
+                        TextInput::make('current_lessors')->label('Текущие лизингодатели')->nullable(),
+                        TextInput::make('months')->label('Срок лизинга')->numeric()->nullable(),
+                        TinyEditor::make('user_comment')->label('Комментарий пользователя')->nullable(),
 
+                        Repeater::make('vehicles')
+                            ->label('Транспортные средства')
+                            ->createItemButtonLabel('Добавить')
+                            ->relationship('vehicles')
+                            ->schema([
+                                Select::make('type')->label('Выберите тип ТС')
+                                    ->relationship('type', 'name')
+                                    ->nullable(),
+                                TextInput::make('vehicle_brand')->label('Марка ТС')->nullable(),
+                                TextInput::make('vehicle_model')->label('Модель ТС')->nullable(),
+                                TextInput::make('vehicle_count')->label('Количество')->numeric()->nullable(),
+                                TextInput::make('vehicle_state')->label('Состояние ТС')->nullable(),
+                            ])
+                    ])
+                    ->collapsible()
             ]);
     }
 
