@@ -21,8 +21,7 @@ return new class extends Migration {
             $table->foreignId('vehicle_type_id')
                 ->nullable()
                 ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
 
             $table->string('vehicle_brand')->nullable();
             $table->string('vehicle_model')->nullable();

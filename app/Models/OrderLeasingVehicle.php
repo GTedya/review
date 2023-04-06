@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
- * @property ?int $order_leasing_id
+ * @property int $order_leasing_id
  * @property ?int $vehicle_type_id
  * @property ?string $vehicle_brand
  * @property ?string $vehicle_model

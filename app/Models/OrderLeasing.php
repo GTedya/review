@@ -6,16 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Ramsey\Collection\Collection;
 
 /**
  * @property int $id
- * @property ?int $order_id
+ * @property int $order_id
  * @property ?float $advance
  * @property ?int $months
  * @property ?string $current_lessors
  * @property ?string $user_comment
- * @property ?Order $order
- * @property ?OrderLeasingVehicle $vehicles
+ * @property Order $order
+ * @property Collection<OrderLeasingVehicle> $vehicles
  */
 class OrderLeasing extends Model
 {
