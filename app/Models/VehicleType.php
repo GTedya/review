@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property int $id
- * @property ?VehicleType $parents
+ * @property ?int $parent_id
+ * @property ?VehicleType $parent
  * @property string $name
  */
 class VehicleType extends Model
@@ -22,7 +23,7 @@ class VehicleType extends Model
         'parent_id',
     ];
 
-    public function parents(): HasOne
+    public function parent(): HasOne
     {
         return $this->hasOne(VehicleType::class, 'id', 'parent_id');
     }

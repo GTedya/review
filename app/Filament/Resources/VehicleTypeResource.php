@@ -32,22 +32,18 @@ class VehicleTypeResource extends Resource
                 Grid::make()->columnSpan(2)->schema([
 
                     Card::make()->schema([
-                        Grid::make()->schema([
-                            TextInput::make('name')
-                                ->label('Название')
-                                ->required(),
-                        ]),
+                        TextInput::make('name')
+                            ->label('Название')
+                            ->required(),
                     ]),
                 ]),
 
                 Grid::make()->columnSpan(1)->schema([
-                    Section::make('Интервал')->columns(1)->schema([
-                        Select::make('parent_id')
-                            ->label('Родительский тип')
-                            ->options(function (?VehicleType $record) {
-                                return VehicleType::where('id', '!=', $record?->id)->get()->pluck('name', 'id');
-                            })
-                    ]),
+                    Select::make('parent_id')
+                        ->label('Родительский тип')
+                        ->options(function (?VehicleType $record) {
+                            return VehicleType::where('id', '!=', $record?->id)->get()->pluck('name', 'id');
+                        })
                 ]),
             ]);
     }
@@ -57,7 +53,7 @@ class VehicleTypeResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')->label('Название')->sortable()->searchable(),
-                TextColumn::make('parents.name')->label('Родительский тип')->sortable()->searchable(),
+                TextColumn::make('parent.name')->label('Родительский тип')->sortable()->searchable(),
             ])
             ->filters([
                 //
