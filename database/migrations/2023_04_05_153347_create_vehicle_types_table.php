@@ -19,6 +19,7 @@ return new class extends Migration {
                 ->onDelete('set null');
 
             $table->string('name');
+            $table->softDeletes();
         });
     }
 
