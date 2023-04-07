@@ -61,6 +61,48 @@ class OrderResource extends Resource
                             ->required(),
 
                         TinyEditor::make('admin_comment')->label('Коментарий администратора'),
+
+                        Section::make('Лизинг')->relationship('leasing')
+                            ->schema([
+                                TextInput::make('advance')->label('Аванс')->numeric()->nullable(),
+                                TextInput::make('current_lessors')->label('Текущие лизингодатели')->nullable(),
+                                TextInput::make('months')->label('Срок лизинга')->numeric()->nullable(),
+                                TinyEditor::make('user_comment')->label('Комментарий пользователя')->nullable(),
+
+                                Repeater::make('vehicles')
+                                    ->visibleOn('edit')
+                                    ->label('Транспортные средства')
+                                    ->createItemButtonLabel('Добавить')
+                                    ->relationship('vehicles')
+                                    ->schema([
+                                        Select::make('type')->label('Выберите тип ТС')
+                                            ->relationship('type', 'name')
+                                            ->nullable(),
+                                        TextInput::make('vehicle_brand')->label('Марка ТС')->nullable(),
+                                        TextInput::make('vehicle_model')->label('Модель ТС')->nullable(),
+                                        TextInput::make('vehicle_count')->label('Количество')->numeric()->nullable(),
+                                        TextInput::make('vehicle_state')->label('Состояние ТС')->nullable(),
+                                    ])
+                            ])
+                            ->collapsed(),
+
+                        Section::make('Дилер')->relationship('dealer')
+                            ->schema([
+                                Repeater::make('vehicles')
+                                    ->visibleOn('edit')
+                                    ->label('Транспортные средства')
+                                    ->createItemButtonLabel('Добавить')
+                                    ->relationship('vehicles')
+                                    ->schema([
+                                        Select::make('type')->label('Выберите тип ТС')
+                                            ->relationship('type', 'name')
+                                            ->nullable(),
+                                        TextInput::make('vehicle_brand')->label('Марка ТС')->nullable(),
+                                        TextInput::make('vehicle_model')->label('Модель ТС')->nullable(),
+                                        TextInput::make('vehicle_count')->label('Количество')->numeric()->nullable(),
+                                    ])
+                            ])
+                            ->collapsed(),
                     ]),
                 ]),
 
@@ -94,28 +136,7 @@ class OrderResource extends Resource
                     ]),
                 ]),
 
-                Section::make('Лизинг')->relationship('leasing')
-                    ->schema([
-                        TextInput::make('advance')->label('Аванс')->numeric()->nullable(),
-                        TextInput::make('current_lessors')->label('Текущие лизингодатели')->nullable(),
-                        TextInput::make('months')->label('Срок лизинга')->numeric()->nullable(),
-                        TinyEditor::make('user_comment')->label('Комментарий пользователя')->nullable(),
 
-                        Repeater::make('vehicles')
-                            ->label('Транспортные средства')
-                            ->createItemButtonLabel('Добавить')
-                            ->relationship('vehicles')
-                            ->schema([
-                                Select::make('type')->label('Выберите тип ТС')
-                                    ->relationship('type', 'name')
-                                    ->nullable(),
-                                TextInput::make('vehicle_brand')->label('Марка ТС')->nullable(),
-                                TextInput::make('vehicle_model')->label('Модель ТС')->nullable(),
-                                TextInput::make('vehicle_count')->label('Количество')->numeric()->nullable(),
-                                TextInput::make('vehicle_state')->label('Состояние ТС')->nullable(),
-                            ])
-                    ])
-                    ->collapsible()
             ]);
     }
 
@@ -130,7 +151,7 @@ class OrderResource extends Resource
                         $query->whereHas('geo', fn(Builder $q) => $q->withTrashed()->where('name', 'like', "%$search%")
                         );
                     })
-                    ->getStateUsing(fn(Order $record) => $record->geo()->withTrashed()->first()->name),
+                    ->getStateUsing(fn(Order $record) => $record->geo()->withTrashed()->first()->name ?? ''),
                 TextColumn::make('created_at')->label('Дата создания заказа')->sortable(),
             ])
             ->filters([
