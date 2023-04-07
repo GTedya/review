@@ -65,6 +65,9 @@ class RolesAndPermissionsSeeder extends Seeder
         /** @var Role $leasing */
         $leasing = Role::create(['name' => 'leasing']);
 
+        /** @var Role $client */
+        $client = Role::create(['name' => 'client']);
+
         $geosCRUD = [
             'view geos',
             'create geos',
