@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             // Необходимые сидеры
             UserSeeder::class,
             StatusSeeder::class,
+            RolesAndPermissionsSeeder::class,
         ]);
     }
 }
