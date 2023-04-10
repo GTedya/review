@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
@@ -23,12 +24,12 @@ class VehicleType extends Model
         'parent_id',
     ];
 
-    public function parent()
+    public function parent(): HasOne
     {
-        return $this->belongsTo(VehicleType::class, 'parent_id');
+        return $this->HasOne(VehicleType::class, 'parent_id');
     }
 
-    public function children()
+    public function children(): HasMany
     {
         return $this->hasMany(VehicleType::class, 'parent_id');
     }
