@@ -3,11 +3,9 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\VehicleTypeResource\Pages;
-use App\Filament\Resources\VehicleTypeResource\RelationManagers;
 use App\Models\VehicleType;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
@@ -42,7 +40,9 @@ class VehicleTypeResource extends Resource
                     Select::make('parent_id')
                         ->label('Родительский тип')
                         ->options(function (?VehicleType $record) {
-                            return VehicleType::where('id', '!=', $record?->id)->get()->pluck('name', 'id');
+                            /** @var ?VehicleType $type */
+                            $type = VehicleType::where('id', '!=', $record?->id);
+                            return $type->where('parent_id', '!=', $record?->id)->get()->pluck('name', 'id');
                         })
                 ]),
             ]);
