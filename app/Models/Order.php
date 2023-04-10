@@ -25,6 +25,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property ?Carbon $updated_at
  * @property User $user
  * @property ?Geo $geo
+ * @property ?OrderLeasing $leasing
+ * @property ?OrderDealer $dealer
  * @property Collection<File> $files
  * @property Status $status
  */
@@ -62,6 +64,11 @@ class Order extends Model
     public function leasing(): HasOne
     {
         return $this->hasOne(OrderLeasing::class);
+    }
+
+    public function dealer(): HasOne
+    {
+        return $this->hasOne(OrderDealer::class);
     }
 
     public function files(): MorphMany
