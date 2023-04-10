@@ -3,8 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderResource\Pages;
-use App\Filament\Resources\OrderResource\RelationManagers;
+use App\Models\Geo;
 use App\Models\Order;
+use App\Models\OrderLeasingVehicle;
+use App\Models\VehicleType;
 use App\Utilities\Helpers;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DateTimePicker;
@@ -73,7 +75,12 @@ class OrderResource extends Resource
 
                         Select::make('geo_id')
                             ->label('Область')
-                            ->relationship('geo', 'name'),
+                            ->relationship('geo', 'name', function (Builder $query, ?Order $record) {
+                                $query->withTrashed()->where('deleted_at', null)->orWhere('id', $record->geo_id);
+                            })
+                            ->getOptionLabelFromRecordUsing(function (?Geo $record) {
+                                return $record->trashed() ? "{$record->name} (область удалена)" : $record->name;
+                            }),
 
                         DateTimePicker::make('created_at')
                             ->label('Дата создания')
@@ -106,9 +113,23 @@ class OrderResource extends Resource
                             ->createItemButtonLabel('Добавить')
                             ->relationship('vehicles')
                             ->schema([
-                                Select::make('type')->label('Выберите тип ТС')
-                                    ->relationship('type', 'name')
-                                    ->nullable(),
+                                Select::make('type')
+                                    ->label('Выберите тип ТС')
+                                    ->relationship(
+                                        'type',
+                                        'name',
+                                        function (Builder $query, ?OrderLeasingVehicle $record) {
+                                            $query->withTrashed()
+                                                ->where('deleted_at', null)
+                                                ->orWhere('id', $record?->vehicle_type_id);
+                                        }
+                                    )
+                                    ->getOptionLabelFromRecordUsing(function (VehicleType $record) {
+                                        return $record->trashed() ? "{$record->name} (Тип ТС удален)" : $record->name;
+                                    })
+                                    ->afterStateHydrated(function (?OrderLeasingVehicle $record, $set) {
+                                        $set('type', $record?->order_leasing_id);
+                                    }),
                                 TextInput::make('vehicle_brand')->label('Марка ТС')->nullable(),
                                 TextInput::make('vehicle_model')->label('Модель ТС')->nullable(),
                                 TextInput::make('vehicle_count')->label('Количество')->numeric()->nullable(),
