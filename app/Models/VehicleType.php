@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property ?int $parent_id
  * @property ?VehicleType $parent
  * @property string $name
+ * @property ?Carbon $deleted_at
  */
 class VehicleType extends Model
 {
