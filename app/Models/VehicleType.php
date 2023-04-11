@@ -26,7 +26,7 @@ class VehicleType extends Model
 
     public function parent(): HasOne
     {
-        return $this->HasOne(VehicleType::class, 'parent_id');
+        return $this->hasOne(VehicleType::class, 'parent_id');
     }
 
     public function children(): HasMany
