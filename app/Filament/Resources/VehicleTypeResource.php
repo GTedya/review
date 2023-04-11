@@ -3,11 +3,9 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\VehicleTypeResource\Pages;
-use App\Filament\Resources\VehicleTypeResource\RelationManagers;
 use App\Models\VehicleType;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
@@ -42,9 +40,22 @@ class VehicleTypeResource extends Resource
                     Select::make('parent_id')
                         ->label('Родительский тип')
                         ->options(function (?VehicleType $record) {
-                            return VehicleType::where('id', '!=', $record?->id)->get()->pluck('name', 'id');
+                            if ($record !== null) {
+                                $ids = array_reduce(
+                                    $record->children()->with(static::recursiveWith())->get()->toArray(),
+                                    static::recursiveReduce(),
+                                    [],
+                                );
+
+                                $ids[] = $record->id;
+                            }
+
+                            return VehicleType::whereNotIn('id', $ids ?? [])
+                                ->get()
+                                ->pluck('name', 'id');
                         })
                 ]),
+
             ]);
     }
 
@@ -80,5 +91,23 @@ class VehicleTypeResource extends Resource
             'create' => Pages\CreateVehicleType::route('/create'),
             'edit' => Pages\EditVehicleType::route('/{record}/edit'),
         ];
+    }
+
+    private static function recursiveWith(): array
+    {
+        return [
+            'children' => function ($query) {
+                $query->with(static::recursiveWith());
+            }
+        ];
+    }
+
+    private static function recursiveReduce()
+    {
+        return function ($result, $item) {
+            $result[] = $item['id'];
+            $reduced = array_reduce($item['children'], static::recursiveReduce(), []);
+            return array_merge($result, $reduced);
+        };
     }
 }
