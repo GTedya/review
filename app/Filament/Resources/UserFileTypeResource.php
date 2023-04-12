@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserFileTypesResource\Pages;
-use App\Models\UserFileTypes;
+use App\Filament\Resources\UserFileTypeResource\Pages;
+use App\Models\UserFileType;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
@@ -13,9 +13,9 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 
-class UserFileTypesResource extends Resource
+class UserFileTypeResource extends Resource
 {
-    protected static ?string $model = UserFileTypes::class;
+    protected static ?string $model = UserFileType::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
@@ -64,9 +64,9 @@ class UserFileTypesResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUserFileTypes::route('/'),
-            'create' => Pages\CreateUserFileTypes::route('/create'),
-            'edit' => Pages\EditUserFileTypes::route('/{record}/edit'),
+            'index' => Pages\ListUserFileType::route('/'),
+            'create' => Pages\CreateUserFileType::route('/create'),
+            'edit' => Pages\EditUserFileType::route('/{record}/edit'),
         ];
     }
 }
