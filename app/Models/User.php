@@ -6,6 +6,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -24,6 +25,7 @@ class User extends Authenticatable implements FilamentUser
      * @property ?Carbon $created_at
      * @property ?Carbon $updated_at
      * @property Collection<Order> $orders
+     * @property ?Order $banOrders
      *
      */
     protected $fillable = [
@@ -59,5 +61,10 @@ class User extends Authenticatable implements FilamentUser
     public function orders(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function banOrders(): BelongsToMany
+    {
+        return $this->belongsToMany(Order::class, 'manager_order_bans', 'user_id', 'order_id');
     }
 }

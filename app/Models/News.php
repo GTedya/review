@@ -23,7 +23,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property ?Carbon $updated_at
  * @property ?array $meta
  * @property Collection<File> $files
- * @property ?Media $media
  */
 class News extends Model implements HasMedia
 {

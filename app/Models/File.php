@@ -11,7 +11,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * @property int $id
  * @property string $text
- * @property ?Media $media
  */
 class File extends Model implements HasMedia
 {

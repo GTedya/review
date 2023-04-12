@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
@@ -20,7 +19,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property ?Carbon $updated_at
  * @property ?array $meta
  * @property Collection<File> $files
- * @property ?Media $media
  */
 class Page extends Model implements HasMedia
 {

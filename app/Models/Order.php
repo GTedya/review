@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
@@ -29,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property ?OrderDealer $dealer
  * @property Collection<File> $files
  * @property Status $status
+ * @property ?User $banUsers
  */
 class Order extends Model
 {
@@ -74,5 +76,10 @@ class Order extends Model
     public function files(): MorphMany
     {
         return $this->morphMany(File::class, 'fileable',);
+    }
+
+    public function banUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'manager_order_bans', 'order_id', 'user_id');
     }
 }

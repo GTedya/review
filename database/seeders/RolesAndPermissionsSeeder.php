@@ -59,11 +59,11 @@ class RolesAndPermissionsSeeder extends Seeder
         /** @var Role $admin */
         $admin = Role::create(['name' => 'admin']);
 
-        /** @var Role $dealer */
-        $dealer = Role::create(['name' => 'dealer']);
+        /** @var Role $dealer_manager */
+        $dealer_manager = Role::create(['name' => 'dealer_manager']);
 
-        /** @var Role $leasing */
-        $leasing = Role::create(['name' => 'leasing']);
+        /** @var Role $leasing_manager */
+        $leasing_manager = Role::create(['name' => 'leasing_manager']);
 
         /** @var Role $client */
         $client = Role::create(['name' => 'client']);
@@ -131,5 +131,13 @@ class RolesAndPermissionsSeeder extends Seeder
         /** @var User $user */
         $user = User::where('id', 1)->first();
         $user->assignRole($admin);
+
+        /** @var User $user */
+        $user = User::where('id', 2)->first();
+        $user->assignRole($dealer_manager);
+
+        /** @var User $user */
+        $user = User::where('id', 3)->first();
+        $user->assignRole($leasing_manager);
     }
 }

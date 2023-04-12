@@ -40,6 +40,15 @@ class UserSeeder extends Seeder
                 'created_at' => $dateTime,
                 'updated_at' => $dateTime,
             ],
+            [
+                'id' => 4,
+                'name' => 'client',
+                'email' => 'client@client.dev',
+                'password' => Hash::make('client%dev'),
+                'created_at' => $dateTime,
+                'updated_at' => $dateTime,
+            ],
+
         ];
 
         DB::table('users')->insert($inserts);

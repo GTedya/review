@@ -6,6 +6,7 @@ use App\Filament\Resources\OrderResource\Pages;
 use App\Models\Geo;
 use App\Models\Order;
 use App\Models\OrderLeasingVehicle;
+use App\Models\User;
 use App\Models\VehicleType;
 use App\Utilities\Helpers;
 use Filament\Forms\Components\Card;
@@ -21,6 +22,7 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class OrderResource extends Resource
@@ -155,6 +157,18 @@ class OrderResource extends Resource
                         DateTimePicker::make('end_date')
                             ->label('Дата окончания')
                             ->displayFormat('Y-m-d H:i:s'),
+
+                        Select::make('user_ban')
+                            ->label('Пользователь ')
+                            ->multiple()
+                            ->relationship('banUsers', 'name')
+                            ->options(function () {
+                                /** @var ?User $user */
+                                $users = User::where('id', '!=', Auth::id());
+                                return $users->whereHas('roles', function ($q) {
+                                    $q->where('name', 'dealer_manager')->orWhere('name', 'leasing_manager');
+                                })->get()->pluck('name', 'id');
+                            }),
                     ]),
                 ]),
             ]);
