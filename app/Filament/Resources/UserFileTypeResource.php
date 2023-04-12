@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserFileTypesResource\Pages;
+use App\Filament\Resources\UserFileTypeResource\Pages;
 use App\Models\UserFileType;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
