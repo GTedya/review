@@ -2,12 +2,12 @@
 
 namespace App\Filament\Resources\UserFileTypesResource\Pages;
 
-use App\Filament\Resources\UserFileTypesResource;
+use App\Filament\Resources\UserFileTypeResource;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateUserFileTypes extends CreateRecord
+class CreateUserFileType extends CreateRecord
 {
-    protected static string $resource = UserFileTypesResource::class;
+    protected static string $resource = UserFileTypeResource::class;
 
     public function getTitle(): string
     {

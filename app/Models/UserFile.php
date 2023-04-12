@@ -11,7 +11,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * @property int $id
  * @property int $type_id
- * @property UserFileTypes $type
+ * @property UserFileType $type
  */
 class UserFile extends Model implements HasMedia
 {
@@ -25,6 +25,6 @@ class UserFile extends Model implements HasMedia
 
     public function type(): BelongsTo
     {
-        return $this->belongsTo(UserFileTypes::class);
+        return $this->belongsTo(UserFileType::class);
     }
 }

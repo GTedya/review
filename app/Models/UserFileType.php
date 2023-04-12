@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $name
  */
-class UserFileTypes extends Model
+class UserFileType extends Model
 {
     use HasFactory;
 

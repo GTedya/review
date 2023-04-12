@@ -2,13 +2,13 @@
 
 namespace App\Filament\Resources\UserFileTypesResource\Pages;
 
-use App\Filament\Resources\UserFileTypesResource;
+use App\Filament\Resources\UserFileTypeResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
 
-class ListUserFileTypes extends ListRecords
+class ListUserFileType extends ListRecords
 {
-    protected static string $resource = UserFileTypesResource::class;
+    protected static string $resource = UserFileTypeResource::class;
 
     protected function getActions(): array
     {
