@@ -147,7 +147,7 @@ class OrderResource extends Resource
                             ->displayFormat('Y-m-d H:i:s'),
                     ]),
 
-                    Section::make('Дополнительная информация')->columns(1)->schema([
+                    Card::make()->columns(1)->schema([
                         Select::make('status')
                             ->label('Статус')
                             ->relationship('status', 'name')
@@ -159,15 +159,14 @@ class OrderResource extends Resource
                             ->displayFormat('Y-m-d H:i:s'),
 
                         Select::make('user_ban')
-                            ->label('Пользователь ')
+                            ->label('Заблокировать доступ')
                             ->multiple()
-                            ->relationship('banUsers', 'name')
-                            ->options(function () {
-                                /** @var ?User $user */
-                                $users = User::where('id', '!=', Auth::id());
-                                return $users->whereHas('roles', function ($q) {
+                            ->searchable()
+                            ->preload()
+                            ->relationship('banUsers', 'name', function (Builder $query) {
+                                $query->where('id', '!=', Auth::id())->whereHas('roles', function ($q) {
                                     $q->where('name', 'dealer_manager')->orWhere('name', 'leasing_manager');
-                                })->get()->pluck('name', 'id');
+                                });
                             }),
                     ]),
                 ]),
