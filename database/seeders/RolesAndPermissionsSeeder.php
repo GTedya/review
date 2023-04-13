@@ -139,5 +139,9 @@ class RolesAndPermissionsSeeder extends Seeder
         /** @var User $user */
         $user = User::where('id', 3)->first();
         $user->assignRole($leasing_manager);
+
+        /** @var User $user */
+        $user = User::where('id', 4)->first();
+        $user->assignRole($client);
     }
 }

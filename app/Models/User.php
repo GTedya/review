@@ -15,7 +15,10 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens;
+    use HasFactory;
+    use HasRoles;
+    use Notifiable;
 
     /**
      * @property int $id
@@ -24,6 +27,7 @@ class User extends Authenticatable implements FilamentUser
      * @property string $password
      * @property ?Carbon $created_at
      * @property ?Carbon $updated_at
+     * @property ?string $remember_token
      * @property Collection<Order> $orders
      * @property ?Order $banOrders
      *
