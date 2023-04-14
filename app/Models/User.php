@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -64,9 +63,9 @@ class User extends Authenticatable implements FilamentUser
         return $this->can('view admin panel');
     }
 
-    public function orders(): BelongsTo
+    public function orders(): HasMany
     {
-        return $this->belongsTo(Order::class);
+        return $this->hasMany(Order::class);
     }
 
     public function banOrders(): BelongsToMany

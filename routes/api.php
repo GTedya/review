@@ -18,5 +18,9 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/user', [UserController::class, 'info']);
+
+    Route::group(['prefix' => '/client', 'middleware' => 'role:client'], function () {
+        Route::get('/info', [UserController::class, 'info']);
+        Route::get('/orders', [UserController::class, 'orders']);
+    });
 });
