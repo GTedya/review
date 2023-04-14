@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Client\AuthController;
 use App\Http\Controllers\Client\UserController;
+use App\Http\Controllers\Client\NewsController;
 use App\Http\Controllers\Manager\OrderController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,14 +19,16 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/news', [NewsController::class, 'pagination']);
+
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::group(['prefix' => '/client', 'middleware' => 'role:client'], function () {
+    Route::middleware('role:client')->prefix('client')->group(function () {
         Route::get('/info', [UserController::class, 'info']);
         Route::get('/orders', [UserController::class, 'orders']);
     });
 
-    Route::group(['prefix' => '/manager', 'middleware' => 'role:dealer_manager|leasing_manager'], function () {
+    Route::middleware('role:dealer_manager|leasing_manager')->prefix('manager')->group(function () {
         Route::get('/orders', [OrderController::class, 'orders']);
     });
 });
