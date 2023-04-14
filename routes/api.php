@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Client\AuthController;
 use App\Http\Controllers\Client\UserController;
+use App\Http\Controllers\Manager\OrderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,5 +23,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::group(['prefix' => '/client', 'middleware' => 'role:client'], function () {
         Route::get('/info', [UserController::class, 'info']);
         Route::get('/orders', [UserController::class, 'orders']);
+    });
+
+    Route::group(['prefix' => '/manager', 'middleware' => 'role:dealer_manager|leasing_manager'], function () {
+        Route::get('/orders', [OrderController::class, 'orders']);
     });
 });
