@@ -15,11 +15,13 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  */
 class UserFile extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory;
+    use InteractsWithMedia;
 
     public $timestamps = false;
 
     protected $fillable = [
+        'user_id',
         'type_id'
     ];
 
