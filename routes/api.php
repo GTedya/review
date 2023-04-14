@@ -19,7 +19,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::group(['prefix' => '/user'], function () {
+    Route::group(['prefix' => '/client', 'middleware' => 'role:client'], function () {
         Route::get('/info', [UserController::class, 'info']);
         Route::get('/orders', [UserController::class, 'orders']);
     });

@@ -31,6 +31,6 @@ class UserController extends Controller
         $user = Auth::user();
 
         $orders = $this->userRepo->getOrders($user);
-        return response()->json(['orders' => $orders]);
+        return response()->json(['success' => true, 'orders' => $orders]);
     }
 }
