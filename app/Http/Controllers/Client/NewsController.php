@@ -16,6 +16,6 @@ class NewsController extends Controller
 
     public function pagination()
     {
-        return response()->json(['news' => $this->newsRepo->pagination()]);
+        return response()->json(['success' => true ,'news' => $this->newsRepo->pagination()]);
     }
 }
