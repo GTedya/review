@@ -6,7 +6,6 @@ use App\Filament\Resources\OrderResource\Pages;
 use App\Models\Geo;
 use App\Models\Order;
 use App\Models\OrderLeasingVehicle;
-use App\Models\User;
 use App\Models\VehicleType;
 use App\Utilities\Helpers;
 use Filament\Forms\Components\Card;
@@ -68,7 +67,12 @@ class OrderResource extends Resource
 
                         Section::make('Лизинг')->relationship('leasing')
                             ->schema([
-                                TextInput::make('advance')->label('Аванс')->numeric()->nullable(),
+                                TextInput::make('advance')->label('Аванс')->numeric()->required(function ($get) {
+                                    return filled($get('current_lessors'))
+                                        || filled($get('months'))
+                                        || filled($get('user_comment'))
+                                        || filled($get('vehicles'));
+                                }),
                                 TextInput::make('current_lessors')->label('Текущие лизингодатели')->nullable(),
                                 TextInput::make('months')->label('Срок лизинга')->numeric()->nullable(),
                                 TinyEditor::make('user_comment')->label('Комментарий пользователя')->nullable(),
@@ -80,6 +84,7 @@ class OrderResource extends Resource
                                     ->relationship('vehicles')
                                     ->schema([
                                         Select::make('type')
+                                            ->required()
                                             ->label('Выберите тип ТС')
                                             ->relationship(
                                                 'type',
@@ -115,7 +120,7 @@ class OrderResource extends Resource
                                     ->schema([
                                         Select::make('type')->label('Выберите тип ТС')
                                             ->relationship('type', 'name')
-                                            ->nullable(),
+                                            ->required(),
                                         TextInput::make('vehicle_brand')->label('Марка ТС')->nullable(),
                                         TextInput::make('vehicle_model')->label('Модель ТС')->nullable(),
                                         TextInput::make('vehicle_count')->label('Количество')->numeric()->nullable(),
