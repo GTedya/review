@@ -24,6 +24,7 @@ class User extends Authenticatable implements FilamentUser
      * @property int $id
      * @property string $name
      * @property string $email
+     * @property string $phone
      * @property string $password
      * @property ?Carbon $created_at
      * @property ?Carbon $updated_at
@@ -35,6 +36,7 @@ class User extends Authenticatable implements FilamentUser
      */
     protected $fillable = [
         'name',
+        'phone',
         'email',
         'password',
     ];
