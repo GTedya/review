@@ -11,13 +11,17 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, HasMedia
 {
     use HasApiTokens;
     use HasFactory;
     use HasRoles;
+    use InteractsWithMedia;
     use Notifiable;
 
     /**
@@ -31,8 +35,8 @@ class User extends Authenticatable implements FilamentUser
      * @property ?string $remember_token
      * @property Collection<Order> $orders
      * @property Collection $userFiles
+     * @property Media $logo
      * @property ?Order $banOrders
-     *
      */
     protected $fillable = [
         'name',
@@ -78,5 +82,11 @@ class User extends Authenticatable implements FilamentUser
     public function files(): HasMany
     {
         return $this->hasMany(UserFile::class);
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('logo')
+            ->singleFile();
     }
 }
