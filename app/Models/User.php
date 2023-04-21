@@ -24,6 +24,13 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     use InteractsWithMedia;
     use Notifiable;
 
+    public const ROLE_NAMES = [
+        'admin' => 'Администратор',
+        'leasing_manager' => 'Менеджер Лизинга',
+        'dealer_manager' => 'Менеджер Дилера',
+        'client' => 'Клиент',
+    ];
+
     /**
      * @property int $id
      * @property string $name

@@ -2,12 +2,16 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\DealerManagerResource\Pages;
+use App\Filament\Resources\DealerManagerResource\RelationManagers;
+use App\Models\DealerManager;
 use App\Models\User;
 use App\Utilities\Helpers;
+use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -15,20 +19,22 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
-class UserResource extends Resource
+class DealerManagerResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $slug = 'dealer_managers';
 
-    protected static ?string $modelLabel = 'Пользователь';
-    protected static ?string $pluralModelLabel = 'Пользователи';
+    protected static ?string $modelLabel = 'Менеджер Дилера';
+    protected static ?string $pluralModelLabel = 'Менеджеры Дилера';
+    protected static ?string $navigationIcon = 'heroicon-o-collection';
 
     public static function form(Form $form): Form
     {
@@ -64,35 +70,20 @@ class UserResource extends Resource
             ]),
 
             Grid::make()->columnSpan(1)->schema([
-                Card::make()->schema([
-                    Select::make('role')
-                        ->label('Роль пользователя')
-                        ->reactive()
-                        ->options(function () {
-                            return Role::query()->get()->pluck('name', 'id')->map(fn($name) => User::ROLE_NAMES[$name]);
-                        })
-                        ->saveRelationshipsUsing(function (User $record, $state) {
-                            $record->roles()->sync($state);
-                        })
+                    Hidden::make('role')
+                        ->saveRelationshipsUsing(function (User $record) {
+                            $record->roles()->sync([2]);
+                        }),
 
-                        ->afterStateHydrated(function (?User $record, $set) {
-                            $set('role', $record?->roles()->first()?->id);
-                        })
-                        ->required(),
-
-                    Fieldset::make('Лого')->schema([
+                    Card::make()->schema([
                         SpatieMediaLibraryFileUpload::make('logo')
                             ->image()
                             ->enableOpen()
-                            ->disableLabel()
+                            ->label('Лого')
                             ->directory('form-tmp')
                             ->collection('logo')
-                            ->panelLayout('integrated'),
-                    ])->visible(function ($get) {
-                        return ($get('role') == '2') || ($get('role') == '3');
-                    }),
+                    ]),
                 ]),
-            ]),
 
         ]);
     }
@@ -103,7 +94,7 @@ class UserResource extends Resource
             ->columns([
                 TextColumn::make('name')->label('Имя')->sortable()->searchable(),
                 TextColumn::make('email')->label('Email')->searchable(),
-                TextColumn::make('roles.name')->label('Роль')->sortable(),
+                TextColumn::make('phone')->label('Номер телефона')->sortable(),
                 TextColumn::make('created_at')->label('Создан')->sortable(),
             ])
             ->filters([
@@ -127,14 +118,17 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => Pages\ListDealerManagers::route('/'),
+            'create' => Pages\CreateDealerManager::route('/create'),
+            'edit' => Pages\EditDealerManager::route('/{record}/edit'),
         ];
     }
 
     public static function getEloquentQuery(): Builder
     {
-        return User::where('id', '!=', Auth::id());
+        $users = User::where('id', '!=', Auth::id());
+        return $users->whereHas('roles', function ($query) {
+            $query->where('name', 'dealer_manager');
+        });
     }
 }
