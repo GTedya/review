@@ -34,7 +34,6 @@ class User extends Authenticatable implements FilamentUser, HasMedia
      * @property ?string $remember_token
      * @property Collection<Order> $orders
      * @property Collection $userFiles
-     * @property Media $logo
      * @property ?Order $banOrders
      */
     protected $fillable = [
