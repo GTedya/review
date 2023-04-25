@@ -3,6 +3,7 @@
 use App\Http\Controllers\Client\AuthController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Client\NewsController;
+use App\Http\Controllers\Manager\ManagerController;
 use App\Http\Controllers\Manager\OrderController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,5 +31,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('role:dealer_manager|leasing_manager')->prefix('manager')->group(function () {
         Route::get('/orders', [OrderController::class, 'orders']);
+        Route::post('/logo', [ManagerController::class, 'logoAdd']);
     });
 });
