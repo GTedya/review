@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
             [
                 'id' => 1,
                 'name' => 'admin',
+                'phone' => '88888888881',
                 'email' => 'admin@admin.dev',
                 'password' => Hash::make('admin%dev'),
                 'created_at' => $dateTime,
@@ -27,6 +28,7 @@ class UserSeeder extends Seeder
             [
                 'id' => 2,
                 'name' => 'dealer',
+                'phone' => '88888888882',
                 'email' => 'dealer@dealer.dev',
                 'password' => Hash::make('dealer%dev'),
                 'created_at' => $dateTime,
@@ -35,6 +37,7 @@ class UserSeeder extends Seeder
             [
                 'id' => 3,
                 'name' => 'leasing',
+                'phone' => '88888888883',
                 'email' => 'leasing@leasing.dev',
                 'password' => Hash::make('leasing%dev'),
                 'created_at' => $dateTime,
@@ -43,6 +46,7 @@ class UserSeeder extends Seeder
             [
                 'id' => 4,
                 'name' => 'client',
+                'phone' => '88888888884',
                 'email' => 'client@client.dev',
                 'password' => Hash::make('client%dev'),
                 'created_at' => $dateTime,
