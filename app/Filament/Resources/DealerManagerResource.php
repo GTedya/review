@@ -3,16 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\DealerManagerResource\Pages;
-use App\Filament\Resources\DealerManagerResource\RelationManagers;
-use App\Models\DealerManager;
 use App\Models\User;
 use App\Utilities\Helpers;
-use Filament\Forms;
 use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
@@ -21,10 +16,8 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 
 class DealerManagerResource extends Resource
 {
@@ -70,20 +63,20 @@ class DealerManagerResource extends Resource
             ]),
 
             Grid::make()->columnSpan(1)->schema([
-                    Hidden::make('role')
-                        ->saveRelationshipsUsing(function (User $record) {
-                            $record->roles()->sync([2]);
-                        }),
+                Hidden::make('role')
+                    ->saveRelationshipsUsing(function (User $record) {
+                        $record->roles()->sync([2]);
+                    }),
 
-                    Card::make()->schema([
-                        SpatieMediaLibraryFileUpload::make('logo')
-                            ->image()
-                            ->enableOpen()
-                            ->label('Лого')
-                            ->directory('form-tmp')
-                            ->collection('logo')
-                    ]),
+                Card::make()->schema([
+                    SpatieMediaLibraryFileUpload::make('logo')
+                        ->image()
+                        ->enableOpen()
+                        ->label('Лого')
+                        ->directory('form-tmp')
+                        ->collection('logo')
                 ]),
+            ]),
 
         ]);
     }

@@ -3,14 +3,9 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ClientResource\Pages;
-use App\Models\OrderLeasingVehicle;
 use App\Models\User;
-use App\Models\UserFile;
-use App\Models\UserFileType;
-use App\Models\VehicleType;
 use App\Utilities\Helpers;
 use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
@@ -26,8 +21,6 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
-use Spatie\Permission\Models\Role;
 
 class ClientResource extends Resource
 {
@@ -75,25 +68,46 @@ class ClientResource extends Resource
                         ->saveRelationshipsUsing(function (User $record) {
                             $record->roles()->sync([4]);
                         }),
+                ]),
 
-                    Section::make('Файлы')
+                Section::make('Файлы')->collapsed()->schema([
+                    Repeater::make('files')
+                        ->disableLabel()
+                        ->disableItemMovement()
+                        ->relationship('files')
+                        ->createItemButtonLabel('Добавить')
                         ->schema([
-                            Repeater::make('files')
-//                                ->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
-                                ->defaultItems(4)
-//                                ->disableItemCreation()
-//                                ->disableItemDeletion()
-//                                ->disableItemMovement()
-                                ->schema([
-                                    SpatieMediaLibraryFileUpload::make('file')
-                                        ->multiple()
-                                        ->required()
-                                        ->enableOpen()
-                                        ->label('Файл')
-                                        ->directory('form-tmp')
-                                ])
+                            Select::make('type_id')
+                                ->label('Тип файлов')
+                                ->relationship('type', 'name', fn($query) => $query->orderBy('id'))
+                                ->required(),
+
+                            SpatieMediaLibraryFileUpload::make('files')
+                                ->label('Файлы')
+                                ->collection('default')
+                                ->directory('form-tmp')
+                                ->enableDownload()
+                                ->enableOpen()
+                                ->multiple()
+                                ->required(),
                         ])
-                        ->collapsed(),
+                        ->rules([
+                            function () {
+                                return function (string $attribute, $value, callable $fail) {
+                                    $types = [];
+                                    foreach ($value as $item) {
+                                        $id = $item['type_id'];
+                                        if ($types[$id] ?? false) {
+                                            return $fail(
+                                                'Один или более тип файлов повторяется. Перепроверьте указанные значения.'
+                                            );
+                                        }
+                                        $types[$id] = true;
+                                    }
+                                    return true;
+                                };
+                            }
+                        ]),
                 ]),
             ]),
         ]);
@@ -138,7 +152,7 @@ class ClientResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $users = User::where('id', '!=', Auth::id());
-        return $users->whereHas('roles', function ($query){
+        return $users->whereHas('roles', function ($query) {
             $query->where('name', 'client');
         });
     }
