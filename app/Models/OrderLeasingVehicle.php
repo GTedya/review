@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int $id
  * @property int $order_leasing_id
- * @property ?int $vehicle_type_id
+ * @property int $vehicle_type_id
  * @property ?string $vehicle_brand
  * @property ?string $vehicle_model
  * @property ?string $vehicle_state
  * @property ?int $vehicle_count
- * @property ?VehicleType $type
+ * @property VehicleType $type
  */
 class OrderLeasingVehicle extends Model
 {

@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 /**
  * @property int $id
  * @property int $order_id
- * @property ?float $advance
+ * @property float $advance
  * @property ?int $months
  * @property ?string $current_lessors
  * @property ?string $user_comment
