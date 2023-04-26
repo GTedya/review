@@ -54,6 +54,12 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'delete orders']);
         Permission::create(['name' => 'force delete orders']);
 
+        Permission::create(['name' => 'view users']);
+        Permission::create(['name' => 'create users']);
+        Permission::create(['name' => 'edit users']);
+        Permission::create(['name' => 'delete users']);
+        Permission::create(['name' => 'force delete users']);
+
         // Create roles and assign permissions
 
         /** @var Role $admin */
@@ -100,7 +106,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'force delete vehicle_types',
         ];
 
-        $orderCRUD = [
+        $ordersCRUD = [
             'view orders',
             'create orders',
             'edit orders',
@@ -108,8 +114,19 @@ class RolesAndPermissionsSeeder extends Seeder
             'force delete orders',
         ];
 
+        $usersCRUD = [
+            'view users',
+            'create users',
+            'edit users',
+            'delete users',
+            'force delete users',
+        ];
+
         $admin->givePermissionTo([
             'view admin panel',
+
+            //Users
+            $usersCRUD,
 
             // Geos
             $geosCRUD,
@@ -121,7 +138,7 @@ class RolesAndPermissionsSeeder extends Seeder
             $newsCRUD,
 
             // Orders
-            $orderCRUD,
+            $ordersCRUD,
 
             // Types
             $typesCRUD,
