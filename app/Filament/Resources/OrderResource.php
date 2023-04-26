@@ -6,11 +6,13 @@ use App\Filament\Resources\OrderResource\Pages;
 use App\Models\Geo;
 use App\Models\Order;
 use App\Models\OrderLeasingVehicle;
+use App\Models\User;
 use App\Models\VehicleType;
 use App\Utilities\Helpers;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -71,17 +73,18 @@ class OrderResource extends Resource
                                     return filled($get('current_lessors'))
                                         || filled($get('months'))
                                         || filled($get('user_comment'))
-                                        || filled($get('vehicles'));
+                                        || filled($get('leasing_vehicles'));
                                 }),
                                 TextInput::make('current_lessors')->label('Текущие лизингодатели')->nullable(),
                                 TextInput::make('months')->label('Срок лизинга')->numeric()->nullable(),
                                 TinyEditor::make('user_comment')->label('Комментарий пользователя')->nullable(),
 
-                                Repeater::make('vehicles')
+                                Repeater::make('leasing_vehicles')
                                     ->visibleOn('edit')
                                     ->label('Транспортные средства')
                                     ->createItemButtonLabel('Добавить')
                                     ->relationship('vehicles')
+                                    ->defaultItems(0)
                                     ->schema([
                                         Select::make('type')
                                             ->required()
@@ -112,11 +115,12 @@ class OrderResource extends Resource
 
                         Section::make('Дилер')->relationship('dealer')
                             ->schema([
-                                Repeater::make('vehicles')
+                                Repeater::make('dealer_vehicles')
                                     ->visibleOn('edit')
                                     ->label('Транспортные средства')
                                     ->createItemButtonLabel('Добавить')
                                     ->relationship('vehicles')
+                                    ->defaultItems(0)
                                     ->schema([
                                         Select::make('type')->label('Выберите тип ТС')
                                             ->relationship('type', 'name')
@@ -132,10 +136,18 @@ class OrderResource extends Resource
 
                 Grid::make()->columnSpan(1)->schema([
                     Card::make()->schema([
-                        TextInput::make('user_id')
+                        Select::make('user_id')
                             ->label('Пользователь')
-                            ->numeric()
-                            ->required(),
+                            ->relationship('user', 'name', function ($query){
+                                $query->whereHas('roles', fn($query) => $query->where('name', 'client'));
+                            }),
+
+                        Hidden::make('guest')
+                        ->saveRelationshipsUsing(function ($get, $component){
+                            if (!filled($get('user_id'))){
+                               return User::create(['name'=>'guest', 'password'=>'','email'=>$component['email']]);
+                            }
+                        }),
 
                         Select::make('geo_id')
                             ->label('Область')
