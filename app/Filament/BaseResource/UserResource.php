@@ -35,7 +35,7 @@ class UserResource extends Resource
                 Grid::make()->columnSpan(2)->schema([
                     Card::make()->schema([
                         TextInput::make('name')
-                            ->label('Имя')
+                            ->label('ФИО')
                             ->required(),
 
                         TextInput::make('phone')
@@ -82,7 +82,7 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Имя')->sortable()->searchable(),
+                TextColumn::make('name')->label('ФИО')->sortable()->searchable(),
                 TextColumn::make('email')->label('Email')->searchable(),
                 TextColumn::make('phone')->label('Номер телефона')->sortable(),
                 TextColumn::make('created_at')->label('Создан')->sortable(),
