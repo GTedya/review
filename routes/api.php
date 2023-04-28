@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\Client\AuthController;
+use App\Http\Controllers\Client\OrderController as ClientOrder;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Client\NewsController;
 use App\Http\Controllers\Manager\ManagerController;
-use App\Http\Controllers\Manager\OrderController;
+use App\Http\Controllers\Manager\OrderController as ManagerOrder;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,11 +27,15 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('role:client')->prefix('client')->group(function () {
         Route::get('/info', [UserController::class, 'info']);
-        Route::get('/orders', [UserController::class, 'orders']);
+        Route::prefix('order')->group(function (){
+            Route::get('/list', [UserController::class, 'orders']);
+            Route::post('/create', [ClientOrder::class, 'create']);
+        });
+
     });
 
     Route::middleware('role:dealer_manager|leasing_manager')->prefix('manager')->group(function () {
-        Route::get('/orders', [OrderController::class, 'orders']);
+        Route::get('/orders', [ManagerOrder::class, 'orders']);
         Route::post('/logo', [ManagerController::class, 'logoAdd']);
     });
 });

@@ -39,7 +39,7 @@ class Order extends Model
         'org_name',
         'inn',
         'phone',
-        'fio',
+        'name',
         'email',
         'end_date',
         'created_at',

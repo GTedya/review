@@ -92,7 +92,7 @@ class OrderResource extends Resource
                                                 function (Builder $query, ?OrderLeasingVehicle $record) {
                                                     $query->withTrashed()
                                                         ->where('deleted_at', null)
-                                                        ->orWhere('id', $record?->vehicle_type_id);
+                                                        ->orWhere('id', $record?->type_id);
                                                 }
                                             )
                                             ->getOptionLabelFromRecordUsing(function (VehicleType $record) {
@@ -102,10 +102,10 @@ class OrderResource extends Resource
                                             ->afterStateHydrated(function (?OrderLeasingVehicle $record, $set) {
                                                 $set('type', $record?->order_leasing_id);
                                             }),
-                                        TextInput::make('vehicle_brand')->label('Марка ТС')->nullable(),
-                                        TextInput::make('vehicle_model')->label('Модель ТС')->nullable(),
-                                        TextInput::make('vehicle_count')->label('Количество')->numeric()->nullable(),
-                                        TextInput::make('vehicle_state')->label('Состояние ТС')->nullable(),
+                                        TextInput::make('brand')->label('Марка ТС')->nullable(),
+                                        TextInput::make('model')->label('Модель ТС')->nullable(),
+                                        TextInput::make('count')->label('Количество')->numeric()->nullable(),
+                                        TextInput::make('state')->label('Состояние ТС')->nullable(),
                                     ])
                             ])
                             ->collapsed(),
@@ -121,9 +121,9 @@ class OrderResource extends Resource
                                         Select::make('type')->label('Выберите тип ТС')
                                             ->relationship('type', 'name')
                                             ->required(),
-                                        TextInput::make('vehicle_brand')->label('Марка ТС')->nullable(),
-                                        TextInput::make('vehicle_model')->label('Модель ТС')->nullable(),
-                                        TextInput::make('vehicle_count')->label('Количество')->numeric()->nullable(),
+                                        TextInput::make('brand')->label('Марка ТС')->nullable(),
+                                        TextInput::make('model')->label('Модель ТС')->nullable(),
+                                        TextInput::make('count')->label('Количество')->numeric()->nullable(),
                                     ])
                             ])
                             ->collapsed(),
