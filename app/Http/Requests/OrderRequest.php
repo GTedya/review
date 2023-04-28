@@ -36,10 +36,7 @@ class OrderRequest extends FormRequest
             'leasing.vehicles.*' => ['array:type_id,brand,model,count,state'],
             'leasing.vehicles.*.type_id' => ['required', 'int'],
             'dealer' => ['nullable', 'array:vehicles'],
-            'dealer.vehicles' => [
-                'required_with:dealer',
-                'array:type_id,brand,model,count',
-            ],
+            'dealer.vehicles' => ['required_with:dealer', 'array'],
             'dealer.vehicles.*' => ['array:type_id,brand,model,count'],
             'dealer.vehicles.*.type_id' => ['required', 'int'],
 

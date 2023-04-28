@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderLeasingVehicleResource extends JsonResource
+class OrderDealerVehicleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,7 +20,6 @@ class OrderLeasingVehicleResource extends JsonResource
             'brand' => $this->brand,
             'model' => $this->model,
             'count' => $this->count,
-            'state' => $this->state,
         ];
     }
 }

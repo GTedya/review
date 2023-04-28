@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 
 class OrderResource extends JsonResource
 {
@@ -17,7 +16,7 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'fio' => $this->fio,
             'user_id' => $this->user_id,
             'email' => $this->email,
             'phone' => $this->phone,
@@ -27,7 +26,8 @@ class OrderResource extends JsonResource
             'status_id' => $this->status_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'leasing' => OrderLeasingResource::make($this->leasing),
+            'leasing' => OrderLeasingResource::make($this->whenLoaded('leasing')),
+            'dealer' => OrderDealerResource::make($this->whenLoaded('dealer')),
         ];
     }
 }
