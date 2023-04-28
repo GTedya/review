@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property ?string $inn
  * @property ?string $org_name
  * @property ?string $admin_comment
- * @property string $fio
+ * @property string $name
  * @property string $email
  * @property string $phone
  * @property ?Carbon $end_date
