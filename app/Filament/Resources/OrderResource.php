@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Models\Geo;
 use App\Models\Order;
+use App\Models\OrderDealerVehicle;
 use App\Models\OrderLeasingVehicle;
 use App\Models\User;
 use App\Models\VehicleType;
@@ -12,7 +13,6 @@ use App\Utilities\Helpers;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -82,7 +82,7 @@ class OrderResource extends Resource
                                     ->relationship('vehicles')
                                     ->defaultItems(0)
                                     ->schema([
-                                        Select::make('type')
+                                        Select::make('type_id')
                                             ->required()
                                             ->label('Выберите тип ТС')
                                             ->relationship(
@@ -119,9 +119,25 @@ class OrderResource extends Resource
                                     ->relationship('vehicles')
                                     ->defaultItems(0)
                                     ->schema([
-                                        Select::make('type')->label('Выберите тип ТС')
-                                            ->relationship('type', 'name')
-                                            ->required(),
+                                        Select::make('type_id')
+                                            ->required()
+                                            ->label('Выберите тип ТС')
+                                            ->relationship(
+                                                'type',
+                                                'name',
+                                                function (Builder $query, ?OrderDealerVehicle $record) {
+                                                    $query->withTrashed()
+                                                        ->where('deleted_at', null)
+                                                        ->orWhere('id', $record?->type_id);
+                                                }
+                                            )
+                                            ->getOptionLabelFromRecordUsing(function (VehicleType $record) {
+                                                return $record->trashed(
+                                                ) ? "{$record->name} (Тип ТС удален)" : $record->name;
+                                            })
+                                            ->afterStateHydrated(function (?OrderDealerVehicle $record, $set) {
+                                                $set('type', $record?->order_dealer_id);
+                                            }),
                                         TextInput::make('brand')->label('Марка ТС')->nullable(),
                                         TextInput::make('model')->label('Модель ТС')->nullable(),
                                         TextInput::make('count')->label('Количество')->numeric()->nullable(),

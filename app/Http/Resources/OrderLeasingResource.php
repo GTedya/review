@@ -16,7 +16,6 @@ class OrderLeasingResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'order_id' => $this->order_id,
             'advance' => $this->advance,
             'months' => $this->months,
             'current_lessors' => $this->current_lessors,

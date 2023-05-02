@@ -2,13 +2,12 @@
 
 namespace App\Services;
 
-use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderDealer;
 use App\Models\OrderLeasing;
 use App\Models\User;
 
-class OrderService extends Controller
+class OrderService
 {
     public function createOrder(User $user, array $data): Order
     {

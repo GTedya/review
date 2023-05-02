@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Utilities\Helpers;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -15,6 +16,14 @@ class OrderRequest extends FormRequest
         return true;
     }
 
+    public function prepareForValidation(): void
+    {
+        $this->merge([
+            'phone' => Helpers::getCleanPhone($this->phone),
+        ]);
+    }
+
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,21 +33,21 @@ class OrderRequest extends FormRequest
     {
         return [
             'email' => ['required', 'string', 'email'],
-            'phone' => ['required', 'string', 'min:10'],
+            'phone' => ['required', 'string', 'size:11'],
             'name' => ['required', 'string', 'min:4'],
             'inn' => ['nullable', 'string', 'size:12'],
             'org_name' => ['nullable', 'string'],
             'end_date' => ['nullable', 'date'],
-            'geo_id' => ['nullable', 'int'],
+            'geo_id' => ['nullable', 'int', 'exists:geos,id'],
             'leasing' => ['nullable', 'array:advance,months,current_lessors,user_comment,vehicles'],
             'leasing.advance' => ['required_with:leasing', 'numeric'],
             'leasing.vehicles' => ['required_with:leasing', 'array'],
             'leasing.vehicles.*' => ['array:type_id,brand,model,count,state'],
-            'leasing.vehicles.*.type_id' => ['required', 'int'],
+            'leasing.vehicles.*.type_id' => ['required', 'int', 'exists:vehicle_types,id'],
             'dealer' => ['nullable', 'array:vehicles'],
             'dealer.vehicles' => ['required_with:dealer', 'array'],
             'dealer.vehicles.*' => ['array:type_id,brand,model,count'],
-            'dealer.vehicles.*.type_id' => ['required', 'int'],
+            'dealer.vehicles.*.type_id' => ['required', 'int', 'exists:vehicle_types,id'],
 
         ];
     }
@@ -46,9 +55,8 @@ class OrderRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required' => 'Поле email является обязательным',
-            'name.required' => 'Поле ФИО является обязательным',
-            'phone.required' => 'Поле телефона является обязательным',
+
+            'required' => 'Это поле является обязательным',
             'leasing.advance.required_with' => 'Поле аванса является обязательным',
             'leasing.vehicles.required_with' => 'Вы не выбрали ни одного ТС',
             'dealer.vehicles.required_with' => 'Вы не выбрали ни одного ТС',
@@ -61,10 +69,10 @@ class OrderRequest extends FormRequest
             'array' => 'Неверный формат',
             'date' => 'Неверный формат',
 
-            'inn.size' => 'ИНН должен содержать 12 символов',
+            'inn.size' => 'ИНН должен содержать :size символов',
             'email.email' => 'Неверный формат email',
-            'phone.min' => 'Телефон должен содержать как минимум :min символов',
-            'name.min' => 'ФИО должно содержать как минимум :min символов',
+            'phone.size' => 'Неверный формат',
+            'name.min' => 'ФИО должно содержать как минимум :min символа',
         ];
     }
 }
