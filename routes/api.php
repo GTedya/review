@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Client\AuthController;
-use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Client\NewsController;
+use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Manager\ManagerController;
 use App\Http\Controllers\Manager\OrderController;
 use Illuminate\Support\Facades\Route;
@@ -20,7 +20,10 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/news', [NewsController::class, 'pagination']);
+    Route::prefix('/news')->group(function () {
+        Route::get('/', [NewsController::class, 'pagination']);
+        Route::get('/{id}', [NewsController::class, 'single']);
+    });
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
