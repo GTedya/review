@@ -5,6 +5,7 @@ use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Client\NewsController;
 use App\Http\Controllers\Manager\ManagerController;
 use App\Http\Controllers\Manager\OrderController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +22,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/news', [NewsController::class, 'pagination']);
+    Route::get('/{$slug}', [PageController::class, 'getPage']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
