@@ -6,15 +6,18 @@ use App\Filament\Resources\OrderResource\Pages;
 use App\Models\Geo;
 use App\Models\Order;
 use App\Models\OrderLeasingVehicle;
+use App\Models\User;
 use App\Models\VehicleType;
 use App\Utilities\Helpers;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -40,8 +43,8 @@ class OrderResource extends Resource
             ->schema([
                 Grid::make()->columnSpan(2)->schema([
                     Card::make()->schema([
-                        TextInput::make('fio')
-                            ->label('Имя')
+                        TextInput::make('name')
+                            ->label('ФИО')
                             ->required(),
 
 
@@ -67,21 +70,17 @@ class OrderResource extends Resource
 
                         Section::make('Лизинг')->relationship('leasing')
                             ->schema([
-                                TextInput::make('advance')->label('Аванс')->numeric()->required(function ($get) {
-                                    return filled($get('current_lessors'))
-                                        || filled($get('months'))
-                                        || filled($get('user_comment'))
-                                        || filled($get('vehicles'));
-                                }),
+                                TextInput::make('advance')->label('Аванс')->numeric()->required(),
                                 TextInput::make('current_lessors')->label('Текущие лизингодатели')->nullable(),
                                 TextInput::make('months')->label('Срок лизинга')->numeric()->nullable(),
                                 TinyEditor::make('user_comment')->label('Комментарий пользователя')->nullable(),
 
-                                Repeater::make('vehicles')
+                                Repeater::make('leasing_vehicles')
                                     ->visibleOn('edit')
                                     ->label('Транспортные средства')
                                     ->createItemButtonLabel('Добавить')
                                     ->relationship('vehicles')
+                                    ->defaultItems(0)
                                     ->schema([
                                         Select::make('type')
                                             ->required()
@@ -107,16 +106,18 @@ class OrderResource extends Resource
                                         TextInput::make('vehicle_count')->label('Количество')->numeric()->nullable(),
                                         TextInput::make('vehicle_state')->label('Состояние ТС')->nullable(),
                                     ])
-                            ])
-                            ->collapsed(),
+                            ])->visible(function ($get) {
+                                return $get('hasLeasing');
+                            })->collapsible(),
 
                         Section::make('Дилер')->relationship('dealer')
                             ->schema([
-                                Repeater::make('vehicles')
+                                Repeater::make('dealer_vehicles')
                                     ->visibleOn('edit')
                                     ->label('Транспортные средства')
                                     ->createItemButtonLabel('Добавить')
                                     ->relationship('vehicles')
+                                    ->defaultItems(0)
                                     ->schema([
                                         Select::make('type')->label('Выберите тип ТС')
                                             ->relationship('type', 'name')
@@ -125,17 +126,46 @@ class OrderResource extends Resource
                                         TextInput::make('vehicle_model')->label('Модель ТС')->nullable(),
                                         TextInput::make('vehicle_count')->label('Количество')->numeric()->nullable(),
                                     ])
-                            ])
-                            ->collapsed(),
+                            ])->visible(function ($get) {
+                                return $get('hasDealer');
+                            })->collapsible(),
                     ]),
                 ]),
 
                 Grid::make()->columnSpan(1)->schema([
                     Card::make()->schema([
-                        TextInput::make('user_id')
+                        Select::make('user_id')
                             ->label('Пользователь')
-                            ->numeric()
-                            ->required(),
+                            ->disabledOn('edit')
+                            ->beforeStateDehydrated(function ($state, callable $get, callable $set) {
+                                if (blank($state)) {
+                                    $phone = $get('phone');
+                                    $email = $get('email');
+
+                                    /** @var ?User $user */
+                                    $user = User::query()
+                                        ->where('phone', $phone)
+                                        ->orWhere('email', $email)
+                                        ->first();
+
+                                    if ($user === null) {
+                                        /** @var ?User $user */
+                                        $user = User::create([
+                                            'name' => $get('name'),
+                                            'password' => '',
+                                            'email' => $email,
+                                            'phone' => $phone,
+                                        ]);
+
+                                        $user?->assignRole('client');
+                                    }
+
+                                    $set('user_id', $user?->id);
+                                }
+                            })
+                            ->relationship('user', 'name', function ($query) {
+                                $query->whereHas('roles', fn($query) => $query->where('name', 'client'));
+                            }),
 
                         Select::make('geo_id')
                             ->label('Область')
@@ -158,6 +188,26 @@ class OrderResource extends Resource
                             ->relationship('status', 'name')
                             ->default(1)
                             ->required(),
+
+                        Grid::make()->columns(2)->schema([
+                            Toggle::make('hasLeasing')->label('Данные по лизингу')
+                                ->inline()
+                                ->formatStateUsing(function (?Order $record) {
+                                    return $record?->leasing()->exists();
+                                })->saveRelationshipsUsing(function (bool $state, ?Order $record) {
+                                    if (!$state) {
+                                        $record?->leasing()->delete();
+                                    };
+                                }),
+                            Toggle::make('hasDealer')->label('Данные по дилеру')->inline()
+                                ->formatStateUsing(function (?Order $record) {
+                                    return $record?->dealer()->exists();
+                                })->saveRelationshipsUsing(function (bool $state, ?Order $record) {
+                                    if (!$state) {
+                                        $record?->dealer()->delete();
+                                    };
+                                }),
+                        ])->reactive()->visibleOn('edit'),
 
                         DateTimePicker::make('end_date')
                             ->label('Дата окончания')
@@ -182,7 +232,7 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('fio')->label('ФИО')->sortable()->searchable(),
+                TextColumn::make('name')->label('ФИО')->sortable()->searchable(),
                 TextColumn::make('end_date')->label('Дата окончания')->sortable(),
                 TextColumn::make('geo.name')->label('Область')
                     ->searchable(query: function (Builder $query, string $search) {

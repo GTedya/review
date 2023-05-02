@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->string('inn')->nullable();
             $table->string('org_name')->nullable();
             $table->string('phone');
-            $table->string('fio');
+            $table->string('name');
             $table->string('email');
             $table->date('end_date')->nullable();
 
