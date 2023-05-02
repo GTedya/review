@@ -137,7 +137,6 @@ class OrderResource extends Resource
                         Select::make('user_id')
                             ->label('Пользователь')
                             ->disabledOn('edit')
-                            ->dehydrated(false)
                             ->beforeStateDehydrated(function ($state, callable $get, callable $set) {
                                 if (blank($state)) {
                                     $phone = $get('phone');
