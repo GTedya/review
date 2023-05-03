@@ -14,7 +14,7 @@ class NewsService
         $this->newsRepo = $newsRepo;
     }
 
-    public function getBySlug(string $slug): ?News
+    public function getBySlug(string $slug): News
     {
         $content = $this->newsRepo->single($slug);
         if ($content === null) {

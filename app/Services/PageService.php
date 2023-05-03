@@ -14,7 +14,7 @@ class PageService
         $this->pageRepo = $pageRepo;
     }
 
-    public function getBySlug(string $slug): ?Page
+    public function getBySlug(string $slug): Page
     {
         $content = $this->pageRepo->pageBySlug($slug);
         if ($content === null) {
