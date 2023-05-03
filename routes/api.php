@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [NewsController::class, 'pagination']);
         Route::get('/{id}', [NewsController::class, 'single']);
     });
-    Route::get('/{$slug}', [PageController::class, 'getPage']);
+    Route::get('/page/{slug}', [PageController::class, 'getPage']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
