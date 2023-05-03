@@ -2,11 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\News;
 use App\Models\Page;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class PageRepo
 {

@@ -19,8 +19,6 @@ class PageResource extends JsonResource
             'title' => $this->title,
             'slug' => $this->slug,
             'content' => $this->content,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
             'meta' => $this->meta,
             'created_at' => $this->created_at,
             'image' => $this->getFirstMediaUrl('image'),
