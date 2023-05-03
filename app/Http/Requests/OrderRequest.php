@@ -68,6 +68,7 @@ class OrderRequest extends FormRequest
             'numeric' => 'Поле должно быть числом',
             'array' => 'Неверный формат',
             'date' => 'Неверный формат',
+            'exists' => 'Указано неверное значение',
 
             'inn.size' => 'ИНН должен содержать :size символов',
             'email.email' => 'Неверный формат email',

@@ -24,7 +24,7 @@ class OrderResource extends JsonResource
             'end_date' => $this->end_date,
             'geo_id' => $this->geo_id,
             'inn' => $this->inn,
-            'status_id' => $this->status,
+            'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'leasing' => OrderLeasingResource::make($this->whenLoaded('leasing')),
