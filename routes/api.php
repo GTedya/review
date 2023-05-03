@@ -21,7 +21,10 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/news', [NewsController::class, 'pagination']);
+    Route::prefix('/news')->group(function () {
+        Route::get('/', [NewsController::class, 'pagination']);
+        Route::get('/{slug}', [NewsController::class, 'single']);
+    });
     Route::get('/geos', [GeoController::class, 'list']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
