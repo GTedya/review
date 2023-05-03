@@ -14,7 +14,7 @@ class GeoController extends Controller
         $this->geoRepo = $geoRepo;
     }
 
-    public function pagination(): JsonResponse
+    public function list(): JsonResponse
     {
         return response()->json(['success' => true, 'geos' => $this->geoRepo->list()]);
     }
