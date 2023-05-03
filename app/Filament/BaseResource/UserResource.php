@@ -17,6 +17,7 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Phpsa\FilamentPasswordReveal\Password;
 
 class UserResource extends Resource
 {
@@ -50,8 +51,7 @@ class UserResource extends Resource
                             ->label('Email')
                             ->required(),
 
-                        TextInput::make('password')
-                            ->password()
+                        Password::make('password')
                             ->required(fn($context) => $context === 'create')
                             ->dehydrated(fn($context, $state) => $context !== 'edit' || filled($state))
                             ->minLength(8)
