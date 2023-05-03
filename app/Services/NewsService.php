@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\News;
 use App\Repositories\NewsRepo;
 
 class NewsService
@@ -13,7 +14,7 @@ class NewsService
         $this->newsRepo = $newsRepo;
     }
 
-    public function getBySlug(string $slug)
+    public function getBySlug(string $slug): News
     {
         $content = $this->newsRepo->single($slug);
         if ($content === null) {

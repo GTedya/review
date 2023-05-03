@@ -49,4 +49,9 @@ class Page extends Model implements HasMedia
             ->withResponsiveImages()
             ->singleFile();
     }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return $value;
+    }
 }
