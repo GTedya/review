@@ -4,11 +4,12 @@ namespace App\Repositories;
 
 use App\Models\Geo;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class GeoRepo
 {
-    public function pagination(): LengthAwarePaginator
+    public function list(): Collection
     {
-        return Geo::query()->paginate();
+        return Geo::all();
     }
 }

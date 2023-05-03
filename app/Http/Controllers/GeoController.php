@@ -16,6 +16,6 @@ class GeoController extends Controller
 
     public function pagination(): JsonResponse
     {
-        return response()->json(['success' => true, 'geos' => $this->geoRepo->pagination()]);
+        return response()->json(['success' => true, 'geos' => $this->geoRepo->list()]);
     }
 }
