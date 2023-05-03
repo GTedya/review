@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\NewsResource;
 use App\Repositories\NewsRepo;
+use Illuminate\Http\JsonResponse;
 
 class NewsController extends Controller
 {
@@ -17,5 +19,13 @@ class NewsController extends Controller
     public function pagination()
     {
         return response()->json(['success' => true, 'news' => $this->newsRepo->pagination()]);
+    }
+
+    public function single(string $slug): JsonResponse
+    {
+        $news = NewsResource::make($this->newsRepo->single($slug));
+        return response()->json(
+            ['success' => true, 'news' => $news]
+        );
     }
 }
