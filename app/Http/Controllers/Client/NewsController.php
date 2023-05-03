@@ -23,7 +23,13 @@ class NewsController extends Controller
 
     public function single(string $slug): JsonResponse
     {
-        $news = NewsResource::make($this->newsRepo->single($slug));
+        $content = $this->newsRepo->single($slug);
+        if ($content === null) {
+            abort(404, 'Данной страницы не существует');
+        }
+
+        $news = NewsResource::make($content);
+
         return response()->json(
             ['success' => true, 'news' => $news]
         );

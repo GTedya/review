@@ -22,7 +22,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('/news')->group(function () {
         Route::get('/', [NewsController::class, 'pagination']);
-        Route::get('/{id}', [NewsController::class, 'single']);
+        Route::get('/{slug}', [NewsController::class, 'single']);
     });
 
     Route::post('/logout', [AuthController::class, 'logout']);
