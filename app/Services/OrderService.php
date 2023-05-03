@@ -6,11 +6,13 @@ use App\Models\Order;
 use App\Models\OrderDealer;
 use App\Models\OrderLeasing;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
     public function createOrder(User $user, array $data): Order
     {
+        DB::beginTransaction();
         /** @var Order $order */
         $order = $user->orders()->create($data);
 
@@ -30,6 +32,7 @@ class OrderService
                 $dealer->vehicles()->create($dataVehicle);
             }
         }
+        DB::commit();
         return $order;
     }
 }
