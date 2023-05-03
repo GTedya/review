@@ -5,14 +5,16 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\NewsResource;
 use App\Repositories\NewsRepo;
+use App\Services\NewsService;
 use Illuminate\Http\JsonResponse;
 
 class NewsController extends Controller
 {
     public NewsRepo $newsRepo;
 
-    public function __construct(NewsRepo $newsRepo)
+    public function __construct(NewsRepo $newsRepo, NewsService $newsService)
     {
+        $this->newsService = $newsService;
         $this->newsRepo = $newsRepo;
     }
 
@@ -23,10 +25,7 @@ class NewsController extends Controller
 
     public function single(string $slug): JsonResponse
     {
-        $content = $this->newsRepo->single($slug);
-        if ($content === null) {
-            abort(404, 'Данной страницы не существует');
-        }
+        $content = $this->newsService->getBySlug($slug);
 
         $news = NewsResource::make($content);
 
