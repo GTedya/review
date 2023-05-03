@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int $id
  * @property int $order_leasing_id
- * @property int $vehicle_type_id
- * @property ?string $vehicle_brand
- * @property ?string $vehicle_model
- * @property ?string $vehicle_state
- * @property ?int $vehicle_count
+ * @property int $type_id
+ * @property ?string $brand
+ * @property ?string $model
+ * @property ?string $state
+ * @property ?int $count
  * @property VehicleType $type
  */
 class OrderLeasingVehicle extends Model
@@ -24,15 +24,15 @@ class OrderLeasingVehicle extends Model
 
     protected $fillable = [
         'order_leasing_id',
-        'vehicle_type_id',
-        'vehicle_brand',
-        'vehicle_model',
-        'vehicle_count',
-        'vehicle_state',
+        'type_id',
+        'brand',
+        'model',
+        'count',
+        'state',
     ];
 
     public function type(): BelongsTo
     {
-        return $this->belongsTo(VehicleType::class, 'vehicle_type_id');
+        return $this->belongsTo(VehicleType::class, 'type_id');
     }
 }

@@ -82,4 +82,15 @@ class Order extends Model
     {
         return $this->belongsToMany(User::class, 'manager_order_bans', 'order_id', 'user_id');
     }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return $value;
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return $value;
+    }
+
 }

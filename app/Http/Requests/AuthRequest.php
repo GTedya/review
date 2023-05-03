@@ -27,7 +27,7 @@ class AuthRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'email.required' => 'Поле email является обязательным',

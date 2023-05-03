@@ -18,13 +18,13 @@ return new class extends Migration {
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->foreignId('vehicle_type_id')
-                ->constrained()
+            $table->foreignId('type_id')
+                ->constrained('vehicle_types')
                 ->onUpdate('cascade');
 
-            $table->string('vehicle_brand')->nullable();
-            $table->string('vehicle_model')->nullable();
-            $table->integer('vehicle_count')->nullable();
+            $table->string('brand')->nullable();
+            $table->string('model')->nullable();
+            $table->integer('count')->nullable();
         });
     }
 
