@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 class NewsController extends Controller
 {
     public NewsRepo $newsRepo;
+    public NewsService $newsService;
 
     public function __construct(NewsRepo $newsRepo, NewsService $newsService)
     {
@@ -18,7 +19,7 @@ class NewsController extends Controller
         $this->newsRepo = $newsRepo;
     }
 
-    public function pagination()
+    public function pagination(): JsonResponse
     {
         return response()->json(['success' => true, 'news' => $this->newsRepo->pagination()]);
     }

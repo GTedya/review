@@ -3,6 +3,7 @@
 use App\Http\Controllers\Client\AuthController;
 use App\Http\Controllers\Client\NewsController;
 use App\Http\Controllers\Client\UserController;
+use App\Http\Controllers\GeoController;
 use App\Http\Controllers\Manager\ManagerController;
 use App\Http\Controllers\Manager\OrderController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [NewsController::class, 'pagination']);
         Route::get('/{slug}', [NewsController::class, 'single']);
     });
+    Route::get('/geos', [GeoController::class, 'list']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
