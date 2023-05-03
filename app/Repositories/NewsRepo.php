@@ -11,4 +11,9 @@ class NewsRepo
     {
         return News::query()->orderBy('created_at', 'desc')->paginate();
     }
+
+    public function single(string $slug): ?News
+    {
+        return News::query()->where('slug', $slug)->with('files')->first();
+    }
 }
