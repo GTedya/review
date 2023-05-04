@@ -8,6 +8,7 @@ use App\Http\Controllers\GeoController;
 use App\Http\Controllers\Manager\ManagerController;
 use App\Http\Controllers\Manager\OrderController as ManagerOrder;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\VehTypeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,14 +24,17 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+
     Route::prefix('/news')->group(function () {
         Route::get('/', [NewsController::class, 'pagination']);
         Route::get('/{slug}', [NewsController::class, 'single']);
     });
     Route::get('/page/{slug}', [PageController::class, 'getPage']);
+
     Route::get('/geos', [GeoController::class, 'list']);
 
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/veh_types', [VehTypeController::class, 'list']);
 
     Route::middleware('role:client')->prefix('client')->group(function () {
         Route::get('/info', [UserController::class, 'info']);

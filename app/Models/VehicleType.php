@@ -13,12 +13,15 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property ?int $parent_id
  * @property ?VehicleType $parent
+ * @property ?VehicleType $children
+ * @property ?VehicleType $childrenDeep
  * @property string $name
  * @property ?Carbon $deleted_at
  */
 class VehicleType extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     public $timestamps = false;
 
@@ -35,5 +38,10 @@ class VehicleType extends Model
     public function children(): HasMany
     {
         return $this->hasMany(VehicleType::class, 'parent_id');
+    }
+
+    public function childrenDeep(): HasMany
+    {
+        return $this->hasMany(VehicleType::class, 'parent_id')->with('childrenDeep');
     }
 }
