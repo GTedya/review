@@ -3,8 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Claim;
-use App\Models\Geo;
-use Illuminate\Support\Collection;
 
 class ClaimRepo
 {
