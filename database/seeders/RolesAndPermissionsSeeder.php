@@ -54,6 +54,13 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'delete orders']);
         Permission::create(['name' => 'force delete orders']);
 
+
+        Permission::create(['name' => 'view claims']);
+        Permission::create(['name' => 'create claims']);
+        Permission::create(['name' => 'edit claims']);
+        Permission::create(['name' => 'delete claims']);
+        Permission::create(['name' => 'force delete claims']);
+
         Permission::create(['name' => 'view users']);
         Permission::create(['name' => 'create users']);
         Permission::create(['name' => 'edit users']);
@@ -114,6 +121,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'force delete orders',
         ];
 
+        $claimsForAdmin = [
+            'view claims',
+            'delete claims',
+            'force delete claims',
+        ];
+
         $usersCRUD = [
             'view users',
             'create users',
@@ -142,7 +155,11 @@ class RolesAndPermissionsSeeder extends Seeder
 
             // Types
             $typesCRUD,
+
+            $claimsForAdmin
         ]);
+
+        $client->givePermissionTo(['create claims']);
 
 
         /** @var User $user */
