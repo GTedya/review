@@ -25,4 +25,10 @@ class Claim extends Model
         'created_at',
         'text',
     ];
+
+    public function getCreatedAtAttribute($value)
+    {
+        return $value;
+    }
+
 }
