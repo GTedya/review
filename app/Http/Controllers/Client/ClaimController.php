@@ -10,6 +10,8 @@ use Illuminate\Http\JsonResponse;
 
 class ClaimController extends Controller
 {
+    private ClaimRepo $claimRepo;
+
     public function __construct(ClaimRepo $claimRepo)
     {
         $this->claimRepo = $claimRepo;
