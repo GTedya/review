@@ -159,8 +159,6 @@ class RolesAndPermissionsSeeder extends Seeder
             $claimsForAdmin
         ]);
 
-        $client->givePermissionTo(['create claims']);
-
 
         /** @var User $user */
         $user = User::where('id', 1)->first();
