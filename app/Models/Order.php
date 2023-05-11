@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
@@ -27,10 +28,12 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property User $user
  * @property ?Geo $geo
  * @property ?OrderLeasing $leasing
- * @property ?OrderDealer $dealer
  * @property Collection<File> $files
  * @property Status $status
  * @property ?User $banUsers
+ * @property Collection<OrderLeasingVehicle> $leasingVehicles
+ * @property Collection<OrderDealerVehicle> $dealerVehicles
+ *
  */
 class Order extends Model
 {
@@ -68,11 +71,6 @@ class Order extends Model
         return $this->hasOne(OrderLeasing::class);
     }
 
-    public function dealer(): HasOne
-    {
-        return $this->hasOne(OrderDealer::class);
-    }
-
     public function files(): MorphMany
     {
         return $this->morphMany(File::class, 'fileable',);
@@ -81,6 +79,17 @@ class Order extends Model
     public function banUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'manager_order_bans', 'order_id', 'user_id');
+    }
+
+    public function dealerVehicles(): HasMany
+    {
+        return $this->hasMany(OrderDealerVehicle::class);
+    }
+
+
+    public function leasingVehicles(): HasMany
+    {
+        return $this->hasMany(OrderLeasingVehicle::class);
     }
 
     public function getCreatedAtAttribute($value)

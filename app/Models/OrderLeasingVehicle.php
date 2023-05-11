@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
- * @property int $order_leasing_id
+ * @property int $order_id
  * @property int $type_id
  * @property ?string $brand
  * @property ?string $model
@@ -23,7 +23,7 @@ class OrderLeasingVehicle extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'order_leasing_id',
+        'order_id',
         'type_id',
         'brand',
         'model',

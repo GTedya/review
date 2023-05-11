@@ -5,8 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -16,7 +14,6 @@ use Illuminate\Support\Collection;
  * @property ?string $current_lessors
  * @property ?string $user_comment
  * @property Order $order
- * @property Collection<OrderLeasingVehicle> $vehicles
  */
 class OrderLeasing extends Model
 {
@@ -32,10 +29,6 @@ class OrderLeasing extends Model
         'user_comment',
     ];
 
-    public function vehicles(): HasMany
-    {
-        return $this->hasMany(OrderLeasingVehicle::class);
-    }
 
     public function order(): BelongsTo
     {

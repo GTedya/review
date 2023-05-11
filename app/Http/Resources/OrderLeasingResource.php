@@ -20,7 +20,6 @@ class OrderLeasingResource extends JsonResource
             'months' => $this->months,
             'current_lessors' => $this->current_lessors,
             'user_comment' => $this->user_comment,
-            'vehicles' => OrderLeasingVehicleResource::collection($this->vehicles),
         ];
     }
 }

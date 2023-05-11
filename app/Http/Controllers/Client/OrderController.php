@@ -24,7 +24,7 @@ class OrderController extends Controller
         /** @var User $user */
         $user = Auth::user();
         $order = $this->orderService->createOrder($user, $request->validated());
-        $order = $order->fresh('leasing', 'dealer');
+        $order = $order->fresh('leasing', 'dealerVehicles', 'leasingVehicles');
 
         return response()->json(['success' => true, 'order' => OrderResource::make($order)]);
     }
