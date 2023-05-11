@@ -28,7 +28,8 @@ class OrderResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'leasing' => OrderLeasingResource::make($this->whenLoaded('leasing')),
-            'dealer' => OrderDealerResource::make($this->whenLoaded('dealer')),
+            'leasing_vehicles' => OrderLeasingVehicleResource::collection($this->leasingVehicles),
+            'dealer_vehicles' => OrderDealerVehicleResource::collection($this->dealerVehicles),
         ];
     }
 }

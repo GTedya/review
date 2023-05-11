@@ -68,83 +68,82 @@ class OrderResource extends Resource
 
                         TinyEditor::make('admin_comment')->label('Коментарий администратора'),
 
-                        Section::make('Лизинг')->relationship('leasing')
-                            ->schema([
+                        Section::make('Лизинг')->schema([
+                            Grid::make()->columns(1)->relationship('leasing')->schema([
                                 TextInput::make('advance')->label('Аванс')->numeric()->required(),
                                 TextInput::make('current_lessors')->label('Текущие лизингодатели')->nullable(),
                                 TextInput::make('months')->label('Срок лизинга')->numeric()->nullable(),
                                 TinyEditor::make('user_comment')->label('Комментарий пользователя')->nullable(),
+                            ]),
 
-                                Repeater::make('leasing_vehicles')
-                                    ->visibleOn('edit')
-                                    ->label('Транспортные средства')
-                                    ->createItemButtonLabel('Добавить')
-                                    ->relationship('vehicles')
-                                    ->defaultItems(0)
-                                    ->schema([
-                                        Select::make('type_id')
-                                            ->required()
-                                            ->label('Выберите тип ТС')
-                                            ->relationship(
-                                                'type',
-                                                'name',
-                                                function (Builder $query, ?OrderLeasingVehicle $record) {
-                                                    $query->withTrashed()
-                                                        ->where('deleted_at', null)
-                                                        ->orWhere('id', $record?->type_id);
-                                                }
-                                            )
-                                            ->getOptionLabelFromRecordUsing(function (VehicleType $record) {
-                                                return $record->trashed(
-                                                ) ? "{$record->name} (Тип ТС удален)" : $record->name;
-                                            })
-                                            ->afterStateHydrated(function (?OrderLeasingVehicle $record, $set) {
-                                                $set('type', $record?->order_leasing_id);
-                                            }),
-                                        TextInput::make('brand')->label('Марка ТС')->nullable(),
-                                        TextInput::make('model')->label('Модель ТС')->nullable(),
-                                        TextInput::make('count')->label('Количество')->numeric()->nullable(),
-                                        TextInput::make('state')->label('Состояние ТС')->nullable(),
-                                    ])
-                            ])->visible(function ($get) {
-                                return $get('hasLeasing');
-                            })->collapsible(),
+                            Repeater::make('leasing_vehicles')
+                                ->label('Транспортные средства')
+                                ->createItemButtonLabel('Добавить')
+                                ->relationship('leasingVehicles')
+                                ->defaultItems(0)
+                                ->schema([
+                                    Select::make('type_id')
+                                        ->required()
+                                        ->label('Выберите тип ТС')
+                                        ->relationship(
+                                            'type',
+                                            'name',
+                                            function (Builder $query, ?OrderLeasingVehicle $record) {
+                                                $query->withTrashed()
+                                                    ->where('deleted_at', null)
+                                                    ->orWhere('id', $record?->type_id);
+                                            }
+                                        )
+                                        ->getOptionLabelFromRecordUsing(function (VehicleType $record) {
+                                            return $record->trashed(
+                                            ) ? "{$record->name} (Тип ТС удален)" : $record->name;
+                                        })
+                                        ->afterStateHydrated(function (?OrderLeasingVehicle $record, $set) {
+                                            $set('type', $record?->order_leasing_id);
+                                        }),
+                                    TextInput::make('brand')->label('Марка ТС')->nullable(),
+                                    TextInput::make('model')->label('Модель ТС')->nullable(),
+                                    TextInput::make('count')->label('Количество')->numeric()->nullable(),
+                                    TextInput::make('state')->label('Состояние ТС')->nullable(),
+                                ])
+                        ])->visible(function ($get) {
+                            return $get('hasLeasing');
+                        })->collapsible(),
 
-                        Section::make('Дилер')->relationship('dealer')
-                            ->schema([
-                                Repeater::make('dealer_vehicles')
-                                    ->visibleOn('edit')
-                                    ->label('Транспортные средства')
-                                    ->createItemButtonLabel('Добавить')
-                                    ->relationship('vehicles')
-                                    ->defaultItems(0)
-                                    ->schema([
-                                        Select::make('type_id')
-                                            ->required()
-                                            ->label('Выберите тип ТС')
-                                            ->relationship(
-                                                'type',
-                                                'name',
-                                                function (Builder $query, ?OrderDealerVehicle $record) {
-                                                    $query->withTrashed()
-                                                        ->where('deleted_at', null)
-                                                        ->orWhere('id', $record?->type_id);
-                                                }
-                                            )
-                                            ->getOptionLabelFromRecordUsing(function (VehicleType $record) {
-                                                return $record->trashed(
-                                                ) ? "{$record->name} (Тип ТС удален)" : $record->name;
-                                            })
-                                            ->afterStateHydrated(function (?OrderDealerVehicle $record, $set) {
-                                                $set('type', $record?->order_dealer_id);
-                                            }),
-                                        TextInput::make('brand')->label('Марка ТС')->nullable(),
-                                        TextInput::make('model')->label('Модель ТС')->nullable(),
-                                        TextInput::make('count')->label('Количество')->numeric()->nullable(),
-                                    ])
-                            ])->visible(function ($get) {
-                                return $get('hasDealer');
-                            })->collapsible(),
+                        Section::make('Дилер')->schema([
+                            Repeater::make('dealer_vehicles')
+                                ->visibleOn('edit')
+                                ->label('Транспортные средства')
+                                ->createItemButtonLabel('Добавить')
+                                ->relationship('dealerVehicles')
+                                ->defaultItems(0)
+                                ->schema([
+                                    Select::make('type_id')
+                                        ->required()
+                                        ->label('Выберите тип ТС')
+                                        ->relationship(
+                                            'type',
+                                            'name',
+                                            function (Builder $query, ?OrderDealerVehicle $record) {
+                                                $query->withTrashed()
+                                                    ->where('deleted_at', null)
+                                                    ->orWhere('id', $record?->type_id);
+                                            }
+                                        )
+                                        ->getOptionLabelFromRecordUsing(function (VehicleType $record) {
+                                            return $record->trashed(
+                                            ) ? "{$record->name} (Тип ТС удален)" : $record->name;
+                                        })
+                                        ->afterStateHydrated(function (?OrderDealerVehicle $record, $set) {
+                                            $set('type', $record?->order_dealer_id);
+                                        }),
+                                    TextInput::make('brand')->label('Марка ТС')->nullable(),
+                                    TextInput::make('model')->label('Модель ТС')->nullable(),
+                                    TextInput::make('count')->label('Количество')->numeric()->nullable(),
+                                ])
+                        ])->visible(function ($get) {
+                            return $get('hasDealer');
+                        })->collapsible(),
                     ]),
                 ]),
 
@@ -213,14 +212,15 @@ class OrderResource extends Resource
                                 })->saveRelationshipsUsing(function (bool $state, ?Order $record) {
                                     if (!$state) {
                                         $record?->leasing()->delete();
+                                        $record?->leasingVehicles()->delete();
                                     };
                                 }),
                             Toggle::make('hasDealer')->label('Данные по дилеру')->inline()
                                 ->formatStateUsing(function (?Order $record) {
-                                    return $record?->dealer()->exists();
+                                    return $record?->dealerVehicles()->exists();
                                 })->saveRelationshipsUsing(function (bool $state, ?Order $record) {
                                     if (!$state) {
-                                        $record?->dealer()->delete();
+                                        $record?->dealerVehicles()->delete();
                                     };
                                 }),
                         ])->reactive()->visibleOn('edit'),
