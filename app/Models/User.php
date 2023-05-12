@@ -40,6 +40,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
      * @property ?Carbon $updated_at
      * @property ?string $remember_token
      * @property Collection<Order> $orders
+     * @property Collection<Rent> $rents
      * @property Collection $userFiles
      * @property ?Order $banOrders
      */
@@ -77,6 +78,11 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function rents(): HasMany
+    {
+        return $this->hasMany(Rent::class);
     }
 
     public function banOrders(): BelongsToMany

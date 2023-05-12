@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Geo extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     public $timestamps = false;
 
