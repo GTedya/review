@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
@@ -30,9 +30,9 @@ class VehicleType extends Model
         'parent_id',
     ];
 
-    public function parent(): HasOne
+    public function parent(): BelongsTo
     {
-        return $this->hasOne(VehicleType::class, 'parent_id');
+        return $this->belongsTo(VehicleType::class, 'parent_id');
     }
 
     public function children(): HasMany
