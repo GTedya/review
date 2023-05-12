@@ -12,6 +12,13 @@ return new class extends Migration {
     {
         Schema::create('geos', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('parent_id')
+                ->nullable()
+                ->constrained('geos')
+                ->onUpdate('cascade')
+                ->onDelete('set null');
+
             $table->string('name');
             $table->softDeletes();
         });
