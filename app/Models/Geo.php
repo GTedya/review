@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
  * @property ?int $parent_id
  * @property string $name
  * @property ?Geo $parent
- * @property ?Geo $children
+ * @property Collection<Geo> $children
  */
 class Geo extends Model
 {
