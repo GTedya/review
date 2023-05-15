@@ -26,7 +26,6 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property Geo $geo
  *
  */
-
 class Rent extends Model implements HasMedia
 {
     use HasFactory;
@@ -57,5 +56,10 @@ class Rent extends Model implements HasMedia
     public function rentVehicles(): HasMany
     {
         return $this->hasMany(RentVehicle::class);
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('image');
     }
 }
