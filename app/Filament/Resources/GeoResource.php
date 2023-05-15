@@ -40,7 +40,7 @@ class GeoResource extends Resource
                 Grid::make()->columnSpan(1)->schema([
                     Card::make()->schema([
                         Select::make('parent_id')
-                            ->label('Родительский тип')
+                            ->label('Родительская область')
                             ->options(function (?Geo $record) {
                                 return Geo::where('parent_id', null)->where('id', '!=', $record?->id)
                                     ->get()
@@ -65,7 +65,7 @@ class GeoResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')->label('Название')->sortable()->searchable(),
-                TextColumn::make('parent.name')->label('Родительский тип')->sortable()->searchable(),
+                TextColumn::make('parent.name')->label('Родительская область')->sortable()->searchable(),
             ])
             ->filters([
                 //
