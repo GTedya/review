@@ -18,6 +18,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -125,6 +126,8 @@ class RentResource extends Resource
                         ->getOptionLabelFromRecordUsing(function (Geo $record) {
                             return $record->trashed() ? "{$record->name} (область удалена)" : $record->name;
                         }),
+
+                    Toggle::make('is_published')->label('Активная запись')->default(true),
 
                     DateTimePicker::make('created_at')
                         ->label('Дата создания')

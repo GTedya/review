@@ -17,6 +17,7 @@ return new class extends Migration
 
             $table->foreignId('rent_id')
                 ->constrained()
+                ->onDelete('cascade')
                 ->onUpdate('cascade');
 
             $table->foreignId('type_id')
