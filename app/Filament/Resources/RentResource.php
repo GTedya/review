@@ -127,7 +127,7 @@ class RentResource extends Resource
                             return $record->trashed() ? "{$record->name} (область удалена)" : $record->name;
                         }),
 
-                    Toggle::make('is_published')->label('Активная запись')->default(true),
+                    Toggle::make('is_published')->label('Опубликованная запись')->default(true),
 
                     DateTimePicker::make('created_at')
                         ->label('Дата создания')
