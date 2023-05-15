@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
  * @property int id
  * @property int rent_id
  * @property int type_id
- * @property Collection<VehicleType> $type
+ * @property VehicleType $type
  */
 class RentVehicle extends Model
 {

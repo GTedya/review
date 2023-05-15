@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -24,7 +25,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property ?Carbon $updated_at
  * @property User $user
  * @property Geo $geo
- *
+ * @property Collection<RentVehicle> $rentVehicles
  */
 class Rent extends Model implements HasMedia
 {
