@@ -70,7 +70,7 @@ class RentResource extends Resource
                             ->image()
                             ->disableLabel()
                             ->multiple()
-                            ->collection('image')
+                            ->collection('images')
                             ->label('Изображение')
                             ->directory('form-tmp')
                     ]),
