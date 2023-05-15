@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
+ * @property ?int $parent_id
  * @property string $name
  * @property ?Geo $parent
  * @property ?Geo $children

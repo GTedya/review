@@ -13,7 +13,6 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Builder;
 
 class GeoResource extends Resource
 {
@@ -41,9 +40,11 @@ class GeoResource extends Resource
                     Select::make('parent_id')
                         ->label('Родительский тип')
                         ->options(function (?Geo $record) {
-                            return Geo::whereNot(function (Builder $query) {
-                                $query->where('parent_id', '!=', null);
-                            })->where('id', '!=', $record?->id)->get()->pluck('name', 'id');
+                            return Geo::where('parent_id', null)->where('id', '!=', $record?->id)
+                                ->get()
+                                ->pluck('name', 'id');
+                        })->visible(function (?Geo $record) {
+                            return !($record?->children()->exists());
                         }),
                 ]),
 
