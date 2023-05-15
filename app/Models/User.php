@@ -100,4 +100,14 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         $this->addMediaCollection('logo')
             ->singleFile();
     }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return $value;
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return $value;
+    }
 }
