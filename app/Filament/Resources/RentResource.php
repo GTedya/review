@@ -66,7 +66,7 @@ class RentResource extends Resource
                         ->required(),
 
                     Fieldset::make('Изображение')->columns(1)->schema([
-                        SpatieMediaLibraryFileUpload::make('image')
+                        SpatieMediaLibraryFileUpload::make('images')
                             ->image()
                             ->disableLabel()
                             ->multiple()
