@@ -6,6 +6,7 @@ use App\Filament\Resources\GeoResource\Pages;
 use App\Models\Geo;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -24,15 +25,29 @@ class GeoResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
+        return $form->columns(3)
             ->schema([
-                Grid::make()->columns(1)->schema([
+                Grid::make()->columnSpan(2)->schema([
+
                     Card::make()->schema([
                         TextInput::make('name')
                             ->label('Название')
                             ->required(),
                     ]),
-                ])
+                ]),
+
+                Grid::make()->columnSpan(1)->schema([
+                    Select::make('parent_id')
+                        ->label('Родительский тип')
+                        ->options(function (?Geo $record) {
+                            return Geo::where('parent_id', null)->where('id', '!=', $record?->id)
+                                ->get()
+                                ->pluck('name', 'id');
+                        })->visible(function (?Geo $record) {
+                            return !($record?->children()->exists());
+                        }),
+                ]),
+
             ]);
     }
 
@@ -41,6 +56,7 @@ class GeoResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')->label('Название')->sortable()->searchable(),
+                TextColumn::make('parent.name')->label('Родительский тип')->sortable()->searchable(),
             ])
             ->filters([
                 //
