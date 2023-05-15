@@ -142,6 +142,7 @@ class RentResource extends Resource
             ->columns([
                 TextColumn::make('name')->label('ФИО')->sortable()->searchable(),
                 TextColumn::make('phone')->label('Номер телефона')->sortable(),
+                TextColumn::make('type')->label('Тип объявления'),
                 TextColumn::make('geo.name')->label('Область')
                     ->searchable(query: function (Builder $query, string $search) {
                         $query->whereHas('geo', fn(Builder $q) => $q->withTrashed()->where('name', 'like', "%$search%")
