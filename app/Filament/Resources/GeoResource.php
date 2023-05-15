@@ -6,6 +6,7 @@ use App\Filament\Resources\GeoResource\Pages;
 use App\Models\Geo;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
@@ -37,17 +38,25 @@ class GeoResource extends Resource
                 ]),
 
                 Grid::make()->columnSpan(1)->schema([
-                    Select::make('parent_id')
-                        ->label('Родительский тип')
-                        ->options(function (?Geo $record) {
-                            return Geo::where('parent_id', null)->where('id', '!=', $record?->id)
-                                ->get()
-                                ->pluck('name', 'id');
-                        })->visible(function (?Geo $record) {
-                            return !($record?->children()->exists());
-                        }),
+                    Card::make()->schema([
+                        Select::make('parent_id')
+                            ->label('Родительский тип')
+                            ->options(function (?Geo $record) {
+                                return Geo::where('parent_id', null)->where('id', '!=', $record?->id)
+                                    ->get()
+                                    ->pluck('name', 'id');
+                            })->visible(function (?Geo $record) {
+                                return !$record?->children()->exists();
+                            })->dehydrated(function (?Geo $record) {
+                                return !$record?->children()->exists();
+                            }),
+                            Placeholder::make('has_children')
+                                ->label('У данной области есть дочерние области')
+                                ->visible(function (?Geo $record) {
+                                return $record?->children()->exists();
+                            }),
+                        ]),
                 ]),
-
             ]);
     }
 

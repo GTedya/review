@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Constants\RentTypeConstants;
 use App\Filament\Resources\RentResource\Pages;
 use App\Models\Geo;
 use App\Models\Rent;
@@ -44,7 +45,7 @@ class RentResource extends Resource
                 Card::make()->schema([
                     Grid::make()->schema([
                         TextInput::make('name')
-                            ->label('Название')
+                            ->label('Заголовок')
                             ->required(),
 
                         TextInput::make('phone')
@@ -55,8 +56,9 @@ class RentResource extends Resource
                             ->label('Email')
                             ->email(),
 
-                        TextInput::make('type')
+                        Select::make('type')
                             ->label('Тип')
+                            ->options(RentTypeConstants::RENT_TYPES)
                             ->required(),
                     ]),
                     Textarea::make('text')
