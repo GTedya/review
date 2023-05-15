@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Collection;
 
 /**
  * @property int id
  * @property int rent_id
  * @property int type_id
+ * @property Collection<VehicleType> $type
  */
 class RentVehicle extends Model
 {
@@ -22,7 +24,7 @@ class RentVehicle extends Model
         'type_id',
     ];
 
-    public function vehicleTypes(): BelongsTo
+    public function type(): BelongsTo
     {
         return $this->belongsTo(VehicleType::class, 'type_id');
     }

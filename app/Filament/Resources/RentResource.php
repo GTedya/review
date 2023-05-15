@@ -88,7 +88,7 @@ class RentResource extends Resource
                                 ->required()
                                 ->label('Выберите тип ТС')
                                 ->relationship(
-                                    'vehicleTypes',
+                                    'type',
                                     'name',
                                     function (Builder $query, ?RentVehicle $record) {
                                         $query->withTrashed()
