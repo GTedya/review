@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property ?int $parent_id
  * @property string $name
  * @property ?Geo $parent
- * @property ?Geo $children
+ * @property Collection<Geo> $children
  */
 class Geo extends Model
 {
