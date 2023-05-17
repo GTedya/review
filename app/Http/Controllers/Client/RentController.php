@@ -38,6 +38,6 @@ class RentController extends Controller
         $userId = Auth::id();
         $perPage = $request->input('per_page');
 
-        return response()->json(['success' => true, 'rents' => $this->rentRepo->pagination($userId, $perPage)]);
+        return response()->json(['success' => true, 'rents' => $this->rentRepo->history($userId, $perPage)]);
     }
 }
