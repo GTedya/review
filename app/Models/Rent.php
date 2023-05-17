@@ -63,4 +63,9 @@ class Rent extends Model implements HasMedia
     {
         $this->addMediaCollection('images');
     }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return $value;
+    }
 }

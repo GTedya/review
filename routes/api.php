@@ -4,6 +4,7 @@ use App\Http\Controllers\Client\AuthController;
 use App\Http\Controllers\Client\ClaimController;
 use App\Http\Controllers\Client\NewsController;
 use App\Http\Controllers\Client\OrderController as ClientOrder;
+use App\Http\Controllers\Client\RentController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\GeoController;
 use App\Http\Controllers\Manager\ManagerController;
@@ -44,7 +45,10 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/list', [UserController::class, 'orders']);
             Route::post('/create', [ClientOrder::class, 'create']);
         });
+
+        Route::post('/rent', [RentController::class, 'create']);
     });
+
 
     Route::middleware('role:dealer_manager|leasing_manager')->prefix('manager')->group(function () {
         Route::get('/orders', [ManagerOrder::class, 'orders']);

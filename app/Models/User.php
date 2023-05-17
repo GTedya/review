@@ -14,7 +14,20 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
-
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string $phone
+ * @property string $password
+ * @property ?Carbon $created_at
+ * @property ?Carbon $updated_at
+ * @property ?string $remember_token
+ * @property Collection<Order> $orders
+ * @property Collection<Rent> $rents
+ * @property Collection $userFiles
+ * @property ?Order $banOrders
+ */
 class User extends Authenticatable implements FilamentUser, HasMedia
 {
     use HasApiTokens;
@@ -30,20 +43,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         'client' => 'Клиент',
     ];
 
-    /**
-     * @property int $id
-     * @property string $name
-     * @property string $email
-     * @property string $phone
-     * @property string $password
-     * @property ?Carbon $created_at
-     * @property ?Carbon $updated_at
-     * @property ?string $remember_token
-     * @property Collection<Order> $orders
-     * @property Collection<Rent> $rents
-     * @property Collection $userFiles
-     * @property ?Order $banOrders
-     */
+
     protected $fillable = [
         'name',
         'phone',
@@ -99,5 +99,15 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     {
         $this->addMediaCollection('logo')
             ->singleFile();
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return $value;
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return $value;
     }
 }
