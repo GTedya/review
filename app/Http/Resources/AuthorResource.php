@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RentResource extends JsonResource
+class AuthorResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,15 +16,8 @@ class RentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => AuthorResource::make($this->user),
             'name' => $this->name,
-            'type' => $this->type,
             'email' => $this->email,
-            'is_published' => $this->is_published,
-            'phone' => $this->phone,
-            'geo' => GeoResource::make($this->geo),
-            'created_at' => $this->created_at,
-            'rent_vehicle' => RentVehicleResource::collection($this->whenLoaded('rentVehicles')),
         ];
     }
 }

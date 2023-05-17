@@ -16,7 +16,7 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => UserResource::make($this->user),
+            'user' => AuthorResource::make($this->user),
             'name' => $this->name,
             'user_id' => $this->user_id,
             'email' => $this->email,
