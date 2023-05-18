@@ -50,6 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::prefix('rent')->group(function () {
             Route::post('/create', [RentController::class, 'create']);
             Route::get('/history', [RentController::class, 'history']);
+            Route::post('/extend/{id}', [RentController::class, 'extend']);
         });
     });
 
