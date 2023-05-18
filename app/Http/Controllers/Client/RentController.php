@@ -38,6 +38,17 @@ class RentController extends Controller
         $userId = Auth::id();
         $perPage = $request->input('per_page');
 
-        return response()->json(['success' => true, 'rents' => $this->rentRepo->history($userId, $perPage)]);
+        return response()->json(['success' => true, 'ads' => $this->rentRepo->history($userId, $perPage)]);
+    }
+
+    public function list(Request $request): JsonResponse
+    {
+        $perPage = $request->input('per_page');
+        $geos = $request->input('geo');
+        $types = $request->input('types');
+        $value = $this->rentRepo->pagination($perPage, $geos, $types);
+
+
+        return response()->json(['success' => true, 'ads' => $value]);
     }
 }

@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/claim', [ClaimController::class, 'putClaim']);
+Route::get('/rent/list', [RentController::class, 'list']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
