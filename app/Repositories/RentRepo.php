@@ -23,6 +23,6 @@ class RentRepo
                 $query->whereIn('type_id', $types);
             });
         }
-        return $query->orderBy('created_at', 'desc')->with('rentVehicles')->paginate($perPage);
+        return $query->whereDate('active_until', '>=', now())->orderBy('created_at', 'desc')->with('rentVehicles')->paginate($perPage);
     }
 }

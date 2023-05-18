@@ -20,6 +20,7 @@ class RentResource extends JsonResource
             'name' => $this->name,
             'type' => $this->type,
             'email' => $this->email,
+            'active_until' => $this->active_until,
             'is_published' => $this->is_published,
             'phone' => $this->phone,
             'geo' => GeoResource::make($this->geo),
