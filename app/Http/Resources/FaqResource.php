@@ -14,6 +14,11 @@ class FaqResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'question' => $this->question,
+            'answer' => $this->answer,
+            'sort_index' => $this->sort_index,
+        ];
     }
 }
