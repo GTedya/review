@@ -29,9 +29,14 @@ class FaqResource extends Resource
 
                 Card::make()->schema([
 
-                    TextInput::make('question')->label('Вопрос'),
+                    TextInput::make('question')
+                        ->label('Вопрос')
+                        ->required(),
 
-                    TinyEditor::make('answer')->label('Ответ'),
+                    TinyEditor::make('answer')
+                        ->label('Ответ')
+                        ->required(),
+
                     TextInput::make('sort_index')
                         ->label('Индекс сортировки')
                         ->numeric()
