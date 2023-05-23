@@ -3,15 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PartnerResource\Pages;
-use App\Filament\Resources\PartnerResource\RelationManagers;
-use App\Models\Geo;
 use App\Models\Partner;
-use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
@@ -20,8 +15,6 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PartnerResource extends Resource
 {
@@ -46,16 +39,14 @@ class PartnerResource extends Resource
 
                         TextInput::make('link')
                             ->label('Ссылка'),
-
-
                     ]),
                 ]),
 
                 Grid::make()->columnSpan(1)->schema([
                     Card::make()->schema([
                         TextInput::make('sort_index')
-                        ->numeric()
-                        ->default(500),
+                            ->numeric()
+                            ->default(500),
 
                         Fieldset::make('Изображение')->columns(1)->schema([
                             SpatieMediaLibraryFileUpload::make('logo')
@@ -64,7 +55,8 @@ class PartnerResource extends Resource
                                 ->disableLabel()
                                 ->label('Лого')
                                 ->directory('form-tmp')
-                                ->collection('logo'),
+                                ->collection('logo')
+                                ->required(),
                         ]),
                     ]),
                 ]),
