@@ -9,6 +9,6 @@ class FaqRepo
 {
     public function list(?int $per_page): Collection
     {
-        return Faq::limit($per_page)->get();
+        return Faq::limit($per_page)->orderByDesc('sort_index')->get();
     }
 }
