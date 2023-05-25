@@ -26,14 +26,4 @@ class MenuGroup extends Model
     {
         return $this->hasMany(MenuItem::class, 'group_id');
     }
-
-    public function scopeHeader(Builder $query): Builder
-    {
-        return $query->where('is_bottom', false);
-    }
-
-    public function scopeFooter(Builder $query): Builder
-    {
-        return $query->where('is_bottom', true);
-    }
 }
