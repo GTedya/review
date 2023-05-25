@@ -20,6 +20,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property ?string $email
  * @property string $type
  * @property string $title
+ * @property bool $is_published
  * @property ?string $text
  * @property ?Carbon $created_at
  * @property ?Carbon $updated_at
@@ -33,6 +34,7 @@ class Rent extends Model implements HasMedia
     use InteractsWithMedia;
 
     protected $fillable = [
+        'is_published',
         'user_id',
         'geo_id',
         'name',

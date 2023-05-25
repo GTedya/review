@@ -41,4 +41,15 @@ class RentController extends Controller
 
         return response()->json(['success' => true, 'rents' => RentResource::collection($history)->resource]);
     }
+
+    public function list(Request $request): JsonResponse
+    {
+        $perPage = $request->input('per_page');
+        $geos = $request->input('geo');
+        $types = $request->input('types');
+        $rents = $this->rentRepo->pagination($perPage, $geos, $types);
+
+
+        return response()->json(['success' => true, 'rents' => RentResource::collection($rents)->resource]);
+    }
 }
