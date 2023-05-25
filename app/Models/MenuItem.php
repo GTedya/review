@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -24,7 +25,7 @@ class MenuItem extends Model
         'sort_index',
     ];
 
-    public function group()
+    public function group(): BelongsTo
     {
         return $this->belongsTo(MenuGroup::class, 'group_id');
     }

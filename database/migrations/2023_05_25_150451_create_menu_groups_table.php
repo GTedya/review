@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('menu_groups', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('link')->nullable();
             $table->boolean('is_bottom');
             $table->integer('sort_index')->default(500);
         });
