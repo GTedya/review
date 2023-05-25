@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @property int $id
  * @property string $name
+ * @property int $sort_index
  * @property bool $is_bottom
  * @property Collection<MenuItem> $items
  */
@@ -20,6 +21,7 @@ class MenuGroup extends Model
     protected $fillable = [
         'name',
         'is_bottom',
+        'sort_index',
     ];
 
     public function items(): HasMany
