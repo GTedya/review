@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
- * @property ?Carbon $deleted_at
+ * @property int $sort_index
  * @property string $name
  * @property string $link
  * @property int $group_id
@@ -21,6 +21,7 @@ class MenuItem extends Model
         'name',
         'link',
         'group_id',
+        'sort_index',
     ];
 
     public function group()
