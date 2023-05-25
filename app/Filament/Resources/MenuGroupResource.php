@@ -29,6 +29,10 @@ class MenuGroupResource extends Resource
                 TextInput::make('name')
                     ->label('Название группы')
                     ->required(),
+
+                TextInput::make('link')
+                    ->label('Ссылка')
+                    ->nullable(),
             ]),
 
             Card::make()->columnSpan(1)->schema([
