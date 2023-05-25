@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderResource;
 use App\Repositories\ManagerRepo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,8 @@ class OrderController extends Controller
 
     public function orders(): JsonResponse
     {
-        return response()->json(['success' => true, 'orders' => $this->managerRepo->getOrders(Auth::id())]);
+        $orders = $this->managerRepo->getOrders(Auth::id());
+
+        return response()->json(['success' => true, 'orders' => OrderResource::collection($orders)->resource]);
     }
 }
