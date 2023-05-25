@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Client\AuthController;
 use App\Http\Controllers\Client\ClaimController;
+use App\Http\Controllers\Client\FaqController;
 use App\Http\Controllers\Client\NewsController;
 use App\Http\Controllers\Client\OrderController as ClientOrder;
 use App\Http\Controllers\Client\RentController;
@@ -25,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/claim', [ClaimController::class, 'putClaim']);
+Route::get('/faqs', [FaqController::class, 'getFaqs']);
 Route::get('/rent/list', [RentController::class, 'list']);
 
 Route::middleware('auth:sanctum')->group(function () {
