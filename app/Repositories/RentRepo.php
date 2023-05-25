@@ -9,7 +9,7 @@ class RentRepo
 {
     public function history(int $id, ?int $perPage): LengthAwarePaginator
     {
-        return Rent::query()->where('user_id', $id)->orderBy('created_at', 'desc')->paginate($perPage);
+        return Rent::query()->where('user_id', $id)->orderBy('created_at', 'desc')->with(['geo', 'user'])->paginate($perPage);
     }
 
     public function pagination(?int $perPage, ?array $geos, ?array $types): LengthAwarePaginator
@@ -23,6 +23,6 @@ class RentRepo
                 $query->whereIn('type_id', $types);
             });
         }
-        return $query->whereDate('active_until', '>=', now())->orderBy('created_at', 'desc')->with('rentVehicles')->paginate($perPage);
+        return $query->whereDate('active_until', '>=', now())->orderBy('created_at', 'desc')->with(['rentVehicles.type', 'geo', 'user'])->paginate($perPage);
     }
 }
