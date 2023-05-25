@@ -39,6 +39,6 @@ class RentController extends Controller
         $perPage = $request->input('per_page');
         $history = $this->rentRepo->history($userId, $perPage);
 
-        return response()->json(['success' => true, 'rents' => RentResource::collection($history)]);
+        return response()->json(['success' => true, 'rents' => RentResource::collection($history)->resource]);
     }
 }
