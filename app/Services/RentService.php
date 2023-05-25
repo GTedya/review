@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Rent;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class RentService
 {
@@ -19,5 +20,19 @@ class RentService
 
         DB::commit();
         return $rent;
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    public function extend(int $userId, int $rentId): void
+    {
+        $result = Rent::query()
+            ->where('id', $rentId)
+            ->where('user_id', $userId)
+            ->update(['active_until' => now()->addMonth()]);
+        if (!$result) {
+            throw ValidationException::withMessages(['message' => 'Не удалось продлить объявление']);
+        }
     }
 }

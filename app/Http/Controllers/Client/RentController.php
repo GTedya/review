@@ -11,6 +11,7 @@ use App\Services\RentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class RentController extends Controller
 {
@@ -51,5 +52,17 @@ class RentController extends Controller
 
 
         return response()->json(['success' => true, 'rents' => RentResource::collection($rents)->resource]);
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    public function extend(int $rentId): JsonResponse
+    {
+        $userId = Auth::id();
+
+        $this->rentService->extend($userId, $rentId);
+
+        return response()->json(['success' => true]);
     }
 }
