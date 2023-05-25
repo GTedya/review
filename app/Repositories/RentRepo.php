@@ -9,7 +9,7 @@ class RentRepo
 {
     public function history(int $id, ?int $perPage): LengthAwarePaginator
     {
-        return Rent::query()->where('user_id', $id)->orderBy('created_at', 'desc')->paginate($perPage);
+        return Rent::query()->where('user_id', $id)->orderBy('created_at', 'desc')->with(['geo', 'user'])->paginate($perPage);
     }
 
     public function pagination(?int $perPage, ?array $geos, ?array $types): LengthAwarePaginator

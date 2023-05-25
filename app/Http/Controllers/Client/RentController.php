@@ -37,8 +37,9 @@ class RentController extends Controller
     {
         $userId = Auth::id();
         $perPage = $request->input('per_page');
+        $history = $this->rentRepo->history($userId, $perPage);
 
-        return response()->json(['success' => true, 'ads' => $this->rentRepo->history($userId, $perPage)]);
+        return response()->json(['success' => true, 'rents' => RentResource::collection($history)->resource]);
     }
 
     public function list(Request $request): JsonResponse
