@@ -50,6 +50,6 @@ class RentController extends Controller
         $rents = $this->rentRepo->pagination($perPage, $geos, $types);
 
 
-        return response()->json(['success' => true, 'ads' => RentResource::collection($rents)]);
+        return response()->json(['success' => true, 'rents' => RentResource::collection($rents)->resource]);
     }
 }
