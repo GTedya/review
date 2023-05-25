@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\MenuResource;
 use App\Repositories\MenuRepo;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
@@ -18,7 +17,7 @@ class MenuController extends Controller
 
     public function list(): JsonResponse
     {
-        $menus = MenuResource::collection($this->menuRepo->list());
-        return response()->json(['success' => true, 'menu' => $menus]);
+        $menu = MenuResource::collection($this->menuRepo->list());
+        return response()->json(['success' => true, 'menu' => $menu]);
     }
 }
