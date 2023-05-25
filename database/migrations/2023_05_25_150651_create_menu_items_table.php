@@ -15,7 +15,6 @@ return new class extends Migration {
 
             $table->string('name');
             $table->string('link');
-            $table->softDeletes();
             $table->integer('sort_index')->default(500);
             $table->foreignId('group_id')
                 ->constrained('menu_groups')
