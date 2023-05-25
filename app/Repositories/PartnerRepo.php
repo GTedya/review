@@ -9,6 +9,6 @@ class PartnerRepo
 {
     public function list(?int $limit): Collection
     {
-        return Partner::limit($limit)->orderByDesc('sort_index')->get();
+        return Partner::limit($limit)->get();
     }
 }

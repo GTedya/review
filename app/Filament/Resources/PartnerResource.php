@@ -44,10 +44,6 @@ class PartnerResource extends Resource
 
                 Grid::make()->columnSpan(1)->schema([
                     Card::make()->schema([
-                        TextInput::make('sort_index')
-                            ->numeric()
-                            ->default(500),
-
                         Fieldset::make('Изображение')->columns(1)->schema([
                             SpatieMediaLibraryFileUpload::make('logo')
                                 ->image()
@@ -69,7 +65,6 @@ class PartnerResource extends Resource
             ->columns([
                 TextColumn::make('name')->label('Название')->sortable()->searchable(),
                 SpatieMediaLibraryImageColumn::make('logo')->collection('logo')->label('Лого'),
-                TextColumn::make('sort_index')->label('Индекс сортировки')->sortable(),
             ])
             ->filters([
                 //
