@@ -17,6 +17,7 @@ class MenuResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'link' => $this->link,
             'is_bottom' => $this->is_bottom,
             'group_items' => MenuItemResource::collection($this->items),
         ];
