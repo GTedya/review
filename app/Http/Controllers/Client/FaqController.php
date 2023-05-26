@@ -20,7 +20,7 @@ class FaqController extends Controller
 
     public function getFaqs(Request $request): JsonResponse
     {
-        $per_page = $request->input('per_page');
+        $per_page = $request->integer('per_page');
 
         return response()->json(['success' => true, 'faqs' => FaqResource::collection($this->faqRepo->list($per_page))]);
     }
