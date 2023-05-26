@@ -14,6 +14,6 @@ class UserRepo
 
     public function getOrders(?User $user): LengthAwarePaginator
     {
-        return $user->orders()->orderBy('created_at', 'desc')->paginate();
+        return $user->orders()->orderBy('created_at', 'desc')->with(['geo', 'user'])->paginate();
     }
 }
