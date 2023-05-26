@@ -19,7 +19,7 @@ class PartnerController extends Controller
 
     public function getPartner(Request $request): JsonResponse
     {
-        $limit = $request->input('limit');
+        $limit = $request->integer('limit');
 
         return response()->json(
             ['success' => true, 'partners' => PartnerResource::collection($this->partnerRepo->list($limit))]
