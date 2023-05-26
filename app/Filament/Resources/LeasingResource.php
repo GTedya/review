@@ -48,7 +48,6 @@ class LeasingResource extends Resource
                             ->image()
                             ->enableOpen()
                             ->disableLabel()
-                            ->responsiveImages()
                             ->label('Изображение')
                             ->directory('form-tmp')
                             ->collection('image')
