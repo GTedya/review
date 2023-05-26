@@ -7,6 +7,7 @@ use App\Http\Controllers\Client\OrderController as ClientOrder;
 use App\Http\Controllers\Client\RentController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\GeoController;
+use App\Http\Controllers\LeasingController;
 use App\Http\Controllers\Manager\ManagerController;
 use App\Http\Controllers\Manager\OrderController as ManagerOrder;
 use App\Http\Controllers\PageController;
@@ -26,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/claim', [ClaimController::class, 'putClaim']);
 Route::get('/rent/list', [RentController::class, 'list']);
+Route::get('/leasings', [LeasingController::class, 'getLeasings']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
