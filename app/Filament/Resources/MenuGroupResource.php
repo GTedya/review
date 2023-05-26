@@ -43,8 +43,7 @@ class MenuGroupResource extends Resource
 
                 Checkbox::make('is_bottom')
                     ->label('Нижнее меню')
-                    ->default(false)
-                    ->reactive(),
+                    ->default(false),
             ]),
         ]);
     }

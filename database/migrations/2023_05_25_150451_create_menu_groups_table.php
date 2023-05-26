@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('link')->nullable();
-            $table->boolean('is_bottom');
+            $table->boolean('is_bottom')->default(false);
             $table->integer('sort_index')->default(500);
         });
     }
