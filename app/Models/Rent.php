@@ -20,8 +20,10 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property ?string $email
  * @property string $type
  * @property string $title
+ * @property bool $is_published
  * @property ?string $text
  * @property ?Carbon $created_at
+ * @property ?Carbon $active_until
  * @property ?Carbon $updated_at
  * @property User $user
  * @property Geo $geo
@@ -33,6 +35,7 @@ class Rent extends Model implements HasMedia
     use InteractsWithMedia;
 
     protected $fillable = [
+        'is_published',
         'user_id',
         'geo_id',
         'name',
@@ -41,6 +44,7 @@ class Rent extends Model implements HasMedia
         'type',
         'title',
         'text',
+        'active_until',
         'created_at'
     ];
 
@@ -65,6 +69,11 @@ class Rent extends Model implements HasMedia
     }
 
     public function getCreatedAtAttribute($value)
+    {
+        return $value;
+    }
+
+    public function getActiveUntilAttribute($value)
     {
         return $value;
     }
