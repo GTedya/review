@@ -19,7 +19,7 @@ class MenuResource extends JsonResource
             'name' => $this->name,
             'link' => $this->link,
             'is_bottom' => $this->is_bottom,
-            'group_items' => MenuItemResource::collection($this->items),
+            'items' => MenuItemResource::collection($this->items),
         ];
     }
 }
