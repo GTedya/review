@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -19,6 +20,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property ?Carbon $updated_at
  * @property ?array $meta
  * @property Collection<File> $files
+ * @property Collection<PageVar> $pageVars
  */
 class Page extends Model implements HasMedia
 {
@@ -53,5 +55,10 @@ class Page extends Model implements HasMedia
     public function getCreatedAtAttribute($value)
     {
         return $value;
+    }
+
+    public function pageVars(): HasMany
+    {
+        return $this->hasMany(PageVar::class);
     }
 }
