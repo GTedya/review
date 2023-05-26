@@ -21,17 +21,15 @@ class NewsController extends Controller
 
     public function pagination(): JsonResponse
     {
-        return response()->json(['success' => true, 'news' => $this->newsRepo->pagination()]);
+        return response()->json(['success' => true, 'news' => NewsResource::collection($this->newsRepo->pagination())->resource]);
     }
 
     public function single(string $slug): JsonResponse
     {
         $content = $this->newsService->getBySlug($slug);
 
-        $news = NewsResource::make($content);
-
         return response()->json(
-            ['success' => true, 'news' => $news]
+            ['success' => true, 'news' => NewsResource::make($content)]
         );
     }
 }

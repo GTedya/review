@@ -21,8 +21,6 @@ class VehTypeController extends Controller
     {
         $types = $this->typeRepo->list();
 
-        $types = VehTypeResource::collection($types);
-
-        return response()->json(['success' => true, 'types' => $types]);
+        return response()->json(['success' => true, 'types' => VehTypeResource::collection($types)]);
     }
 }
