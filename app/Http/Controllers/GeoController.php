@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\GeoResource;
 use App\Repositories\GeoRepo;
 use Illuminate\Http\JsonResponse;
 
@@ -16,6 +17,6 @@ class GeoController extends Controller
 
     public function list(): JsonResponse
     {
-        return response()->json(['success' => true, 'geos' => $this->geoRepo->list()]);
+        return response()->json(['success' => true, 'geos' => GeoResource::collection($this->geoRepo->list())]);
     }
 }

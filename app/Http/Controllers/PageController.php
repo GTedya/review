@@ -22,10 +22,8 @@ class PageController extends Controller
     {
         $content = $this->pageService->getBySlug($slug);
 
-        $page = PageResource::make($content);
-
         return response()->json(
-            ['success' => true, 'page' => $page]
+            ['success' => true, 'page' => PageResource::make($content)]
         );
     }
 }

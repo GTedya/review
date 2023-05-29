@@ -12,6 +12,6 @@ class ManagerRepo
     {
         return Order::query()->whereDoesntHave('banUsers', function (Builder $query) use ($userId) {
             $query->where('manager_order_bans.user_id', $userId);
-        })->paginate();
+        })->with(['geo', 'user'])->paginate();
     }
 }
