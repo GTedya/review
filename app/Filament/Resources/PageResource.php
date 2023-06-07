@@ -85,7 +85,7 @@ class PageResource extends Resource
                 TextColumn::make('template')->label('Шаблон')->getStateUsing(function (Page $record) {
                     return Page::NAMES[$record->template];
                 })->sortable()->searchable(),
-                TextColumn::make('slug')->label('Ссылка')->sortable()->searchable(),
+                TextColumn::make('slug')->label('Slug')->sortable()->searchable(),
                 TextColumn::make('title')->label('Название')->sortable()->searchable(),
                 TextColumn::make('created_at')->label('Дата создания')->sortable(),
             ])
