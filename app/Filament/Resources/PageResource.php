@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\Str;
 
 class PageResource extends Resource
 {
@@ -33,6 +34,8 @@ class PageResource extends Resource
                     Grid::make()->schema([
                         TextInput::make('title')
                             ->label('Название')
+                            ->reactive()
+                            ->afterStateUpdated(static::getNameChangedCallback())
                             ->required(),
 
                         TextInput::make('slug')
@@ -110,5 +113,14 @@ class PageResource extends Resource
             'create' => Pages\CreatePage::route('/create'),
             'edit' => Pages\EditPage::route('/{record}/edit'),
         ];
+    }
+
+    private static function getNameChangedCallback(): callable
+    {
+        return function ($state, callable $set, string $context) {
+            if ($context === 'create') {
+                $set('slug', Str::slug($state));
+            }
+        };
     }
 }
