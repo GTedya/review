@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * @property int $id
@@ -13,9 +15,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $page_var_id
  * @property PageVar $pageVar
  */
-class RepeatVar extends Model
+class RepeatVar extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     public $timestamps = false;
 
@@ -32,5 +35,15 @@ class RepeatVar extends Model
     public function pageVar(): BelongsTo
     {
         return $this->belongsTo(PageVar::class);
+    }
+
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('main_slider_image')
+            ->singleFile();
+
+        $this->addMediaCollection('main_info_tiles_logo')
+            ->singleFile();
     }
 }
