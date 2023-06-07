@@ -8,7 +8,6 @@ use App\Services\CustomVar;
 use App\Services\PageCustomFields;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -19,36 +18,31 @@ class DefaultPageFields extends PageCustomFields
     public function getSchema(): array
     {
         return [
-            Fieldset::make('fields')->label('Переменные')->columns(1)->schema([
+            Section::make('Шаблон страницы по умолчанию')->collapsed()->schema([
+                TinyEditor::make('vars.default.content')->label('Контент'),
 
-                Grid::make()->schema([
-                    Section::make('Шаблон страницы по умолчанию')->collapsed()->schema([
-                        TinyEditor::make('vars.default.content')->label('Контент'),
+                Fieldset::make('Изображение')->columns(1)->schema([
+                    FileUpload::make('vars.default.image')
+                        ->image()
+                        ->enableOpen()
+                        ->disableLabel()
+                        ->label('Изображение')
+                        ->directory('form-tmp')
+                        ->panelLayout('integrated'),
+                ]),
 
-                        Fieldset::make('Изображение')->columns(1)->schema([
-                            FileUpload::make('vars.default.image')
-                                ->image()
-                                ->enableOpen()
-                                ->disableLabel()
-                                ->label('Изображение')
-                                ->directory('form-tmp')
-                                ->panelLayout('integrated'),
-                        ]),
+                Repeater::make('vars.files')->label('Файлы')
+                    ->createItemButtonLabel('Добавить')
+                    ->dehydrated(false)
+                    ->schema([
+                        TextInput::make('text')->label('Текст файла')->required(),
 
-                        Repeater::make('vars.files')->label('Файлы')
-                            ->createItemButtonLabel('Добавить')
-                            ->dehydrated(false)
-                            ->schema([
-                                TextInput::make('text')->label('Текст файла')->required(),
-
-                                FileUpload::make('file')
-                                    ->required()
-                                    ->enableOpen()
-                                    ->label('Файл')
-                                    ->directory('form-tmp')
-                            ]),
+                        FileUpload::make('file')
+                            ->required()
+                            ->enableOpen()
+                            ->label('Файл')
+                            ->directory('form-tmp')
                     ]),
-                ])
             ]),
         ];
     }

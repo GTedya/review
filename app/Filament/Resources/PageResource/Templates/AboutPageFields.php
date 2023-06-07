@@ -7,9 +7,7 @@ use App\Services\CustomFieldsGetter;
 use App\Services\CustomFieldsSaver;
 use App\Services\CustomVar;
 use App\Services\PageCustomFields;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -21,70 +19,64 @@ class AboutPageFields extends PageCustomFields
     public function getSchema(): array
     {
         return [
-            Fieldset::make('fields')->label('Переменные')->columns(1)->schema([
-                Grid::make()->schema([
+            Section::make('О нас')->collapsed()->schema([
+                TextInput::make('vars.about.title')
+                    ->label('Заголовок')
+                    ->required(),
 
-                    Section::make('О нас')->collapsed()->schema([
-                        TextInput::make('vars.about.title')
-                            ->label('Заголовок')
-                            ->required(),
+                TinyEditor::make('vars.about.body')
+                    ->label('Описание')
+                    ->nullable(),
 
-                        TinyEditor::make('vars.about.body')
-                            ->label('Описание')
-                            ->nullable(),
+                TextInput::make('vars.about.video_link')
+                    ->label('Ссылка на видео')
+                    ->nullable(),
 
-                        TextInput::make('vars.about.video_link')
-                            ->label('Ссылка на видео')
-                            ->nullable(),
+                TextInput::make('vars.about.steps_title')
+                    ->label('Заголовок процесса')
+                    ->nullable(),
 
-                        TextInput::make('vars.about.steps_title')
-                            ->label('Заголовок процесса')
-                            ->nullable(),
+                TextInput::make('vars.about.steps_body')
+                    ->label('Подзаголовок процесса')
+                    ->nullable(),
 
-                        TextInput::make('vars.about.steps_body')
-                            ->label('Подзаголовок процесса')
-                            ->nullable(),
+                FileUpload::make('vars.about.image')
+                    ->label('Картинка')
+                    ->image()
+                    ->directory('form-tmp')
+                    ->nullable(),
+            ]),
 
-                        FileUpload::make('vars.about.image')
-                            ->label('Картинка')
-                            ->image()
-                            ->directory('form-tmp')
-                            ->nullable(),
+            Section::make('Партнеры')->collapsed()->schema([
+                Select::make('vars.partners.ids')
+                    ->label('Партнеры')
+                    ->nullable()
+                    ->multiple()
+                    ->disableLabel()
+                    ->options(Partner::all()->pluck('name', 'id')),
+            ]),
+
+
+            Section::make('Шаги процесса')->collapsed()->schema([
+                Repeater::make('vars.steps')
+                    ->label('Шаги')
+                    ->createItemButtonLabel('Создать шаг')
+                    ->minItems(function ($state) {
+                        if (count($state) == 0) {
+                            return 0;
+                        }
+                        return 3;
+                    })
+                    ->maxItems(3)
+                    ->schema([
+                        TextInput::make('title')
+                            ->required()
+                            ->label('Заголовок'),
+
+                        TextInput::make('body')
+                            ->required()
+                            ->label('Описание'),
                     ]),
-
-                    Section::make('Партнеры')->collapsed()->schema([
-                        Select::make('vars.partners.ids')
-                            ->label('Партнеры')
-                            ->nullable()
-                            ->multiple()
-                            ->disableLabel()
-                            ->options(Partner::all()->pluck('name', 'id')),
-                    ]),
-
-
-                    Section::make('Шаги процесса')->collapsed()->schema([
-                        Repeater::make('vars.steps')
-                            ->label('Шаги')
-                            ->createItemButtonLabel('Создать шаг')
-                            ->minItems(function ($state) {
-                                if (count($state) == 0) {
-                                    return 0;
-                                }
-                                return 3;
-                            })
-                            ->maxItems(3)
-                            ->schema([
-                                TextInput::make('title')
-                                    ->required()
-                                    ->label('Заголовок'),
-
-                                TextInput::make('body')
-                                    ->required()
-                                    ->label('Описание'),
-                            ]),
-                    ]),
-
-                ]),
             ]),
         ];
     }

@@ -7,9 +7,7 @@ use App\Services\CustomFieldsGetter;
 use App\Services\CustomFieldsSaver;
 use App\Services\CustomVar;
 use App\Services\PageCustomFields;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -20,82 +18,75 @@ class LeasingsPageFields extends PageCustomFields
     public function getSchema(): array
     {
         return [
-            Fieldset::make('fields')->label('Переменные')->columns(1)->schema([
-                Grid::make()->schema([
+            Section::make('Страница лизинга')->collapsed()->schema([
+                TextInput::make('vars.leasings.title')
+                    ->label('Заголовок')
+                    ->required(),
 
+                TextInput::make('vars.leasings.benefits_title')
+                    ->label('Заголовок блока выгоды')
+                    ->nullable(),
 
-                    Section::make('Страница лизинга')->collapsed()->schema([
-                        TextInput::make('vars.leasings.title')
-                            ->label('Заголовок')
-                            ->required(),
+                TextInput::make('vars.leasings.steps_title')
+                    ->label('Заголовок процесса')
+                    ->nullable(),
 
-                        TextInput::make('vars.leasings.benefits_title')
-                            ->label('Заголовок блока выгоды')
-                            ->nullable(),
+                TextInput::make('vars.leasings.steps_body')
+                    ->label('Подзаголовок процесса')
+                    ->nullable(),
 
-                        TextInput::make('vars.leasings.steps_title')
-                            ->label('Заголовок процесса')
-                            ->nullable(),
+                TextInput::make('vars.leasings.cta_title')
+                    ->label('Призыв к действию')
+                    ->nullable(),
 
-                        TextInput::make('vars.leasings.steps_body')
-                            ->label('Подзаголовок процесса')
-                            ->nullable(),
+                FileUpload::make('vars.leasings.image')
+                    ->label('Картинка')
+                    ->image()
+                    ->directory('form-tmp')
+                    ->nullable(),
+            ]),
 
-                        TextInput::make('vars.leasings.cta_title')
-                            ->label('Призыв к действию')
-                            ->nullable(),
+            Section::make('Шаги процесса')->collapsed()->schema([
+                Repeater::make('vars.steps')
+                    ->label('Шаги')
+                    ->createItemButtonLabel('Создать шаг')
+                    ->minItems(function ($state) {
+                        if (count($state) == 0) {
+                            return 0;
+                        }
+                        return 3;
+                    })
+                    ->maxItems(3)
+                    ->schema([
+                        TextInput::make('title')
+                            ->required()
+                            ->label('Заголовок'),
 
-                        FileUpload::make('vars.leasings.image')
-                            ->label('Картинка')
-                            ->image()
-                            ->directory('form-tmp')
-                            ->nullable(),
+                        TextInput::make('body')
+                            ->required()
+                            ->label('Описание'),
                     ]),
-
-                    Section::make('Шаги процесса')->collapsed()->schema([
-                        Repeater::make('vars.steps')
-                            ->label('Шаги')
-                            ->createItemButtonLabel('Создать шаг')
-                            ->minItems(function ($state) {
-                                if (count($state) == 0) {
-                                    return 0;
-                                }
-                                return 3;
-                            })
-                            ->maxItems(3)
-                            ->schema([
-                                TextInput::make('title')
-                                    ->required()
-                                    ->label('Заголовок'),
-
-                                TextInput::make('body')
-                                    ->required()
-                                    ->label('Описание'),
-                            ]),
-                    ]),
+            ]),
 
 
-                    Section::make('Партнеры')->collapsed()->schema([
-                        Select::make('vars.partners.ids')
-                            ->label('Партнеры')
-                            ->nullable()
-                            ->multiple()
-                            ->disableLabel()
-                            ->options(Partner::all()->pluck('name', 'id')),
-                    ]),
+            Section::make('Партнеры')->collapsed()->schema([
+                Select::make('vars.partners.ids')
+                    ->label('Партнеры')
+                    ->nullable()
+                    ->multiple()
+                    ->disableLabel()
+                    ->options(Partner::all()->pluck('name', 'id')),
+            ]),
 
 
-                    Section::make('Блок о выгодах')->collapsed()->schema([
-                        Repeater::make('vars.benefits')
-                            ->createItemButtonLabel('Добавить выгоду')
-                            ->disableLabel()
-                            ->schema([
-                                TextInput::make('title')->label('Заголовок')->required(),
-                                TextInput::make('body')->label('Текст')->required(),
-                            ])
-                    ]),
-
-                ]),
+            Section::make('Блок о выгодах')->collapsed()->schema([
+                Repeater::make('vars.benefits')
+                    ->createItemButtonLabel('Добавить выгоду')
+                    ->disableLabel()
+                    ->schema([
+                        TextInput::make('title')->label('Заголовок')->required(),
+                        TextInput::make('body')->label('Текст')->required(),
+                    ])
             ]),
         ];
     }

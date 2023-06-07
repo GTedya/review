@@ -6,9 +6,7 @@ use App\Services\CustomFieldsGetter;
 use App\Services\CustomFieldsSaver;
 use App\Services\CustomVar;
 use App\Services\PageCustomFields;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -19,88 +17,82 @@ class SearchPageFields extends PageCustomFields
     public function getSchema(): array
     {
         return [
-            Fieldset::make('fields')->label('Переменные')->columns(1)->schema([
-                Grid::make()->schema([
+            Section::make('Страница подбора')->collapsed()->schema([
+                TextInput::make('vars.search.title')
+                    ->label('Заголовок')
+                    ->required(),
 
-                    Section::make('Страница подбора')->collapsed()->schema([
-                        TextInput::make('vars.search.title')
-                            ->label('Заголовок')
-                            ->required(),
+                TextInput::make('vars.search.why_us_title')
+                    ->label('Заголовок почему мы')
+                    ->nullable(),
 
-                        TextInput::make('vars.search.why_us_title')
-                            ->label('Заголовок почему мы')
-                            ->nullable(),
+                TinyEditor::make('vars.search.body')
+                    ->label('Описание')
+                    ->nullable(),
 
-                        TinyEditor::make('vars.search.body')
-                            ->label('Описание')
-                            ->nullable(),
+                TextInput::make('vars.search.video_link')
+                    ->label('Ссылка на видео')
+                    ->nullable(),
 
-                        TextInput::make('vars.search.video_link')
-                            ->label('Ссылка на видео')
-                            ->nullable(),
+                TextInput::make('vars.search.steps_title')
+                    ->label('Заголовок процесса')
+                    ->nullable(),
 
-                        TextInput::make('vars.search.steps_title')
-                            ->label('Заголовок процесса')
-                            ->nullable(),
+                TextInput::make('vars.search.steps_body')
+                    ->label('Подзаголовок процесса')
+                    ->nullable(),
 
-                        TextInput::make('vars.search.steps_body')
-                            ->label('Подзаголовок процесса')
-                            ->nullable(),
+                TextInput::make('vars.search.map_title')
+                    ->label('Заголовок карты')
+                    ->nullable(),
 
-                        TextInput::make('vars.search.map_title')
-                            ->label('Заголовок карты')
-                            ->nullable(),
+                TextInput::make('vars.search.map_body')
+                    ->label('Тело карты')
+                    ->nullable(),
 
-                        TextInput::make('vars.search.map_body')
-                            ->label('Тело карты')
-                            ->nullable(),
+                TextInput::make('vars.search.cta_title')
+                    ->label('Призыв к действию')
+                    ->nullable(),
 
-                        TextInput::make('vars.search.cta_title')
-                            ->label('Призыв к действию')
-                            ->nullable(),
+                FileUpload::make('vars.search.image')
+                    ->label('Картинка')
+                    ->image()
+                    ->directory('form-tmp')
+                    ->nullable(),
+            ]),
 
-                        FileUpload::make('vars.search.image')
-                            ->label('Картинка')
-                            ->image()
-                            ->directory('form-tmp')
-                            ->nullable(),
+
+            Section::make('Блок о выгодах')->collapsed()->schema([
+                Repeater::make('vars.benefits')
+                    ->createItemButtonLabel('Добавить выгоду')
+                    ->disableLabel()
+                    ->schema([
+                        TextInput::make('title')->label('Заголовок')->required(),
+                        TextInput::make('body')->label('Текст')->required(),
+                    ])
+            ]),
+
+
+            Section::make('Шаги процесса')->collapsed()->schema([
+                Repeater::make('vars.steps')
+                    ->label('Шаги')
+                    ->createItemButtonLabel('Создать шаг')
+                    ->minItems(function ($state) {
+                        if (count($state) == 0) {
+                            return 0;
+                        }
+                        return 3;
+                    })
+                    ->maxItems(3)
+                    ->schema([
+                        TextInput::make('title')
+                            ->required()
+                            ->label('Заголовок'),
+
+                        TextInput::make('body')
+                            ->required()
+                            ->label('Описание'),
                     ]),
-
-
-                    Section::make('Блок о выгодах')->collapsed()->schema([
-                        Repeater::make('vars.benefits')
-                            ->createItemButtonLabel('Добавить выгоду')
-                            ->disableLabel()
-                            ->schema([
-                                TextInput::make('title')->label('Заголовок')->required(),
-                                TextInput::make('body')->label('Текст')->required(),
-                            ])
-                    ]),
-
-
-                    Section::make('Шаги процесса')->collapsed()->schema([
-                        Repeater::make('vars.steps')
-                            ->label('Шаги')
-                            ->createItemButtonLabel('Создать шаг')
-                            ->minItems(function ($state) {
-                                if (count($state) == 0) {
-                                    return 0;
-                                }
-                                return 3;
-                            })
-                            ->maxItems(3)
-                            ->schema([
-                                TextInput::make('title')
-                                    ->required()
-                                    ->label('Заголовок'),
-
-                                TextInput::make('body')
-                                    ->required()
-                                    ->label('Описание'),
-                            ]),
-                    ]),
-
-                ]),
             ]),
         ];
     }

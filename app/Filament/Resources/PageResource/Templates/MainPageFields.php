@@ -7,9 +7,7 @@ use App\Services\CustomFieldsGetter;
 use App\Services\CustomFieldsSaver;
 use App\Services\CustomVar;
 use App\Services\PageCustomFields;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -23,112 +21,106 @@ class MainPageFields extends PageCustomFields
     public function getSchema(): array
     {
         return [
-            Fieldset::make('fields')->label('Переменные')->columns(1)->schema([
-                Grid::make()->schema([
+            Section::make('Заглавный слайдер')->collapsed()->schema([
+                Repeater::make('vars.title_slider')
+                    ->label('Слайды')
+                    ->createItemButtonLabel('Добавить слайд')
+                    ->schema([
+                        TextInput::make('title')
+                            ->required()
+                            ->label('Заголовок'),
 
-                    Section::make('Заглавный слайдер')->collapsed()->schema([
-                        Repeater::make('vars.title_slider')
-                            ->label('Слайды')
-                            ->createItemButtonLabel('Добавить слайд')
-                            ->schema([
-                                TextInput::make('title')
-                                    ->required()
-                                    ->label('Заголовок'),
+                        Textarea::make('text')
+                            ->required()
+                            ->label('Текст'),
 
-                                Textarea::make('text')
-                                    ->required()
-                                    ->label('Текст'),
+                        Toggle::make('button_open_modal')->label('Кнопка всплывающего окна'),
 
-                                Toggle::make('button_open_modal')->label('Кнопка всплывающего окна'),
+                        TextInput::make('link')->nullable()->label('Ссылка'),
 
-                                TextInput::make('link')->nullable()->label('Ссылка'),
-
-                                FileUpload::make('image')
-                                    ->label('Изображение')
-                                    ->image()
-                                    ->directory('form-tmp')
-                                    ->required(),
-                            ]),
-                    ]),
-
-                    Section::make('Инфо блоки')->collapsed()->schema([
-                        Repeater::make('vars.info_tiles')
-                            ->label('Блоки')
-                            ->createItemButtonLabel('Создать инфо блок')
-                            ->minItems(function ($state) {
-                                if (count($state) == 0) {
-                                    return 0;
-                                }
-                                return 3;
-                            })
-                            ->maxItems(3)
-                            ->schema([
-                                TextInput::make('title')
-                                    ->required()
-                                    ->label('Заголовок'),
-
-                                TextInput::make('body')
-                                    ->required()
-                                    ->label('Описание'),
-
-                                FileUpload::make('logo')
-                                    ->label('Лого')
-                                    ->image()
-                                    ->directory('form-tmp')
-                                    ->required(),
-                            ]),
-                    ]),
-
-                    Section::make('Почему мы')->collapsed()->schema([
-                        TextInput::make('vars.why_us.title')
-                            ->label('Заголовок')
-                            ->required(),
-
-                        TinyEditor::make('vars.why_us.body')
-                            ->label('Описание')
-                            ->nullable(),
-
-                        TextInput::make('vars.why_us.video_link')
-                            ->label('Ссылка на видео')
-                            ->nullable(),
-
-                        FileUpload::make('vars.why_us.preview')
-                            ->label('Превью')
+                        FileUpload::make('image')
+                            ->label('Изображение')
                             ->image()
                             ->directory('form-tmp')
                             ->required(),
                     ]),
+            ]),
 
-                    Section::make('Партнеры')->collapsed()->schema([
-                        Select::make('vars.partners.ids')
-                            ->label('Партнеры')
-                            ->nullable()
-                            ->multiple()
-                            ->disableLabel()
-                            ->options(Partner::all()->pluck('name', 'id')),
-                    ]),
+            Section::make('Инфо блоки')->collapsed()->schema([
+                Repeater::make('vars.info_tiles')
+                    ->label('Блоки')
+                    ->createItemButtonLabel('Создать инфо блок')
+                    ->minItems(function ($state) {
+                        if (count($state) == 0) {
+                            return 0;
+                        }
+                        return 3;
+                    })
+                    ->maxItems(3)
+                    ->schema([
+                        TextInput::make('title')
+                            ->required()
+                            ->label('Заголовок'),
 
-                    Section::make('Блок карты')->collapsed()->schema([
-                        TextInput::make('vars.map.title')
-                            ->label('Заголовок')
+                        TextInput::make('body')
+                            ->required()
+                            ->label('Описание'),
+
+                        FileUpload::make('logo')
+                            ->label('Лого')
+                            ->image()
+                            ->directory('form-tmp')
                             ->required(),
-
-                        Textarea::make('vars.map.body')
-                            ->label('Тект')
-                            ->required(),
                     ]),
+            ]),
 
-                    Section::make('Блок о выгодах')->collapsed()->schema([
-                        Repeater::make('vars.benefits')
-                            ->createItemButtonLabel('Добавить выгоду')
-                            ->disableLabel()
-                            ->schema([
-                                TextInput::make('title')->label('Заголовок')->required(),
-                                TextInput::make('text')->label('Текст')->required(),
-                            ])
-                    ]),
+            Section::make('Почему мы')->collapsed()->schema([
+                TextInput::make('vars.why_us.title')
+                    ->label('Заголовок')
+                    ->required(),
 
-                ]),
+                TinyEditor::make('vars.why_us.body')
+                    ->label('Описание')
+                    ->nullable(),
+
+                TextInput::make('vars.why_us.video_link')
+                    ->label('Ссылка на видео')
+                    ->nullable(),
+
+                FileUpload::make('vars.why_us.preview')
+                    ->label('Превью')
+                    ->image()
+                    ->directory('form-tmp')
+                    ->required(),
+            ]),
+
+            Section::make('Партнеры')->collapsed()->schema([
+                Select::make('vars.partners.ids')
+                    ->label('Партнеры')
+                    ->nullable()
+                    ->multiple()
+                    ->disableLabel()
+                    ->options(Partner::all()->pluck('name', 'id')),
+            ]),
+
+            Section::make('Блок карты')->collapsed()->schema([
+                TextInput::make('vars.map.title')
+                    ->label('Заголовок')
+                    ->required(),
+
+                Textarea::make('vars.map.body')
+                    ->label('Тект')
+                    ->required(),
+            ]),
+
+            Section::make('Блок о выгодах')->collapsed()->schema([
+                Repeater::make('vars.benefits')
+                    ->createItemButtonLabel('Добавить выгоду')
+                    ->disableLabel()
+                    ->schema([
+                        TextInput::make('title')->label('Заголовок')->required(),
+                        TextInput::make('text')->label('Текст')->required(),
+                    ])
             ]),
         ];
     }
