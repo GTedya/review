@@ -22,10 +22,10 @@ class Page extends Model
     use HasFactory;
 
     public const NAMES = self::CAN_CREATE + [
+        'main' => 'Главная',
         'about' => 'О нас',
         'search' => 'Подбор',
         'leasings' => 'Лизинг',
-        'leasing' => 'Соло лизинга',
     ];
 
     public const CAN_CREATE = [
