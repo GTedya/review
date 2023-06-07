@@ -41,7 +41,7 @@ class PageResource extends Resource
                                 return $record?->template == 'main';
                             })
                             ->dehydrated(function (?Page $record) {
-                                return $record?->template == 'main';
+                                return $record?->template != 'main';
                             })
                             ->unique(ignoreRecord: true)
                             ->required(),
