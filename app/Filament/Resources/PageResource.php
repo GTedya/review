@@ -86,6 +86,7 @@ class PageResource extends Resource
                     return Page::NAMES[$record->template];
                 })->sortable()->searchable(),
                 TextColumn::make('slug')->label('Ссылка')->sortable()->searchable(),
+                TextColumn::make('title')->label('Название')->sortable()->searchable(),
                 TextColumn::make('created_at')->label('Дата создания')->sortable(),
             ])
             ->filters([
