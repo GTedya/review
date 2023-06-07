@@ -11,7 +11,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * @property int $id
  * @property string $name
- * @property array $vars
+ * @property ?array $vars
  * @property int $page_var_id
  * @property PageVar $pageVar
  */

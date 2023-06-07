@@ -13,7 +13,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * @property int $id
- * @property array $vars
+ * @property ?array $vars
  * @property int $page_id
  * @property Page $page
  * @property Collection<File> $files
