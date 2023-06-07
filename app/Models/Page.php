@@ -21,9 +21,7 @@ class Page extends Model
 {
     use HasFactory;
 
-    public const NAMES = [
-        'default' => 'По умолчанию',
-        'main' => 'Главная',
+    public const NAMES = self::CAN_CREATE + [
         'about' => 'О нас',
         'search' => 'Подбор',
         'leasings' => 'Лизинг',
