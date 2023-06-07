@@ -30,8 +30,15 @@ class PageResource extends Resource
         return $form->columns(3)->schema([
             Grid::make()->columnSpan(2)->schema([
                 Card::make()->schema([
+                    TextInput::make('title')
+                        ->label('Название')
+                        ->required(),
+
                     TextInput::make('slug')
-                        ->label('Ссылка')
+                        ->label('Slug')
+                        ->disabled(function (?Page $record) {
+                            return $record?->template == 'main';
+                        })
                         ->unique(ignoreRecord: true)
                         ->required(),
 
@@ -50,10 +57,7 @@ class PageResource extends Resource
                         ->label('Шаблон')
                         ->default('default')
                         ->options(function (string $context) {
-                            return ($context == 'create') ? [
-                                'default' => 'По умолчанию',
-                                'leasing' => 'Соло лизинга'
-                            ] : Page::NAMES;
+                            return ($context == 'create') ? Page::CAN_CREATE : Page::NAMES;
                         }),
                     DateTimePicker::make('created_at')
                         ->label('Дата создания')

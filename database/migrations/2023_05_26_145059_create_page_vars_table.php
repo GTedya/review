@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('page_vars', function (Blueprint $table) {
             $table->id();
-            $table->json('vars');
+            $table->json('vars')->nullable();
 
             $table->foreignId('page_id')
                 ->constrained()

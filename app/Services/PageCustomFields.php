@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Filament\Resources\PageResource\Templates\AboutPageFields;
+use App\Filament\Resources\PageResource\Templates\DefaultPageFields;
 use App\Filament\Resources\PageResource\Templates\LeasingPageFields;
 use App\Filament\Resources\PageResource\Templates\LeasingsPageFields;
 use App\Filament\Resources\PageResource\Templates\MainPageFields;
@@ -12,6 +13,7 @@ use App\Models\Page;
 abstract class PageCustomFields
 {
     private const PAGE_CLASS_MAP = [
+        'default' => DefaultPageFields::class,
         'main' => MainPageFields::class,
         'about' => AboutPageFields::class,
         'search' => SearchPageFields::class,

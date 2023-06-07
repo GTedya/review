@@ -9,6 +9,7 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
+ * @property string $title
  * @property string $slug
  * @property string $template
  * @property ?Carbon $created_at
@@ -29,7 +30,13 @@ class Page extends Model
         'leasing' => 'Соло лизинга',
     ];
 
+    public const CAN_CREATE = [
+        'default' => 'По умолчанию',
+        'leasing' => 'Соло лизинга',
+    ];
+
     protected $fillable = [
+        'title',
         'template',
         'slug',
         'meta',

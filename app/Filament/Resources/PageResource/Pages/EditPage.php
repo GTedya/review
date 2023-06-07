@@ -12,11 +12,11 @@ class EditPage extends EditRecord
     protected static string $resource = PageResource::class;
     private ?PageCustomFields $pageCustomFields = null;
 
-    private const UNTOUCHABLE = [1, 2, 3, 4];
+    private const UNTOUCHABLE = ['main', 'search', 'about', 'leasings'];
 
     protected function getActions(): array
     {
-        return (in_array($this->record->id, self::UNTOUCHABLE)) ? array() : [Actions\DeleteAction::make(),];
+        return (in_array($this->record->template, self::UNTOUCHABLE)) ? array() : [Actions\DeleteAction::make(),];
     }
 
     private function initCustomFields(): void
