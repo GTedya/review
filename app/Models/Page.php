@@ -4,31 +4,39 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * @property int $id
  * @property string $title
  * @property string $slug
- * @property ?string $content
+ * @property string $template
  * @property ?Carbon $created_at
  * @property ?Carbon $updated_at
  * @property ?array $meta
- * @property Collection<File> $files
+ * @property ?PageVar $pageVar
  */
-class Page extends Model implements HasMedia
+class Page extends Model
 {
     use HasFactory;
-    use InteractsWithMedia;
+
+    public const NAMES = self::CAN_CREATE + [
+        'main' => 'Главная',
+        'about' => 'О нас',
+        'search' => 'Подбор',
+        'leasings' => 'Лизинг',
+    ];
+
+    public const CAN_CREATE = [
+        'default' => 'По умолчанию',
+        'leasing' => 'Соло лизинга',
+    ];
 
     protected $fillable = [
         'title',
+        'template',
         'slug',
-        'content',
         'meta',
         'created_at',
     ];
@@ -38,20 +46,13 @@ class Page extends Model implements HasMedia
     ];
 
 
-    public function files(): MorphMany
-    {
-        return $this->morphMany(File::class, 'fileable',);
-    }
-
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('image')
-            ->withResponsiveImages()
-            ->singleFile();
-    }
-
     public function getCreatedAtAttribute($value)
     {
         return $value;
+    }
+
+    public function pageVar(): hasOne
+    {
+        return $this->hasOne(PageVar::class);
     }
 }

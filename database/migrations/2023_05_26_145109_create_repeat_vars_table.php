@@ -10,13 +10,15 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('pages', function (Blueprint $table) {
+        Schema::create('repeat_vars', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('template')->default('default');
-            $table->string('slug')->unique();
-            $table->json('meta')->nullable();
-            $table->timestamps();
+            $table->string('name');
+            $table->json('vars')->nullable();
+
+            $table->foreignId('page_var_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
@@ -25,6 +27,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('pages');
+        Schema::dropIfExists('repeat_vars');
     }
 };

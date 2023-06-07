@@ -8,17 +8,14 @@ use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\Str;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class PageResource extends Resource
 {
@@ -33,64 +30,50 @@ class PageResource extends Resource
     {
         return $form->columns(3)->schema([
             Grid::make()->columnSpan(2)->schema([
-
                 Card::make()->schema([
                     Grid::make()->schema([
                         TextInput::make('title')
                             ->label('Название')
-                            ->required()
                             ->reactive()
-                            ->afterStateUpdated(static::getNameChangedCallback()),
+                            ->afterStateUpdated(static::getNameChangedCallback())
+                            ->required(),
 
                         TextInput::make('slug')
                             ->label('Slug')
+                            ->disabled(function (?Page $record) {
+                                return $record?->template == 'main';
+                            })
+                            ->dehydrated(function (?Page $record) {
+                                return $record?->template != 'main';
+                            })
                             ->unique(ignoreRecord: true)
                             ->required(),
-                    ]),
 
 
-                    Fieldset::make('Мета поля')->columns(1)->schema([
-                        TextInput::make('meta.title')->label('title'),
-                        TextInput::make('meta.description')->label('description'),
-                    ]),
-
-                    TinyEditor::make('content')->label('Контент'),
-
-                    Fieldset::make('Изображение')->columns(1)->schema([
-                        SpatieMediaLibraryFileUpload::make('image')
-                            ->image()
-                            ->enableOpen()
-                            ->disableLabel()
-                            ->responsiveImages()
-                            ->label('Изображение')
-                            ->directory('form-tmp')
-                            ->collection('image')
-                            ->panelLayout('integrated'),
-                    ]),
-
-                    Repeater::make('files')->label('Файлы')
-                        ->createItemButtonLabel('Добавить')
-                        ->relationship('files')
-                        ->schema([
-                            TextInput::make('text')->label('Текст файла')->required(),
-
-                            SpatieMediaLibraryFileUpload::make('file')
-                                ->required()
-                                ->enableOpen()
-                                ->label('Файл')
-                                ->directory('form-tmp')
+                        Fieldset::make('Мета поля')->columns(1)->schema([
+                            TextInput::make('meta.title')->label('title'),
+                            TextInput::make('meta.description')->label('description'),
                         ]),
+                    ]),
                 ]),
-            ]),
 
+            ]),
             Grid::make()->columnSpan(1)->schema([
                 Card::make()->schema([
+                    Select::make('template')
+                        ->disabledOn('edit')
+                        ->label('Шаблон')
+                        ->default('default')
+                        ->options(function (string $context) {
+                            return ($context == 'create') ? Page::CAN_CREATE : Page::NAMES;
+                        }),
                     DateTimePicker::make('created_at')
                         ->label('Дата создания')
                         ->default('now')
-                        ->displayFormat('Y-m-d H:i:s'),
+                        ->displayFormat('Y-m-d H:i:s')
+                    ,
                 ]),
-            ]),
+            ])
         ]);
     }
 
@@ -99,9 +82,12 @@ class PageResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('template')->label('Шаблон')->getStateUsing(function (Page $record) {
+                    return Page::NAMES[$record->template];
+                })->sortable()->searchable(),
+                TextColumn::make('slug')->label('Slug')->sortable()->searchable(),
                 TextColumn::make('title')->label('Название')->sortable()->searchable(),
                 TextColumn::make('created_at')->label('Дата создания')->sortable(),
-                SpatieMediaLibraryImageColumn::make('media')->label('Изображение')->collection('image'),
             ])
             ->filters([
                 //
@@ -110,7 +96,7 @@ class PageResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                //
             ]);
     }
 
