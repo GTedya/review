@@ -30,22 +30,27 @@ class PageResource extends Resource
         return $form->columns(3)->schema([
             Grid::make()->columnSpan(2)->schema([
                 Card::make()->schema([
-                    TextInput::make('title')
-                        ->label('Название')
-                        ->required(),
+                    Grid::make()->schema([
+                        TextInput::make('title')
+                            ->label('Название')
+                            ->required(),
 
-                    TextInput::make('slug')
-                        ->label('Slug')
-                        ->disabled(function (?Page $record) {
-                            return $record?->template == 'main';
-                        })
-                        ->unique(ignoreRecord: true)
-                        ->required(),
+                        TextInput::make('slug')
+                            ->label('Slug')
+                            ->disabled(function (?Page $record) {
+                                return $record?->template == 'main';
+                            })
+                            ->dehydrated(function (?Page $record) {
+                                return $record?->template == 'main';
+                            })
+                            ->unique(ignoreRecord: true)
+                            ->required(),
 
 
-                    Fieldset::make('Мета поля')->columns(1)->schema([
-                        TextInput::make('meta.title')->label('title'),
-                        TextInput::make('meta.description')->label('description'),
+                        Fieldset::make('Мета поля')->columns(1)->schema([
+                            TextInput::make('meta.title')->label('title'),
+                            TextInput::make('meta.description')->label('description'),
+                        ]),
                     ]),
                 ]),
 
