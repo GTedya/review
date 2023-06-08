@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\PageVar;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,11 +19,10 @@ class PageResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
-            'content' => $this->content,
+            'parent_id' => $this->parent_id,
+            'vars' => PageVarResource::make($this->pageVar),
             'meta' => $this->meta,
             'created_at' => $this->created_at,
-            'image' => $this->getFirstMediaUrl('image'),
-            'files' => FileResource::collection($this->whenLoaded('files')),
         ];
     }
 }
