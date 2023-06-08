@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
@@ -11,11 +12,13 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property string $title
  * @property string $slug
+ * @property ?int $parent_id
  * @property string $template
  * @property ?Carbon $created_at
  * @property ?Carbon $updated_at
  * @property ?array $meta
  * @property ?PageVar $pageVar
+ * @property ?Page $parent
  */
 class Page extends Model
 {
@@ -35,6 +38,7 @@ class Page extends Model
 
     protected $fillable = [
         'title',
+        'parent_id',
         'template',
         'slug',
         'meta',
@@ -49,6 +53,16 @@ class Page extends Model
     public function getCreatedAtAttribute($value)
     {
         return $value;
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Page::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Page::class, 'parent_id');
     }
 
     public function pageVar(): hasOne

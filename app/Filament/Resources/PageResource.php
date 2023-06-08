@@ -67,6 +67,25 @@ class PageResource extends Resource
                         ->options(function (string $context) {
                             return ($context == 'create') ? Page::CAN_CREATE : Page::NAMES;
                         }),
+                    Select::make('parent_id')
+                        ->label('Родитель')
+                        ->options(function (?Page $record) {
+                            if ($record !== null) {
+                                $ids = array_reduce(
+                                    $record->children()->with(static::recursiveWith())->get()->toArray(),
+                                    static::recursiveReduce(),
+                                    [],
+                                );
+
+                                $ids[] = $record->id;
+                            }
+
+                            return Page::whereNotIn('id', $ids ?? [])
+                                ->whereNot('template', 'main')
+                                ->get()
+                                ->pluck('title', 'id');
+                        })
+                        ->disabled(fn(?Page $record) => $record?->id === 1),
                     DateTimePicker::make('created_at')
                         ->label('Дата создания')
                         ->default('now')
@@ -122,6 +141,24 @@ class PageResource extends Resource
             if ($context === 'create') {
                 $set('slug', Str::slug($state));
             }
+        };
+    }
+
+    private static function recursiveWith(): array
+    {
+        return [
+            'children' => function ($query) {
+                $query->with(static::recursiveWith());
+            }
+        ];
+    }
+
+    private static function recursiveReduce(): \Closure
+    {
+        return function ($result, $item) {
+            $result[] = $item['id'];
+            $reduced = array_reduce($item['children'], static::recursiveReduce(), []);
+            return array_merge($result, $reduced);
         };
     }
 }
