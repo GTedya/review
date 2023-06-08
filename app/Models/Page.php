@@ -18,6 +18,7 @@ use Illuminate\Support\Carbon;
  * @property ?Carbon $updated_at
  * @property ?array $meta
  * @property ?PageVar $pageVar
+ * @property ?Page $parent
  */
 class Page extends Model
 {
