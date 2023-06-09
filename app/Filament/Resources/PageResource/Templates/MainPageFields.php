@@ -2,7 +2,12 @@
 
 namespace App\Filament\Resources\PageResource\Templates;
 
+use App\Http\Resources\PartnerResource;
+use App\Models\Page;
+use App\Models\PageVar;
 use App\Models\Partner;
+use App\Models\RepeatVar;
+use App\Repositories\PartnerRepo;
 use App\Services\CustomFieldsGetter;
 use App\Services\CustomFieldsSaver;
 use App\Services\CustomVar;
@@ -18,6 +23,13 @@ use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class MainPageFields extends PageCustomFields
 {
+    public function __construct(
+        private PartnerRepo $partnerRepo,
+        Page $page,
+    ) {
+        parent::__construct($page);
+    }
+
     public function getSchema(): array
     {
         return [
@@ -166,5 +178,38 @@ class MainPageFields extends PageCustomFields
         $saver->setRepeatVarsFields('benefits', new CustomVar(['title', 'text']));
 
         $saver->save($this->page);
+    }
+
+    public function getPageVars(): array
+    {
+        /** @var PageVar $pageVar */
+        $pageVar = $this->page->pageVar;
+
+        $partners = $this->partnerRepo->getByIds(...$pageVar['vars']['partners']);
+        $partners = PartnerResource::collection($partners);
+
+        $repeatGroups = $this->page->pageVar->repeatVars->groupBy('name');
+
+        $titleSlider = $repeatGroups['title_slider']?->map(function (RepeatVar $repeatVar) {
+            $vars = $repeatVar->vars;
+            return array_merge($vars, [
+                'image' => $repeatVar->getFirstMediaUrl('main_slider_image'),
+            ]);
+        });
+        $infoTiles = $repeatGroups['info_tiles']?->map(function (RepeatVar $repeatVar) {
+            $vars = $repeatVar->vars;
+            return array_merge($vars, [
+                'image' => $repeatVar->getFirstMediaUrl('main_info_tiles_logo'),
+            ]);
+        });
+
+        return [
+            ...array_merge($pageVar->vars, [
+                'partners' => $partners,
+            ]),
+            'main_why_us_preview' => $pageVar->getFirstMediaUrl('main_why_us_preview'),
+            'title_slider' => $titleSlider,
+            'info_tiles' => $infoTiles,
+        ];
     }
 }

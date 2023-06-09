@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\PageResource\Templates;
 
+use App\Models\PageVar;
+use App\Models\RepeatVar;
 use App\Services\CustomFieldsGetter;
 use App\Services\CustomFieldsSaver;
 use App\Services\CustomVar;
@@ -75,5 +77,27 @@ class DefaultPageFields extends PageCustomFields
 
         $saver->setRepeatVarsFields('files', new CustomVar(['text'], ['file' => 'default_files']));
         $saver->save($this->page);
+    }
+
+
+    public function getPageVars(): array
+    {
+        /** @var PageVar $pageVar */
+        $pageVar = $this->page->pageVar;
+
+        $repeatGroups = $this->page->pageVar->repeatVars->groupBy('name');
+
+        $files = $repeatGroups['files']?->map(function (RepeatVar $repeatVar) {
+            $vars = $repeatVar->vars;
+            return array_merge($vars, [
+                'default_files' => $repeatVar->getFirstMediaUrl('default_files'),
+            ]);
+        });
+
+        return [
+            ...$pageVar->vars,
+            'default_image' => $pageVar->getFirstMediaUrl('default_image'),
+            'files' => $files,
+        ];
     }
 }

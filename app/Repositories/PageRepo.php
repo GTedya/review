@@ -10,4 +10,11 @@ class PageRepo
     {
         return Page::query()->where('slug', $slug)->first();
     }
+
+    public function pageByTemplate(string $template): ?Page
+    {
+        return Page::query()->where('template', $template)->first();
+    }
+
+
 }

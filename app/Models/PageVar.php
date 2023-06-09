@@ -10,13 +10,12 @@ use Illuminate\Support\Collection;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-
 /**
  * @property int $id
  * @property ?array $vars
  * @property int $page_id
  * @property Page $page
- * @property Collection<File> $files
+ * @property Collection<int, RepeatVar> repeatVars
  */
 class PageVar extends Model implements HasMedia
 {

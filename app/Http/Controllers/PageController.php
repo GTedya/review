@@ -26,4 +26,13 @@ class PageController extends Controller
             ['success' => true, 'page' => PageResource::make($content)]
         );
     }
+
+    public function getMainPage(): JsonResponse
+    {
+        $content = $this->pageService->getByTemplate('main');
+
+        return response()->json(
+            ['success' => true, 'page' => PageResource::make($content)]
+        );
+    }
 }

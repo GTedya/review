@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Repositories\PageRepo;
 use App\Models\Page;
+use App\Repositories\PageRepo;
 
 class PageService
 {
@@ -17,6 +17,15 @@ class PageService
     public function getBySlug(string $slug): Page
     {
         $content = $this->pageRepo->pageBySlug($slug);
+        if ($content === null) {
+            abort(404, 'Данной страницы не существует');
+        };
+        return $content;
+    }
+
+    public function getByTemplate(string $template): Page
+    {
+        $content = $this->pageRepo->pageByTemplate($template);
         if ($content === null) {
             abort(404, 'Данной страницы не существует');
         };
