@@ -48,7 +48,6 @@ class OrderRequest extends FormRequest
             'dealer.vehicles' => ['required_with:dealer', 'array'],
             'dealer.vehicles.*' => ['array:type_id,brand,model,count'],
             'dealer.vehicles.*.type_id' => ['required', 'int', 'exists:vehicle_types,id'],
-
         ];
     }
 

@@ -28,4 +28,14 @@ class OrderController extends Controller
 
         return response()->json(['success' => true, 'order' => OrderResource::make($order)]);
     }
+
+    public function edit(int $orderId, OrderRequest $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        $order = $this->orderService->editOrder($user, $orderId, $request->validated());
+
+        return response()->json(['success' => true, 'order' => $order]);
+    }
 }
