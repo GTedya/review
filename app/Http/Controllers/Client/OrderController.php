@@ -36,6 +36,6 @@ class OrderController extends Controller
 
         $order = $this->orderService->editOrder($user, $orderId, $request->validated());
 
-        return response()->json(['success' => true, 'order' => $order]);
+        return response()->json(['success' => true, 'order' => OrderResource::make($order)]);
     }
 }

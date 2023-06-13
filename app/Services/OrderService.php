@@ -3,8 +3,11 @@
 namespace App\Services;
 
 use App\Models\Order;
+use App\Models\OrderLeasingVehicle;
+use App\Models\Page\RepeatVar;
 use App\Models\User;
 use App\Repositories\OrderRepo;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -33,6 +36,9 @@ class OrderService
         return $order;
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function editOrder(User $user, int $orderId, array $data): Order
     {
         if (!$this->orderRepo->usersOrderExists($orderId, $user->id)) {
@@ -40,15 +46,24 @@ class OrderService
         }
 
         $order = $this->orderRepo->usersOrder($orderId, $user->id);
-
-        DB::beginTransaction();
+        /** @var Collection<RepeatVar> $oldRepeatVars */
+        $oldRepeatVars = $order->leasingVehicles()->get();
+        $oldItems = $this->mapVars($oldRepeatVars);
+        foreach ($data['leasing']['vehicles'] as  $vehicle){
+            $newItems[] = $vehicle['type_id'];
+        }
         if (filled($data['leasing'] ?? null)) {
-            $dataLeasing = $data['leasing'];
-            $order->leasingVehicles()->delete();
-            $order->leasingVehicles()->createMany($dataLeasing['vehicles']);
+            $toDelete = (array_diff_assoc($oldItems, $newItems));
 
-            unset($dataLeasing['vehicles']);
-            $order->leasing()->updateOrCreate(array_diff_key($dataLeasing));
+            $toCreate = array_diff_key($newItems, $oldItems);
+            $toUpdate = array_diff_key($newItems, $toCreate, $toDelete);
+            dd($toDelete,$toCreate, $toUpdate);
+
+
+            if (filled($toDelete)) {
+                $order->leasingVehicles()->delete(83);
+            }
+            $order->leasingVehicles()->createMany($toCreate);
         }
 
         if (filled($data['dealer'] ?? null)) {
@@ -58,8 +73,19 @@ class OrderService
         }
         $order->update($data);
 
-        DB::commit();
-
         return $order;
+    }
+    private function deleteRepeatVars(Collection $repeatVars, array $toDelete)
+    {
+        $repeatVars->whereIn('id', $toDelete)
+            ->each(fn (OrderLeasingVehicle $var) => $var->delete());
+    }
+
+    private function mapVars(Collection $repeatVars): array
+    {
+        $repeatVars = $repeatVars->mapWithKeys(function (OrderLeasingVehicle $item){
+            return [$item->id => $item->type_id];
+        });
+        return $repeatVars->toArray();
     }
 }
