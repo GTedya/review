@@ -145,8 +145,9 @@ class SearchPageFields extends PageCustomFields
 
     public function getPageVars(): array
     {
-        /** @var PageVar $pageVar */
+        /** @var ?PageVar $pageVar */
         $pageVar = $this->page->pageVar;
+        if ($pageVar === null) return [];
 
         $repeatGroups = $this->page->pageVar->repeatVars->groupBy('name');
 

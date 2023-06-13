@@ -45,7 +45,7 @@ class RepeatVar extends Model implements HasMedia
         $this->addMediaCollection('main_info_tiles_logo')
             ->singleFile();
 
-        $this->addMediaCollection('default_files')
+        $this->addMediaCollection('default_file')
             ->singleFile();
     }
 }

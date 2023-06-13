@@ -171,10 +171,12 @@ class LeasingPageFields extends PageCustomFields
 
     public function getPageVars(): array
     {
-        /** @var PageVar $pageVar */
+        /** @var ?PageVar $pageVar */
         $pageVar = $this->page->pageVar;
+        if ($pageVar === null) return [];
 
-        $partners = $this->partnerRepo->getByIds(...$pageVar['vars']['partners']);
+
+        $partners = $this->partnerRepo->getByIds(...($pageVar->vars['partners'] ?? []));
         $partners = PartnerResource::collection($partners);
 
         $repeatGroups = $this->page->pageVar->repeatVars->groupBy('name');
