@@ -8,6 +8,13 @@ class PageRepo
 {
     public function pageBySlug(string $slug): ?Page
     {
-        return Page::query()->where('slug', $slug)->with('files')->first();
+        return Page::query()->where('slug', $slug)->first();
     }
+
+    public function pageByTemplate(string $template): ?Page
+    {
+        return Page::query()->where('template', $template)->first();
+    }
+
+
 }

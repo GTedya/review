@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Services\PageCustomFields;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,11 +19,15 @@ class PageResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
-            'content' => $this->content,
             'meta' => $this->meta,
+            'parent_id' => $this->parent_id,
             'created_at' => $this->created_at,
-            'image' => $this->getFirstMediaUrl('image'),
-            'files' => FileResource::collection($this->whenLoaded('files')),
+            'pageVars' => $this->getPageVars(),
         ];
+    }
+
+    private function getPageVars(): array
+    {
+        return PageCustomFields::getInstance($this->resource)->getPageVars();
     }
 }

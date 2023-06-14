@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\PageResource\Templates;
 
+use App\Models\PageVar;
+use App\Models\RepeatVar;
 use App\Services\CustomFieldsGetter;
 use App\Services\CustomFieldsSaver;
 use App\Services\CustomVar;
@@ -140,4 +142,28 @@ class SearchPageFields extends PageCustomFields
         $saver->setRepeatVarsFields('benefits', new CustomVar(['title', 'body']));
         $saver->save($this->page);
     }
+
+    public function getPageVars(): array
+    {
+        /** @var ?PageVar $pageVar */
+        $pageVar = $this->page->pageVar;
+        if ($pageVar === null) return [];
+
+        $repeatGroups = $this->page->pageVar->repeatVars->groupBy('name');
+
+        $steps = $repeatGroups['steps']?->map(function (RepeatVar $repeatVar) {
+            return $repeatVar->vars;
+        });
+        $benefits = $repeatGroups['benefits']?->map(function (RepeatVar $repeatVar) {
+            return $repeatVar->vars;
+        });
+
+        return [
+            ...$pageVar->vars,
+            'search_main_image' => $pageVar->getFirstMediaUrl('search_main_image'),
+            'steps' => $steps,
+            'benefits' => $benefits,
+        ];
+    }
+
 }

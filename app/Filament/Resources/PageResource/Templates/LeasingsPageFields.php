@@ -2,7 +2,12 @@
 
 namespace App\Filament\Resources\PageResource\Templates;
 
+use App\Http\Resources\PartnerResource;
+use App\Models\Page;
+use App\Models\PageVar;
 use App\Models\Partner;
+use App\Models\RepeatVar;
+use App\Repositories\PartnerRepo;
 use App\Services\CustomFieldsGetter;
 use App\Services\CustomFieldsSaver;
 use App\Services\CustomVar;
@@ -15,6 +20,15 @@ use Filament\Forms\Components\TextInput;
 
 class LeasingsPageFields extends PageCustomFields
 {
+
+    public function __construct(
+        private PartnerRepo $partnerRepo,
+        Page $page,
+    ) {
+        parent::__construct($page);
+    }
+
+
     public function getSchema(): array
     {
         return [
@@ -124,5 +138,34 @@ class LeasingsPageFields extends PageCustomFields
         $saver->setRepeatVarsFields('benefits', new CustomVar(['title', 'body']));
 
         $saver->save($this->page);
+    }
+
+    public function getPageVars(): array
+    {
+        /** @var ?PageVar $pageVar */
+        $pageVar = $this->page->pageVar;
+        if ($pageVar === null) return [];
+
+
+        $partners = $this->partnerRepo->getByIds(...($pageVar->vars['partners'] ?? []));
+        $partners = PartnerResource::collection($partners);
+
+        $repeatGroups = $this->page->pageVar->repeatVars->groupBy('name');
+
+        $steps = $repeatGroups['steps']?->map(function (RepeatVar $repeatVar) {
+            return $repeatVar->vars;
+        });
+        $benefits = $repeatGroups['benefits']?->map(function (RepeatVar $repeatVar) {
+            return $repeatVar->vars;
+        });
+
+        return [
+            ...array_merge($pageVar->vars, [
+                'partners' => $partners,
+            ]),
+            'leasings_main_image' => $pageVar->getFirstMediaUrl('leasings_main_image'),
+            'steps' => $steps,
+            'benefits' => $benefits,
+        ];
     }
 }

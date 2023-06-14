@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\PageResource\Templates;
 
+use App\Models\PageVar;
+use App\Models\RepeatVar;
 use App\Services\CustomFieldsGetter;
 use App\Services\CustomFieldsSaver;
 use App\Services\CustomVar;
@@ -59,7 +61,7 @@ class DefaultPageFields extends PageCustomFields
 
         $getter->setImageFields('default', ['image' => 'default_image']);
 
-        $getter->setRepeaterFields('files', new CustomVar(['text'], ['file' => 'default_files']));
+        $getter->setRepeaterFields('files', new CustomVar(['text'], ['file' => 'default_file']));
 
         return $getter->getFields();
     }
@@ -73,7 +75,31 @@ class DefaultPageFields extends PageCustomFields
             new CustomVar(['content'], ['image' => 'default_image'])
         );
 
-        $saver->setRepeatVarsFields('files', new CustomVar(['text'], ['file' => 'default_files']));
+        $saver->setRepeatVarsFields('files', new CustomVar(['text'], ['file' => 'default_file']));
         $saver->save($this->page);
+    }
+
+
+    public function getPageVars(): array
+    {
+        /** @var ?PageVar $pageVar */
+        $pageVar = $this->page->pageVar;
+        if ($pageVar === null) return [];
+
+
+        $repeatGroups = $this->page->pageVar->repeatVars->groupBy('name');
+
+        $files = $repeatGroups['files']?->map(function (RepeatVar $repeatVar) {
+            $vars = $repeatVar->vars;
+            return array_merge($vars, [
+                'file' => $repeatVar->getFirstMediaUrl('default_file'),
+            ]);
+        });
+
+        return [
+            ...$pageVar->vars,
+            'image' => $pageVar->getFirstMediaUrl('default_image'),
+            'files' => $files,
+        ];
     }
 }

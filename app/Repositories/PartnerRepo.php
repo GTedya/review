@@ -11,4 +11,9 @@ class PartnerRepo
     {
         return Partner::limit($limit)->get();
     }
+
+    public function getByIds(?array $ids): Collection
+    {
+        return Partner::query()->whereIn('id', $ids)->get();
+    }
 }

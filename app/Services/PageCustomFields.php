@@ -35,6 +35,8 @@ abstract class PageCustomFields
 
     abstract public function getFields(): ?array;
 
+    abstract public function saveFields(array $vars): void;
+
     static public function getInstance($page): ?\App\Services\PageCustomFields
     {
         $template = $page->template;
@@ -44,8 +46,9 @@ abstract class PageCustomFields
             return null;
         }
 
-        return new $className($page);
+        return app()->make($className, ['page' => $page]);
     }
 
-    abstract public function saveFields(array $vars): void;
+
+    abstract public function getPageVars(): array;
 }
