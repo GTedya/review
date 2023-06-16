@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
@@ -29,12 +30,14 @@ class OrderController extends Controller
         return response()->json(['success' => true, 'order' => OrderResource::make($order)]);
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function edit(int $orderId, OrderRequest $request): JsonResponse
     {
-        /** @var User $user */
-        $user = Auth::user();
+        $userId = Auth::id();
 
-        $order = $this->orderService->editOrder($user, $orderId, $request->validated());
+        $order = $this->orderService->editOrder($userId, $orderId, $request->validated());
 
         return response()->json(['success' => true, 'order' => OrderResource::make($order)]);
     }

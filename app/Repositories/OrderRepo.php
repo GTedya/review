@@ -10,9 +10,4 @@ class OrderRepo
     {
         return Order::query()->where('id', $orderId)->where('user_id', $userId)->with(['leasing','dealerVehicles' ,'leasingVehicles'])->first();
     }
-
-    public function usersOrderExists(int $orderId, int $userId): bool
-    {
-        return Order::query()->where('id', $orderId)->where('user_id', $userId)->exists();
-    }
 }
