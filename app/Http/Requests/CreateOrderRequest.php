@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Utilities\Helpers;
-use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderRequest extends FormRequest
+class CreateOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -16,18 +14,10 @@ class OrderRequest extends FormRequest
         return true;
     }
 
-    public function prepareForValidation(): void
-    {
-        $this->merge([
-            'phone' => Helpers::getCleanPhone($this->phone),
-        ]);
-    }
-
-
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, Rule|array|string>
+     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
      */
     public function rules(): array
     {

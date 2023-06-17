@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\OrderRequest;
+use App\Http\Requests\CreateOrderRequest;
+use App\Http\Requests\EditOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\User;
 use App\Services\OrderService;
@@ -20,7 +21,7 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
-    public function create(OrderRequest $request): JsonResponse
+    public function create(CreateOrderRequest $request): JsonResponse
     {
         /** @var User $user */
         $user = Auth::user();
@@ -33,11 +34,11 @@ class OrderController extends Controller
     /**
      * @throws ValidationException
      */
-    public function edit(int $orderId, OrderRequest $request): JsonResponse
+    public function edit(int $orderId, EditOrderRequest $request): JsonResponse
     {
         $userId = Auth::id();
 
-        $order = $this->orderService->editOrder($userId, $orderId, $request->validated());
+        $order = $this->orderService->editOrder($userId, $orderId, $request->validated())->refresh();
 
         return response()->json(['success' => true, 'order' => OrderResource::make($order)]);
     }
