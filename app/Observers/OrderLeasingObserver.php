@@ -6,6 +6,7 @@ use App\Models\OrderLeasing;
 
 class OrderLeasingObserver
 {
+    public bool $afterCommit = true;
     /**
      * Handle the OrderLeasing "created" event.
      */
@@ -19,7 +20,10 @@ class OrderLeasingObserver
      */
     public function updated(OrderLeasing $orderLeasing): void
     {
-        dd($orderLeasing);
+        $changes = $orderLeasing->getChanges();
+        foreach ($changes as $key => $value) {
+            $orderLeasing->order->orderHistory()->create(['edited' => $key]);
+        }
     }
 
     /**

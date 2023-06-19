@@ -22,7 +22,7 @@ class OrderObserver
     {
         $changes = $order->getChanges();
         unset($changes['updated_at']);
-        foreach ($changes as $key => $value){
+        foreach ($changes as $key => $value) {
             $order->orderHistory()->create(['edited' => $key]);
         }
     }

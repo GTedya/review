@@ -32,6 +32,6 @@ class OrderLeasing extends Model
 
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::class, 'id', 'order_id');
+        return $this->belongsTo(Order::class);
     }
 }
