@@ -3,12 +3,14 @@
 namespace App\Services;
 
 use App\Models\Order;
+use App\Models\OrderDealerVehicle;
+use App\Models\OrderLeasingVehicle;
 use App\Models\User;
 use App\Repositories\OrderRepo;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class OrderService
@@ -52,27 +54,29 @@ class OrderService
 
         if (filled($data['leasing'] ?? null)) {
             $oldItems = $order->leasingVehicles()->get();
+            $oldIds = $oldItems->map(fn(OrderLeasingVehicle $item) => $item->id);
 
-            $newItems = collect($data['leasing']['vehicles'])->map(function ($item) {
-                return $item['id'] ?? null;
+            $newItems = collect($data['leasing']['vehicles'])->mapWithKeys(function ($item) {
+                return [$item['id'] ?? Str::random() => $item];
             });
 
-            $toUpdate = $oldItems->whereIn('id', $newItems);
-            $toDelete = $oldItems->whereNotIn('id', $newItems);
-            $toCreate = $newItems->whereNull();
+            $toDelete = $oldItems->whereNotIn('id', $newItems->keys());
+            $toCreate = $newItems->whereNotIn('id', $oldIds);
+            $toUpdate = $oldItems->whereIn('id', $newItems->keys());
 
-            $vehiclesConnection = $order->leasingVehicles();
             DB::beginTransaction();
-            if (filled($toDelete)) {
-                $this->deleteVehicles($oldItems, $toDelete);
-            }
 
-            if (filled($toUpdate)) {
-                $this->updateVehicles($data['leasing']['vehicles'], $toUpdate);
+            if (filled($toDelete)) {
+                $this->deleteVehicles($toDelete);
             }
 
             if (filled($toCreate)) {
-                $this->createVehicles($vehiclesConnection, $data['leasing']['vehicles']);
+                $vehiclesConnection = $order->leasingVehicles();
+                $this->createVehicles($vehiclesConnection, $toCreate);
+            }
+
+            if (filled($toUpdate)) {
+                $this->updateVehicles($toUpdate, $newItems);
             }
 
             unset($data['leasing']['vehicles']);
@@ -88,26 +92,29 @@ class OrderService
         if (filled($data['dealer'] ?? null)) {
             $oldItems = $order->dealerVehicles()->get();
 
-            $newItems = collect($data['dealer']['vehicles'])->map(function ($item) {
-                return $item['id'] ?? null;
+            $oldIds = $oldItems->map(fn(OrderDealerVehicle $item) => $item->id);
+
+            $newItems = collect($data['dealer']['vehicles'])->mapWithKeys(function ($item) {
+                return [$item['id'] ?? Str::random() => $item];
             });
 
-            $toUpdate = $oldItems->whereIn('id', $newItems);
-            $toDelete = $oldItems->whereNotIn('id', $newItems);
-            $toCreate = $newItems->whereNull();
+            $toDelete = $oldItems->whereNotIn('id', $newItems->keys());
+            $toCreate = $newItems->whereNotIn('id', $oldIds);
+            $toUpdate = $oldItems->whereIn('id', $newItems->keys());
 
-            $vehiclesConnection = $order->dealerVehicles();
             DB::beginTransaction();
-            if (filled($toDelete)) {
-                $this->deleteVehicles($oldItems, $toDelete);
-            }
 
-            if (filled($toUpdate)) {
-                $this->updateVehicles($data['dealer']['vehicles'], $toUpdate);
+            if (filled($toDelete)) {
+                $this->deleteVehicles($toDelete);
             }
 
             if (filled($toCreate)) {
-                $this->createVehicles($vehiclesConnection, $data['dealer']['vehicles']);
+                $vehiclesConnection = $order->dealerVehicles();
+                $this->createVehicles($vehiclesConnection, $toCreate);
+            }
+
+            if (filled($toUpdate)) {
+                $this->updateVehicles($toUpdate, $newItems);
             }
             DB::commit();
         } else {
@@ -119,35 +126,20 @@ class OrderService
         return $order;
     }
 
-    private function deleteVehicles(Collection $oldItems, Collection $toDelete): void
+    private function deleteVehicles(Collection $toDelete): void
     {
-        $oldItems->whereIn(
-            'id',
-            $toDelete->map(function ($item) {
-                return $item['id'];
-            })
-        )->each(fn($vehicle) => $vehicle->delete());
+        $toDelete->each(fn($vehicle) => $vehicle->delete());
     }
 
-    private function createVehicles(HasMany $connection, array $data): void
+    private function createVehicles(HasMany $connection, Collection $data): void
     {
-        foreach ($data as $newVehicle) {
-            if (!array_key_exists('id', $newVehicle)) {
-                $connection->create($newVehicle);
-            }
-        };
+        $connection->createMany($data);
     }
 
-    private function updateVehicles(array $data, Collection $toUpdate): void
+    private function updateVehicles(Collection $toUpdate, Collection $newItems): void
     {
-        foreach ($data as $updatedVehicle) {
-            if (array_key_exists('id', $updatedVehicle)) {
-                $toUpdate->each(function (Model $item) use ($updatedVehicle) {
-                    if ($updatedVehicle['id'] == $item['id']) {
-                        $item->update($updatedVehicle);
-                    }
-                });
-            }
+        foreach ($toUpdate as $vehicle) {
+            $vehicle->update($newItems[$vehicle->id] ?? []);
         }
     }
 }
