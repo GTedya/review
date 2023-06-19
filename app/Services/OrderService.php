@@ -77,7 +77,7 @@ class OrderService
 
             unset($data['leasing']['vehicles']);
 
-            $order->leasing()->updateOrCreate($data['leasing']);
+            $order->leasing()->updateOrCreate(['order_id' => $order->id], $data['leasing']);
 
             DB::commit();
         } else {
