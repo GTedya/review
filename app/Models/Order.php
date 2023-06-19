@@ -31,8 +31,9 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property Collection<File> $files
  * @property Status $status
  * @property ?User $banUsers
- * @property Collection<OrderLeasingVehicle> $leasingVehicles
- * @property Collection<OrderDealerVehicle> $dealerVehicles
+ * @property Collection<int, OrderLeasingVehicle> $leasingVehicles
+ * @property Collection<int, OrderHistory> $orderHistory
+ * @property Collection<int, OrderDealerVehicle> $dealerVehicles
  *
  */
 class Order extends Model
@@ -90,6 +91,11 @@ class Order extends Model
     public function leasingVehicles(): HasMany
     {
         return $this->hasMany(OrderLeasingVehicle::class);
+    }
+
+    public function orderHistory(): HasMany
+    {
+        return $this->hasMany(OrderHistory::class);
     }
 
     public function getCreatedAtAttribute($value)
