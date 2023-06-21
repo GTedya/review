@@ -198,20 +198,25 @@ class MainPageFields extends PageCustomFields
                 'image' => $repeatVar->getFirstMediaUrl('main_slider_image'),
             ]);
         });
-        $infoTiles = $repeatGroups['info_tiles']?->map(function (RepeatVar $repeatVar) {
+        $infoTiles = ($repeatGroups['info_tiles'] ?? null)?->map(function (RepeatVar $repeatVar) {
             $vars = $repeatVar->vars;
             return array_merge($vars, [
                 'image' => $repeatVar->getFirstMediaUrl('main_info_tiles_logo'),
             ]);
         });
+        $benefits = $repeatGroups['benefits']?->map(function (RepeatVar $repeatVar) {
+            return $repeatVar->vars;
+        });
 
         return [
             ...array_merge($pageVar->vars, [
                 'partners' => $partners,
+
             ]),
             'main_why_us_preview' => $pageVar->getFirstMediaUrl('main_why_us_preview'),
             'title_slider' => $titleSlider,
             'info_tiles' => $infoTiles,
+            'benefits' => $benefits,
         ];
     }
 }
