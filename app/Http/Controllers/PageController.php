@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PageResource;
 use App\Repositories\PageRepo;
 use App\Services\PageService;
+use App\Utilities\Helpers;
 use Illuminate\Http\JsonResponse;
 
 class PageController extends Controller
@@ -22,8 +23,10 @@ class PageController extends Controller
     {
         $content = $this->pageService->getBySlug($slug);
 
+        $breadcrumbs = Helpers::getBreadcrumbs($content, $content->title);
+
         return response()->json(
-            ['success' => true, 'page' => PageResource::make($content)]
+            ['success' => true, 'breadcrumbs' => $breadcrumbs, 'page' => PageResource::make($content)]
         );
     }
 
