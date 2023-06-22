@@ -24,6 +24,7 @@ class OrderUpdateListener
         $order = View::shared('order_observer_update');
         $orderLeasing = View::shared('order_leasing_observer');
         $orderLeasingVehicles = View::shared('order_leasing_vehicle_observer');
+        $orderDealerVehicles = View::shared('order_dealer_vehicle_observer');
 
         if (filled($order)) {
             $changes = array_merge($changes, $order);
@@ -33,6 +34,9 @@ class OrderUpdateListener
         }
         if (filled($orderLeasingVehicles)) {
             $changes[] = $orderLeasingVehicles;
+        }
+        if (filled($orderDealerVehicles)) {
+            $changes[] = $orderDealerVehicles;
         }
 
         if (filled($changes)) {
