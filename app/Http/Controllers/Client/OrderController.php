@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateOrderRequest;
 use App\Http\Requests\EditOrderRequest;
+use App\Http\Resources\OrderHistoryResource;
 use App\Http\Resources\OrderResource;
 use App\Models\User;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -41,5 +43,12 @@ class OrderController extends Controller
         $order = $this->orderService->editOrder($userId, $orderId, $request->validated())->refresh();
 
         return response()->json(['success' => true, 'order' => OrderResource::make($order)]);
+    }
+
+    public function history(int $orderId, Request $request): JsonResponse
+    {
+        $history = $this->orderService->history($orderId,$request->input('count'));
+
+        return response()->json(['success' => true, 'history' => OrderHistoryResource::collection($history)]);
     }
 }

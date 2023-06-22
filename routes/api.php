@@ -55,6 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/edit/{id}', [ClientOrder::class, 'edit']);
             Route::get('/list', [UserController::class, 'orders']);
             Route::post('/create', [ClientOrder::class, 'create']);
+            Route::get('/history/{id}', [ClientOrder::class, 'history']);
         });
 
         Route::prefix('rent')->group(function () {

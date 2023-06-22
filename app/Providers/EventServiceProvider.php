@@ -2,14 +2,19 @@
 
 namespace App\Providers;
 
+use App\Events\OrderUpdate;
+use App\Listeners\OrderUpdateListener;
 use App\Models\Order;
+use App\Models\OrderDealerVehicle;
 use App\Models\OrderLeasing;
+use App\Models\OrderLeasingVehicle;
+use App\Observers\OrderDealerVehicleObserver;
 use App\Observers\OrderLeasingObserver;
+use App\Observers\OrderLeasingVehicleObserver;
 use App\Observers\OrderObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -22,6 +27,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        OrderUpdate::class => [
+            OrderUpdateListener::class,
+        ]
     ];
 
     /**
@@ -31,6 +39,8 @@ class EventServiceProvider extends ServiceProvider
     {
         Order::observe(OrderObserver::class);
         OrderLeasing::observe(OrderLeasingObserver::class);
+        OrderLeasingVehicle::observe(OrderLeasingVehicleObserver::class);
+        OrderDealerVehicle::observe(OrderDealerVehicleObserver::class);
     }
 
     /**

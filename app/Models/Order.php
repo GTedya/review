@@ -34,7 +34,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property Collection<int, OrderLeasingVehicle> $leasingVehicles
  * @property Collection<int, OrderHistory> $orderHistory
  * @property Collection<int, OrderDealerVehicle> $dealerVehicles
- *
  */
 class Order extends Model
 {

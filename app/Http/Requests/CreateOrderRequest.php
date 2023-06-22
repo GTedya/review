@@ -25,7 +25,6 @@ class CreateOrderRequest extends FormRequest
             'email' => ['required', 'string', 'email'],
             'phone' => ['required', 'string', 'size:11'],
             'name' => ['required', 'string', 'min:4'],
-            'inn' => ['nullable', 'string', 'size:12'],
             'org_name' => ['nullable', 'string'],
             'end_date' => ['nullable', 'date'],
             'geo_id' => ['nullable', 'int', 'exists:geos,id'],
@@ -59,7 +58,6 @@ class CreateOrderRequest extends FormRequest
             'date' => 'Неверный формат',
             'exists' => 'Указано неверное значение',
 
-            'inn.size' => 'ИНН должен содержать :size символов',
             'email.email' => 'Неверный формат email',
             'phone.size' => 'Неверный формат',
             'name.min' => 'ФИО должно содержать как минимум :min символа',

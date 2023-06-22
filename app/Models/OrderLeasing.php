@@ -28,7 +28,9 @@ class OrderLeasing extends Model
         'current_lessors',
         'user_comment',
     ];
-
+    protected $casts = [
+        'advance' => 'float',
+    ];
 
     public function order(): BelongsTo
     {
