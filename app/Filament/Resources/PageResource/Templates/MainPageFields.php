@@ -184,7 +184,9 @@ class MainPageFields extends PageCustomFields
     {
         /** @var ?PageVar $pageVar */
         $pageVar = $this->page->pageVar;
-        if ($pageVar === null) return [];
+        if ($pageVar === null) {
+            return [];
+        }
 
 
         $partners = $this->partnerRepo->getByIds(...($pageVar->vars['partners'] ?? []));
@@ -192,7 +194,7 @@ class MainPageFields extends PageCustomFields
 
         $repeatGroups = $this->page->pageVar->repeatVars->groupBy('name');
 
-        $titleSlider = $repeatGroups['title_slider']?->map(function (RepeatVar $repeatVar) {
+        $titleSlider = ($repeatGroups['title_slider'] ?? null)?->map(function (RepeatVar $repeatVar) {
             $vars = $repeatVar->vars;
             return array_merge($vars, [
                 'image' => $repeatVar->getFirstMediaUrl('main_slider_image'),
@@ -204,7 +206,7 @@ class MainPageFields extends PageCustomFields
                 'image' => $repeatVar->getFirstMediaUrl('main_info_tiles_logo'),
             ]);
         });
-        $benefits = $repeatGroups['benefits']?->map(function (RepeatVar $repeatVar) {
+        $benefits = ($repeatGroups['benefits'] ?? null)?->map(function (RepeatVar $repeatVar) {
             return $repeatVar->vars;
         });
 
