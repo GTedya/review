@@ -21,9 +21,9 @@ class OrderService
     {
     }
 
-    public function history(int $orderId, ?int $count): Collection
+    public function history(int $orderId): Collection
     {
-        return $this->orderHistoryRepo->getHistory($orderId, $count);
+        return $this->orderHistoryRepo->getHistory($orderId);
     }
 
     public function createOrder(User $user, array $data): Order

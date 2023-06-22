@@ -7,9 +7,8 @@ use Illuminate\Support\Collection;
 
 class OrderHistoryRepo
 {
-    public function getHistory(int $orderId, ?int $count): Collection
+    public function getHistory(int $orderId): Collection
     {
-        $count = ($count == null) ? 10 : $count;
-        return OrderHistory::query()->where('order_id', $orderId)->latest()->take($count)->get();
+        return OrderHistory::query()->where('order_id', $orderId)->get();
     }
 }
