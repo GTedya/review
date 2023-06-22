@@ -121,7 +121,7 @@ class MainPageFields extends PageCustomFields
                     ->required(),
 
                 Textarea::make('vars.map.body')
-                    ->label('Тект')
+                    ->label('Текст')
                     ->required(),
             ]),
 
