@@ -21,12 +21,12 @@ class PageController extends Controller
 
     public function getPage($slug): JsonResponse
     {
-        $content = $this->pageService->getBySlug($slug);
+        $page = $this->pageService->getBySlug($slug);
 
-        $breadcrumbs = Helpers::getBreadcrumbs($content, $content->title);
+        $breadcrumbs = Helpers::getBreadcrumbs($page, $page->title);
 
         return response()->json(
-            ['success' => true, 'breadcrumbs' => $breadcrumbs, 'page' => PageResource::make($content)]
+            ['success' => true, 'breadcrumbs' => $breadcrumbs, 'page' => PageResource::make($page)]
         );
     }
 

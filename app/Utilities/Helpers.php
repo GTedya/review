@@ -48,7 +48,7 @@ class Helpers
 
         while ($parent !== null) {
             $title = $parent->title ?? '_';
-            $slug = $parent->slug;
+            $slug = $parent->fullSlug();
 
             $breadcrumbs[] = ['text' => $title, 'link' => "/{$slug}"];
 

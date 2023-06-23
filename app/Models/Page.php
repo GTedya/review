@@ -19,6 +19,8 @@ use Illuminate\Support\Carbon;
  * @property ?array $meta
  * @property ?PageVar $pageVar
  * @property ?Page $parent
+ * @property ?Page $parentDeep
+ * @property ?Page $children
  */
 class Page extends Model
 {
@@ -60,6 +62,11 @@ class Page extends Model
         return $this->belongsTo(Page::class, 'parent_id');
     }
 
+    public function parentDeep(): BelongsTo
+    {
+        return $this->belongsTo(Page::class, 'parent_id')->with('parentDeep');
+    }
+
     public function children()
     {
         return $this->hasMany(Page::class, 'parent_id');
@@ -68,5 +75,23 @@ class Page extends Model
     public function pageVar(): hasOne
     {
         return $this->hasOne(PageVar::class);
+    }
+
+    public function fullSlug(): string
+    {
+        $slugs = [];
+        $page = $this;
+        $page->parentDeep;
+        while ($page?->slug ?? false) {
+            $slugs[] = $page->slug;
+
+            /** @var ?Page $parent */
+            $page = $page->parentDeep;
+        }
+
+        $slugs = array_reverse($slugs);
+        $fullSlug = implode('/', $slugs);
+
+        return trim($fullSlug, '/');
     }
 }
