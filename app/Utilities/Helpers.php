@@ -2,6 +2,8 @@
 
 namespace App\Utilities;
 
+use App\Models\Page;
+
 class Helpers
 {
     public static function getCleanPhone(?string $phone): ?string
@@ -34,5 +36,27 @@ class Helpers
         }
 
         return $clean;
+    }
+
+    public static function getBreadcrumbs(
+        Page $page,
+        ?string $title = null,
+    ): array {
+        $breadcrumbs = [['text' => $title ?? $page->title ?? '_']];
+
+        $parent = $page->parent;
+
+        while ($parent !== null) {
+            $title = $parent->title ?? '_';
+            $slug = $parent->fullSlug();
+
+            $breadcrumbs[] = ['text' => $title, 'link' => "/{$slug}"];
+
+            $parent = $parent->parent;
+        }
+
+        $breadcrumbs[] = ['text' => 'Главная', 'link' => '/'];
+
+        return array_reverse($breadcrumbs);
     }
 }

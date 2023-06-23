@@ -128,7 +128,9 @@ class AboutPageFields extends PageCustomFields
     {
         /** @var ?PageVar $pageVar */
         $pageVar = $this->page->pageVar;
-        if ($pageVar === null) return [];
+        if ($pageVar === null) {
+            return [];
+        }
 
 
         $partners = $this->partnerRepo->getByIds(...($pageVar->vars['partners'] ?? []));
@@ -136,7 +138,7 @@ class AboutPageFields extends PageCustomFields
 
         $repeatGroups = $this->page->pageVar->repeatVars->groupBy('name');
 
-        $steps = $repeatGroups['steps']?->map(function (RepeatVar $repeatVar) {
+        $steps = ($repeatGroups['steps'] ?? null)?->map(function (RepeatVar $repeatVar) {
             return $repeatVar->vars;
         });
 
