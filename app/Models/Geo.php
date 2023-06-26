@@ -38,4 +38,8 @@ class Geo extends Model
         return $this->hasMany(Geo::class, 'parent_id');
     }
 
+    public function childrenDeep(): HasMany
+    {
+        return $this->hasMany(Geo::class, 'parent_id')->with('childrenDeep');
+    }
 }

@@ -17,6 +17,7 @@ class GeoResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'children' => GeoResource::collection($this->whenLoaded('childrenDeep')),
         ];
     }
 }

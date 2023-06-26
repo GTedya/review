@@ -36,6 +36,7 @@ Route::get('/menu', [MenuController::class, 'list']);
 Route::get('/leasings', [LeasingController::class, 'getLeasings']);
 Route::get('/page/{slug}', [PageController::class, 'getPage']);
 Route::get('/mainPage', [PageController::class, 'getMainPage']);
+Route::get('/geos', [GeoController::class, 'list']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -45,7 +46,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{slug}', [NewsController::class, 'single']);
     });
 
-    Route::get('/geos', [GeoController::class, 'list']);
 
     Route::get('/veh_types', [VehTypeController::class, 'list']);
 

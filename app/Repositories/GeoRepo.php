@@ -9,6 +9,11 @@ class GeoRepo
 {
     public function list(): Collection
     {
-        return Geo::all();
+        return Geo::query()->where('parent_id', null)->with('childrenDeep')->get();
+    }
+
+    public function doesntHaveChildren($id): bool
+    {
+        return Geo::query()->where('id', $id)->doesntHave('children')->exists();
     }
 }

@@ -185,7 +185,10 @@ class OrderResource extends Resource
                         Select::make('geo_id')
                             ->label('Область')
                             ->relationship('geo', 'name', function (Builder $query, ?Order $record) {
-                                $query->withTrashed()->where('deleted_at', null)->orWhere('id', $record?->geo_id);
+                                $query->doesntHave('children')->withTrashed()->where('deleted_at', null)->orWhere(
+                                    'id',
+                                    $record?->geo_id
+                                );
                             })
                             ->getOptionLabelFromRecordUsing(function (Geo $record) {
                                 return $record->trashed() ? "{$record->name} (область удалена)" : $record->name;
