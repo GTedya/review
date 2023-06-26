@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property ?int $parent_id
  * @property string $name
+ * @property string $region_code
  * @property ?Geo $parent
  * @property Collection<Geo> $children
  */
@@ -25,7 +26,8 @@ class Geo extends Model
 
     protected $fillable = [
         'name',
-        'parent_id'
+        'parent_id',
+        'region_code'
     ];
 
     public function parent(): BelongsTo
