@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderResource\Pages;
+use App\Filament\Resources\OrderResource\RelationManagers\ManagersRelationManager;
 use App\Models\Geo;
 use App\Models\Order;
 use App\Models\OrderDealerVehicle;
@@ -272,7 +273,7 @@ class OrderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ManagersRelationManager::class,
         ];
     }
 
