@@ -39,6 +39,7 @@ class RentRequest extends FormRequest
             'geo_id' => ['nullable', 'int', 'exists:geos,id'],
             'type' => ['required', Rule::in(array_keys(RentTypeConstants::RENT_TYPES))],
             'text' => ['required', 'string'],
+            'van' => ['required', 'boolean'],
             'rent_vehicles' => ['required', 'array'],
             'rent_vehicles.*' => ['array:type_id'],
             'rent_vehicles.*.type_id' => ['required', 'int', 'exists:vehicle_types,id'],
