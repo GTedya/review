@@ -14,6 +14,7 @@ use App\Http\Controllers\Manager\ManagerController;
 use App\Http\Controllers\Manager\OrderController as ManagerOrder;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\VehTypeController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +37,7 @@ Route::get('/menu', [MenuController::class, 'list']);
 Route::get('/leasings', [LeasingController::class, 'getLeasings']);
 Route::get('/page/{slug}', [PageController::class, 'getPage']);
 Route::get('/mainPage', [PageController::class, 'getMainPage']);
+Route::get('/sitemap.xml', [SitemapController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);

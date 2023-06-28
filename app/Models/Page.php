@@ -13,6 +13,9 @@ use Illuminate\Support\Carbon;
  * @property string $title
  * @property string $slug
  * @property ?int $parent_id
+ * @property int $priority
+ * @property ?Page $parentDeep
+ * @property ?Page $children
  * @property string $template
  * @property ?Carbon $created_at
  * @property ?Carbon $updated_at
@@ -39,6 +42,7 @@ class Page extends Model
     protected $fillable = [
         'title',
         'parent_id',
+        'priority',
         'template',
         'slug',
         'meta',
@@ -68,5 +72,33 @@ class Page extends Model
     public function pageVar(): hasOne
     {
         return $this->hasOne(PageVar::class);
+    }
+
+    public function parentDeep(): BelongsTo
+    {
+        return $this->belongsTo(Page::class, 'parent_id')->with('parentDeep');
+    }
+
+    public function fullSlug(): string
+    {
+        $slugs = [];
+        $page = $this;
+        $page->parentDeep;
+        while ($page?->slug ?? false) {
+            $slugs[] = $page->slug;
+
+            /** @var ?Page $parent */
+            $page = $page->parentDeep;
+        }
+
+        $slugs = array_reverse($slugs);
+        $fullSlug = implode('/', $slugs);
+
+        return trim($fullSlug, '/');
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return $value;
     }
 }

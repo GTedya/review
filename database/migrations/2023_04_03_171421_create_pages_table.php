@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('title');
             $table->integer('parent_id')->nullable();
+            $table->integer('priority')->default(50);
             $table->string('template')->default('default');
             $table->string('slug')->unique();
             $table->json('meta')->nullable();
