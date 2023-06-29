@@ -129,6 +129,8 @@ class RentResource extends Resource
 
                     Toggle::make('is_published')->label('Опубликованная запись')->default(true),
 
+                    DateTimePicker::make('active_until')->label('Активно до')->default(now()->addMonth()),
+
                     DateTimePicker::make('created_at')
                         ->label('Дата создания')
                         ->default('now')
