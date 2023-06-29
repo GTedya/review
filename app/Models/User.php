@@ -26,6 +26,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property ?string $remember_token
  * @property Collection<Order> $orders
  * @property Collection<int, Order> $takenOrders
+ * @property Collection<int, ManagerOffer> $offers
  * @property Collection<Rent> $rents
  * @property Collection $userFiles
  * @property ?Order $banOrders
@@ -100,6 +101,11 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     public function takenOrders(): BelongsToMany
     {
         return $this->belongsToMany(Order::class, 'taken_orders', 'user_id', 'order_id');
+    }
+
+    public function offers(): HasMany
+    {
+        return $this->hasMany(ManagerOffer::class);
     }
 
     public function registerMediaCollections(): void
