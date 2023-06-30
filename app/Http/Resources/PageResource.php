@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Services\PageCustomFields;
+use App\Utilities\Helpers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,6 +16,7 @@ class PageResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $breadcrumbs = Helpers::getBreadcrumbs($this->resource);
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -23,6 +25,7 @@ class PageResource extends JsonResource
             'parent_id' => $this->parent_id,
             'created_at' => $this->created_at,
             'pageVars' => $this->getPageVars(),
+            'breadcrumbs' => $breadcrumbs,
         ];
     }
 

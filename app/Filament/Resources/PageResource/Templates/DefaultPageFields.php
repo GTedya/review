@@ -84,12 +84,14 @@ class DefaultPageFields extends PageCustomFields
     {
         /** @var ?PageVar $pageVar */
         $pageVar = $this->page->pageVar;
-        if ($pageVar === null) return [];
+        if ($pageVar === null) {
+            return [];
+        }
 
 
         $repeatGroups = $this->page->pageVar->repeatVars->groupBy('name');
 
-        $files = $repeatGroups['files']?->map(function (RepeatVar $repeatVar) {
+        $files = ($repeatGroups['files'] ?? null)?->map(function (RepeatVar $repeatVar) {
             $vars = $repeatVar->vars;
             return array_merge($vars, [
                 'file' => $repeatVar->getFirstMediaUrl('default_file'),

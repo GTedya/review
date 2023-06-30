@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property ?string $inn
  * @property ?string $org_name
  * @property ?string $admin_comment
+ * @property ?string $user_comment
  * @property string $name
  * @property string $email
  * @property string $phone
@@ -32,11 +33,12 @@ use Illuminate\Database\Eloquent\Builder;
  * @property Collection<File> $files
  * @property Status $status
  * @property ?User $banUsers
+ * @property Collection<int, OrderLeasingVehicle> $leasingVehicles
+ * @property Collection<int, OrderHistory> $orderHistory
+ * @property Collection<int, OrderDealerVehicle> $dealerVehicles
  * @method static Builder manager(int $userId)
  * @method Builder manager(int $userId)
  * @property Collection<int, User> $managers
- * @property Collection<OrderLeasingVehicle> $leasingVehicles
- * @property Collection<OrderDealerVehicle> $dealerVehicles
  *
  */
 class Order extends Model
@@ -53,6 +55,7 @@ class Order extends Model
         'geo_id',
         'status_id',
         'admin_comment',
+        'user_comment',
     ];
 
     public function user(): BelongsTo
@@ -90,10 +93,14 @@ class Order extends Model
         return $this->hasMany(OrderDealerVehicle::class);
     }
 
-
     public function leasingVehicles(): HasMany
     {
         return $this->hasMany(OrderLeasingVehicle::class);
+    }
+
+    public function orderHistory(): HasMany
+    {
+        return $this->hasMany(OrderHistory::class);
     }
 
     public function managers()

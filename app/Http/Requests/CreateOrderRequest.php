@@ -26,6 +26,7 @@ class CreateOrderRequest extends FormRequest
             'phone' => ['required', 'string', 'size:11'],
             'name' => ['required', 'string', 'min:4'],
             'inn' => ['nullable', 'string', 'size:12'],
+            'user_comment' => ['nullable', 'string'],
             'org_name' => ['nullable', 'string'],
             'end_date' => ['nullable', 'date'],
             'geo_id' => ['nullable', 'int', 'exists:geos,id'],

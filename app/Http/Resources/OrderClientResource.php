@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GeoResource extends JsonResource
+class OrderClientResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,11 +14,7 @@ class GeoResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'region_code' => $this->region_code,
-            'children' => GeoResource::collection($this->whenLoaded('childrenDeep')),
-        ];
+        $baseArray = OrderResource::make($this->resource)->toArray($request);
+        return [...$baseArray, 'user_comment' => $this->user_comment];
     }
 }

@@ -8,7 +8,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class ManagerRepo
 {
-    public function getOrders(int $userId): LengthAwarePaginator
+    public function getOrders($userId): LengthAwarePaginator
     {
         return Order::manager($userId)->with(['geo', 'user'])->paginate();
     }

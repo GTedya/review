@@ -34,6 +34,7 @@ return new class extends Migration {
                 ->constrained()
                 ->onUpdate('cascade');
 
+            $table->text('user_comment')->nullable();
             $table->text('admin_comment')->nullable();
             $table->timestamps();
         });
