@@ -16,6 +16,7 @@ class OrderObserver
     {
         $changes = array_flip(array_keys($order->getChanges()));
         unset($changes['updated_at']);
+        unset($changes['user_comment']);
         View::share('order_observer_update', array_flip($changes));
     }
 }

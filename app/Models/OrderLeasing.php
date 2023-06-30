@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float $advance
  * @property ?int $months
  * @property ?string $current_lessors
- * @property ?string $user_comment
  * @property Order $order
  */
 class OrderLeasing extends Model
@@ -26,7 +25,6 @@ class OrderLeasing extends Model
         'advance',
         'months',
         'current_lessors',
-        'user_comment',
     ];
     protected $casts = [
         'advance' => 'float',

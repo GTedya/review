@@ -11,6 +11,7 @@ use App\Repositories\OrderHistoryRepo;
 use App\Repositories\OrderRepo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -45,6 +46,18 @@ class OrderService
         }
         DB::commit();
         return $order;
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    public function getClientOrder($id): Order
+    {
+        $usersOrder = $this->orderRepo->usersOrder($id, Auth::id());
+        if ($usersOrder == null) {
+            abort(403);
+        }
+        return $usersOrder;
     }
 
     /**
@@ -132,7 +145,7 @@ class OrderService
 
         $order->update($data);
 
-        event(new OrderUpdate($order));
+        OrderUpdate::dispatch($order);
 
         return $order;
     }

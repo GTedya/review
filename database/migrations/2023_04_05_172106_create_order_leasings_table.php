@@ -21,7 +21,6 @@ return new class extends Migration {
 
             $table->decimal('advance', 12);
             $table->text('current_lessors')->nullable();
-            $table->text('user_comment')->nullable();
             $table->integer('months')->nullable();
         });
     }

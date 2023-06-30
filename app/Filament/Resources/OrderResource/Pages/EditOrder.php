@@ -30,6 +30,6 @@ class EditOrder extends EditRecord
 
     protected function afterSave()
     {
-        event(new OrderUpdate($this->record));
+        OrderUpdate::dispatch($this->record);
     }
 }

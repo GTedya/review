@@ -67,7 +67,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::middleware('role:dealer_manager|leasing_manager')->prefix('manager')->group(function () {
-        Route::get('/orders', [ManagerOrder::class, 'orders']);
+        Route::prefix('orders')->group(function () {
+            Route::get('/', [ManagerOrder::class, 'orders']);
+            Route::get('/{id}', [ManagerOrder::class, 'getOrder']);
+        });
         Route::post('/logo', [ManagerController::class, 'logoAdd']);
     });
 });
