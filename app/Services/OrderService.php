@@ -27,7 +27,7 @@ class OrderService
     {
         $geo_id = $data['geo_id'];
 
-        if (!$this->geoRepo->doesntHaveChildren($geo_id)) {
+        if ($this->geoRepo->hasChildren($geo_id)) {
             throw ValidationException::withMessages(
                 ['geo_id' => 'Некорректные данные области']
             );
@@ -58,14 +58,12 @@ class OrderService
         $order = $this->orderRepo->usersOrder($orderId, $userId);
 
         if ($order == null) {
-            throw ValidationException::withMessages(
-                ['order' => 'Некорректные данные заказа']
-            );
+            abort(403);
         }
 
         $geo_id = $data['geo_id'];
 
-        if (!$this->geoRepo->doesntHaveChildren($geo_id)) {
+        if ($this->geoRepo->hasChildren($geo_id)) {
             throw ValidationException::withMessages(
                 ['geo_id' => 'Некорректные данные области']
             );

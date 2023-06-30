@@ -12,8 +12,8 @@ class GeoRepo
         return Geo::query()->where('parent_id', null)->with('childrenDeep')->get();
     }
 
-    public function doesntHaveChildren($id): bool
+    public function hasChildren($id): bool
     {
-        return Geo::query()->where('id', $id)->doesntHave('children')->exists();
+        return Geo::query()->where('id', $id)->has('children')->exists();
     }
 }

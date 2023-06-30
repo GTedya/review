@@ -21,7 +21,7 @@ class RentService
     {
         $geo_id = $data['geo_id'];
 
-        if (!$this->geoRepo->doesntHaveChildren($geo_id)) {
+        if ($this->geoRepo->hasChildren($geo_id)) {
             throw ValidationException::withMessages(
                 ['geo_id' => 'Некорректные данные области']
             );

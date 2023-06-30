@@ -15,7 +15,8 @@ use Illuminate\Support\Collection;
  * @property string $name
  * @property string $region_code
  * @property ?Geo $parent
- * @property Collection<Geo> $children
+ * @property Collection<int, Geo> $children
+ * @property Collection<int, Geo> $childrenDeep
  */
 class Geo extends Model
 {
