@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * @property int $id
@@ -31,6 +32,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property Collection<File> $files
  * @property Status $status
  * @property ?User $banUsers
+ * @method static Builder manager(int $userId)
+ * @method Builder manager(int $userId)
  * @property Collection<int, User> $managers
  * @property Collection<OrderLeasingVehicle> $leasingVehicles
  * @property Collection<OrderDealerVehicle> $dealerVehicles
@@ -108,4 +111,15 @@ class Order extends Model
         return $value;
     }
 
+    /**
+     * @param Builder $query
+     * @param int $userId
+     * @return Builder
+     */
+    public function scopeManager(Builder $query, int $userId): Builder
+    {
+       return $query->whereDoesntHave('banUsers', function (\Illuminate\Database\Eloquent\Builder $query) use ($userId) {
+            $query->where('manager_order_bans.user_id', $userId);
+        });
+    }
 }

@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderDealerVehicle;
 use App\Models\OrderLeasingVehicle;
 use App\Models\User;
+use App\Repositories\ManagerRepo;
 use App\Repositories\OrderRepo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
@@ -15,7 +16,7 @@ use Illuminate\Validation\ValidationException;
 
 class OrderService
 {
-    public function __construct(public OrderRepo $orderRepo)
+    public function __construct(public OrderRepo $orderRepo, public ManagerRepo $managerRepo)
     {
     }
 
@@ -141,5 +142,13 @@ class OrderService
         foreach ($toUpdate as $vehicle) {
             $vehicle->update($newItems[$vehicle->id] ?? []);
         }
+    }
+
+    public function managerTakeOrder(User $user, int $orderId): void
+    {
+        if (blank($this->managerRepo->getById($user->id, $orderId))) {
+            abort(403);
+        }
+        $this->managerRepo->takeOrder($user, $orderId);
     }
 }
