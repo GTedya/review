@@ -32,6 +32,7 @@ Route::post('/claim', [ClaimController::class, 'putClaim']);
 Route::get('/partners', [PartnerController::class, 'getPartner']);
 Route::get('/faqs', [FaqController::class, 'getFaqs']);
 Route::get('/rent/list', [RentController::class, 'list']);
+Route::get('/rent/get/{slug}', [RentController::class, 'single']);
 Route::get('/menu', [MenuController::class, 'list']);
 Route::get('/leasings', [LeasingController::class, 'getLeasings']);
 Route::get('/page/{slug}', [PageController::class, 'getPage']);

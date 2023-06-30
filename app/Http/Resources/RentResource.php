@@ -20,6 +20,8 @@ class RentResource extends JsonResource
             'name' => $this->name,
             'type' => $this->type,
             'email' => $this->email,
+            'text' => $this->text,
+            'slug' => $this->slug,
             'active_until' => $this->active_until,
             'is_published' => $this->is_published,
             'phone' => $this->phone,

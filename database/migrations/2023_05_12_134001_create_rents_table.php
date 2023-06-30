@@ -23,6 +23,7 @@ return new class extends Migration {
 
             $table->boolean('is_published')->default(true);
             $table->string('name');
+            $table->string('slug')->unique();
             $table->string('phone');
             $table->string('email')->nullable();
             $table->string('type');

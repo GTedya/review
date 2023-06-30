@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RentRequest;
 use App\Http\Resources\RentResource;
+use App\Models\Rent;
 use App\Models\User;
 use App\Repositories\RentRepo;
 use App\Services\RentService;
@@ -28,6 +29,7 @@ class RentController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
+
         $rent = $this->rentService->create($user, $request->validated());
         $rent = $rent->fresh('rentVehicles');
 
@@ -64,5 +66,17 @@ class RentController extends Controller
         $this->rentService->extend($userId, $rentId);
 
         return response()->json(['success' => true]);
+    }
+
+    public function single(string $slug): JsonResponse
+    {
+        /** @var Rent $rent */
+        $rent = $this->rentRepo->getRentBySlug($slug);
+        if ($rent == null) {
+            abort(404);
+        }
+        $active = now()->lt($rent['active_until']);
+
+        return response()->json(['success' => true, 'actual' => $active, 'rent' => $rent]);
     }
 }

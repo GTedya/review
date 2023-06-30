@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,6 +21,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property ?string $email
  * @property string $type
  * @property string $title
+ * @property string $slug
  * @property bool $is_published
  * @property ?string $text
  * @property ?Carbon $created_at
@@ -33,6 +35,7 @@ class Rent extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
+    use Sluggable;
 
     protected $fillable = [
         'is_published',
@@ -45,8 +48,18 @@ class Rent extends Model implements HasMedia
         'title',
         'text',
         'active_until',
+        'slug',
         'created_at'
     ];
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
 
     public function user(): BelongsTo
     {

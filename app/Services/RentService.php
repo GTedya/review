@@ -13,7 +13,6 @@ class RentService
     {
         DB::beginTransaction();
         $data['active_until'] = now()->addMonth();
-
         /** @var Rent $rent */
         $rent = $user->rents()->create($data);
         $rent->rentVehicles()->createMany($data['rent_vehicles']);
