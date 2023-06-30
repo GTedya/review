@@ -13,7 +13,6 @@ class ManagersRelationManager extends RelationManager
     protected static string $relationship = 'managers';
 
     protected static ?string $pluralModelLabel = 'Менеджеры принявшие в работу';
-    protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Form $form): Form
     {
