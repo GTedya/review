@@ -34,7 +34,7 @@ Route::get('/faqs', [FaqController::class, 'getFaqs']);
 Route::get('/rent/list', [RentController::class, 'list']);
 Route::get('/menu', [MenuController::class, 'list']);
 Route::get('/leasings', [LeasingController::class, 'getLeasings']);
-Route::get('/page/{slug}', [PageController::class, 'getPage']);
+Route::get('/page/{slug}', [PageController::class, 'getPage'])->where('slug', '.*');
 Route::get('/mainPage', [PageController::class, 'getMainPage']);
 
 Route::middleware('auth:sanctum')->group(function () {

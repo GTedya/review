@@ -16,11 +16,28 @@ class PageService
 
     public function getBySlug(string $slug): Page
     {
-        $content = $this->pageRepo->pageBySlug($slug);
-        if ($content === null) {
+        $split = explode('/', $slug);
+        $currentSlug = array_pop($split);
+
+        $page = $this->pageRepo->pageBySlugWithParents($currentSlug);
+
+        if ($page === null) {
             abort(404, 'Данной страницы не существует');
         };
-        return $content;
+
+        $slugs = [];
+
+        $parentPage = $page->parentDeep;
+        while ($parentPage?->slug ?? null) {
+            $slugs[] = $parentPage->slug;
+            $parentPage = $parentPage->parentDeep;
+        }
+
+        if (array_reverse($slugs) != $split) {
+            abort(404, 'Данной страницы не существует');
+        };
+
+        return $page;
     }
 
     public function getByTemplate(string $template): Page
