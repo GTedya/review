@@ -40,7 +40,7 @@ class Helpers
     }
 
     public static function getBreadcrumbs(
-        Page|PageResource $page,
+        Page $page,
         ?string $title = null,
     ): array {
         $breadcrumbs = [['text' => $title ?? $page->title ?? '_']];

@@ -16,7 +16,7 @@ class PageResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $breadcrumbs = Helpers::getBreadcrumbs($this);
+        $breadcrumbs = Helpers::getBreadcrumbs($this->resource);
         return [
             'id' => $this->id,
             'title' => $this->title,
