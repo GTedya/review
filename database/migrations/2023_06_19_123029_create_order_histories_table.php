@@ -10,18 +10,16 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('order_leasings', function (Blueprint $table) {
+        Schema::create('order_histories', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('order_id')
-                ->nullable()
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->decimal('advance', 12);
-            $table->text('current_lessors')->nullable();
-            $table->integer('months')->nullable();
+            $table->json('edited');
+            $table->timestamps();
         });
     }
 
@@ -30,6 +28,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_leasings');
+        Schema::dropIfExists('order_histories');
     }
 };

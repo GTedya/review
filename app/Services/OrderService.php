@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\OrderUpdate;
 use App\Models\Order;
 use App\Models\OrderDealerVehicle;
 use App\Models\OrderLeasingVehicle;
@@ -10,13 +11,14 @@ use App\Repositories\GeoRepo;
 use App\Repositories\OrderRepo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class OrderService
 {
-    public function __construct(public OrderRepo $orderRepo, public GeoRepo $geoRepo)
+    public function __construct(public OrderRepo $orderRepo,public GeoRepo $geoRepo)
     {
     }
 
@@ -25,6 +27,8 @@ class OrderService
      */
     public function createOrder(User $user, array $data): Order
     {
+        // TODO: добавить поле инн
+        $data['inn'] = $user->inn;
         $geo_id = $data['geo_id'];
 
         if ($this->geoRepo->hasChildren($geo_id)) {
@@ -47,6 +51,18 @@ class OrderService
         }
         DB::commit();
         return $order;
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    public function getClientOrder($id): Order
+    {
+        $usersOrder = $this->orderRepo->usersOrder($id, Auth::id());
+        if ($usersOrder == null) {
+            abort(403);
+        }
+        return $usersOrder;
     }
 
     /**
@@ -139,6 +155,8 @@ class OrderService
         }
 
         $order->update($data);
+
+        OrderUpdate::dispatch($order);
 
         return $order;
     }

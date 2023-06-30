@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,9 +33,9 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property Collection<File> $files
  * @property Status $status
  * @property ?User $banUsers
- * @property Collection<OrderLeasingVehicle> $leasingVehicles
- * @property Collection<OrderDealerVehicle> $dealerVehicles
- *
+ * @property Collection<int, OrderLeasingVehicle> $leasingVehicles
+ * @property Collection<int, OrderHistory> $orderHistory
+ * @property Collection<int, OrderDealerVehicle> $dealerVehicles
  */
 class Order extends Model
 {
@@ -93,6 +94,11 @@ class Order extends Model
         return $this->hasMany(OrderLeasingVehicle::class);
     }
 
+    public function orderHistory(): HasMany
+    {
+        return $this->hasMany(OrderHistory::class);
+    }
+
     public function getCreatedAtAttribute($value)
     {
         return $value;
@@ -101,6 +107,13 @@ class Order extends Model
     public function getUpdatedAtAttribute($value)
     {
         return $value;
+    }
+
+    public function scopeManager(Builder $query, int $userId): Builder
+    {
+        return $query->whereDoesntHave('banUsers', function (\Illuminate\Database\Eloquent\Builder $query) use ($userId) {
+            $query->where('manager_order_bans.user_id', $userId);
+        });
     }
 
 }

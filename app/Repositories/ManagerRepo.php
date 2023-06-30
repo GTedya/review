@@ -3,15 +3,17 @@
 namespace App\Repositories;
 
 use App\Models\Order;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ManagerRepo
 {
     public function getOrders($userId): LengthAwarePaginator
     {
-        return Order::query()->whereDoesntHave('banUsers', function (Builder $query) use ($userId) {
-            $query->where('manager_order_bans.user_id', $userId);
-        })->with(['geo', 'user'])->paginate();
+        return Order::manager($userId)->with(['geo', 'user'])->paginate();
+    }
+
+    public function getById(int $userId, int $orderId): ?Order
+    {
+        return Order::manager($userId)->where('id', $orderId)->with(['geo', 'user'])->first();
     }
 }

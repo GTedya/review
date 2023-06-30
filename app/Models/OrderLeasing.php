@@ -26,10 +26,12 @@ class OrderLeasing extends Model
         'months',
         'current_lessors',
     ];
-
+    protected $casts = [
+        'advance' => 'float',
+    ];
 
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::class, 'id', 'order_id');
+        return $this->belongsTo(Order::class);
     }
 }
