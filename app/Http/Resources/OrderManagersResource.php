@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderResource extends JsonResource
+class OrderManagersResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,10 +19,10 @@ class OrderResource extends JsonResource
             'user' => AuthorResource::make($this->user),
             'name' => $this->name,
             'user_id' => $this->user_id,
-            'user_comment' => $this->user_comment,
             'email' => $this->email,
             'phone' => $this->phone,
             'end_date' => $this->end_date,
+            'admin_comment' => $this->admin_comment,
             'geo' => GeoResource::make($this->geo),
             'inn' => $this->inn,
             'status' => $this->status,

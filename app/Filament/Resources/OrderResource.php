@@ -66,6 +66,7 @@ class OrderResource extends Resource
                             ->label('Email')
                             ->required(),
 
+                        TinyEditor::make('user_comment')->label('Комментарий пользователя')->dehydrated(false)->disabled(),
                         TinyEditor::make('admin_comment')->label('Коментарий администратора'),
 
                         Section::make('Лизинг')->schema([
@@ -73,7 +74,7 @@ class OrderResource extends Resource
                                 TextInput::make('advance')->label('Аванс')->numeric()->required(),
                                 TextInput::make('current_lessors')->label('Текущие лизингодатели')->nullable(),
                                 TextInput::make('months')->label('Срок лизинга')->numeric()->nullable(),
-                                TinyEditor::make('user_comment')->label('Комментарий пользователя')->nullable(),
+
                             ]),
 
                             Repeater::make('leasing_vehicles')

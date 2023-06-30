@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property ?string $inn
  * @property ?string $org_name
  * @property ?string $admin_comment
+ * @property ?string $user_comment
  * @property string $name
  * @property string $email
  * @property string $phone
@@ -49,6 +50,7 @@ class Order extends Model
         'geo_id',
         'status_id',
         'admin_comment',
+        'user_comment',
     ];
 
     public function user(): BelongsTo
@@ -85,7 +87,6 @@ class Order extends Model
     {
         return $this->hasMany(OrderDealerVehicle::class);
     }
-
 
     public function leasingVehicles(): HasMany
     {
