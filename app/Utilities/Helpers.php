@@ -2,6 +2,7 @@
 
 namespace App\Utilities;
 
+use App\Http\Resources\PageResource;
 use App\Models\Page;
 
 class Helpers
@@ -39,7 +40,7 @@ class Helpers
     }
 
     public static function getBreadcrumbs(
-        Page $page,
+        Page|PageResource $page,
         ?string $title = null,
     ): array {
         $breadcrumbs = [['text' => $title ?? $page->title ?? '_']];

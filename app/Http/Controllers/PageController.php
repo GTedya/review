@@ -23,10 +23,8 @@ class PageController extends Controller
     {
         $page = $this->pageService->getBySlug($slug);
 
-        $breadcrumbs = Helpers::getBreadcrumbs($page, $page->title);
-
         return response()->json(
-            ['success' => true, 'breadcrumbs' => $breadcrumbs, 'page' => PageResource::make($page)]
+            ['success' => true, 'page' => PageResource::make($page)]
         );
     }
 
