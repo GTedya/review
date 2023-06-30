@@ -14,14 +14,14 @@ class RentRepo
         );
     }
 
-    public function pagination(?int $perPage, ?array $geos, ?bool $van, ?array $types): LengthAwarePaginator
+    public function pagination(?int $perPage, ?array $geos, ?bool $with_nds, ?array $types): LengthAwarePaginator
     {
         $query = Rent::query();
         if (filled($geos)) {
             $query->whereIn('geo_id', $geos);
         }
-        if (filled($van)) {
-            $query->where('van', $van);
+        if (filled($with_nds)) {
+            $query->where('with_nds', $with_nds);
         }
         if (filled($types)) {
             $query->whereHas('rentVehicles', function ($query) use ($types) {

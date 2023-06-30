@@ -23,7 +23,7 @@ class RentResource extends JsonResource
             'active_until' => $this->active_until,
             'is_published' => $this->is_published,
             'phone' => $this->phone,
-            'van' => $this->van,
+            'with_nds' => $this->with_nds,
             'geo' => GeoResource::make($this->geo),
             'created_at' => $this->created_at,
             'rent_vehicle' => RentVehicleResource::collection($this->whenLoaded('rentVehicles')),
