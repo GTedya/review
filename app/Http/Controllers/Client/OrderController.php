@@ -45,6 +45,11 @@ class OrderController extends Controller
         return response()->json(['success' => true, 'order' => OrderResource::make($order)]);
     }
 
+    public function getOrder(int $orderId): JsonResponse
+    {
+        $order
+    }
+
     public function history(int $orderId): JsonResponse
     {
         $history = $this->orderService->history($orderId);
