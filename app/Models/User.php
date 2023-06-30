@@ -14,6 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
+
 /**
  * @property int $id
  * @property string $name
@@ -24,6 +25,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property ?Carbon $updated_at
  * @property ?string $remember_token
  * @property Collection<Order> $orders
+ * @property Collection<int, Order> $takenOrders
  * @property Collection<Rent> $rents
  * @property Collection $userFiles
  * @property ?Order $banOrders
@@ -93,6 +95,11 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     public function files(): HasMany
     {
         return $this->hasMany(UserFile::class);
+    }
+
+    public function takenOrders(): BelongsToMany
+    {
+        return $this->belongsToMany(Order::class, 'taken_orders', 'user_id', 'order_id');
     }
 
     public function registerMediaCollections(): void

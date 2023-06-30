@@ -72,5 +72,6 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/{id}', [ManagerOrder::class, 'getOrder']);
         });
         Route::post('/logo', [ManagerController::class, 'logoAdd']);
+        Route::post('/take_order/{orderId}', [ManagerOrder::class, 'takeOrder']);
     });
 });

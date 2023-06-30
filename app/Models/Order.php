@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * @property int $id
@@ -36,6 +36,10 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property Collection<int, OrderLeasingVehicle> $leasingVehicles
  * @property Collection<int, OrderHistory> $orderHistory
  * @property Collection<int, OrderDealerVehicle> $dealerVehicles
+ * @method static Builder manager(int $userId)
+ * @method Builder manager(int $userId)
+ * @property Collection<int, User> $managers
+ *
  */
 class Order extends Model
 {
@@ -99,6 +103,11 @@ class Order extends Model
         return $this->hasMany(OrderHistory::class);
     }
 
+    public function managers()
+    {
+        return $this->belongsToMany(User::class, 'taken_orders', 'order_id', 'user_id');
+    }
+
     public function getCreatedAtAttribute($value)
     {
         return $value;
@@ -109,11 +118,15 @@ class Order extends Model
         return $value;
     }
 
+    /**
+     * @param Builder $query
+     * @param int $userId
+     * @return Builder
+     */
     public function scopeManager(Builder $query, int $userId): Builder
     {
-        return $query->whereDoesntHave('banUsers', function (\Illuminate\Database\Eloquent\Builder $query) use ($userId) {
+       return $query->whereDoesntHave('banUsers', function (\Illuminate\Database\Eloquent\Builder $query) use ($userId) {
             $query->where('manager_order_bans.user_id', $userId);
         });
     }
-
 }
