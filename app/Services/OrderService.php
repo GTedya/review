@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderDealerVehicle;
 use App\Models\OrderLeasingVehicle;
 use App\Models\User;
+use App\Repositories\GeoRepo;
 use App\Repositories\OrderRepo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
@@ -15,12 +16,22 @@ use Illuminate\Validation\ValidationException;
 
 class OrderService
 {
-    public function __construct(public OrderRepo $orderRepo)
+    public function __construct(public OrderRepo $orderRepo, public GeoRepo $geoRepo)
     {
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function createOrder(User $user, array $data): Order
     {
+        $geo_id = $data['geo_id'];
+
+        if ($this->geoRepo->hasChildren($geo_id)) {
+            throw ValidationException::withMessages(
+                ['geo_id' => 'Некорректные данные области']
+            );
+        };
         DB::beginTransaction();
         /** @var Order $order */
         $order = $user->orders()->create($data);
@@ -47,10 +58,16 @@ class OrderService
         $order = $this->orderRepo->usersOrder($orderId, $userId);
 
         if ($order == null) {
-            throw ValidationException::withMessages(
-                ['order' => 'Некорректные данные заказа']
-            );
+            abort(403);
         }
+
+        $geo_id = $data['geo_id'];
+
+        if ($this->geoRepo->hasChildren($geo_id)) {
+            throw ValidationException::withMessages(
+                ['geo_id' => 'Некорректные данные области']
+            );
+        };
 
         if (filled($data['leasing'] ?? null)) {
             $oldItems = $order->leasingVehicles()->get();
