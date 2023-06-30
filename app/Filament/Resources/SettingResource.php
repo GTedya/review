@@ -18,7 +18,7 @@ class SettingResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-cog';
 
-    protected static ?string $modelLabel = 'Настройка';
+    protected static ?string $modelLabel = 'Настройки';
     protected static ?string $pluralModelLabel = 'Настройки';
 
     public static function form(Form $form): Form

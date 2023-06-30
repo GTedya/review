@@ -17,8 +17,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property ?string $vk
  * @property ?string $app_store
  * @property ?string $google_play
- *
- * @property ?Media $media
  */
 class Setting extends Model implements HasMedia
 {
