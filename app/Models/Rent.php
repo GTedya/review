@@ -21,6 +21,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string $type
  * @property string $title
  * @property bool $is_published
+ * @property bool $with_nds
  * @property ?string $text
  * @property ?Carbon $created_at
  * @property ?Carbon $active_until
@@ -39,6 +40,7 @@ class Rent extends Model implements HasMedia
         'user_id',
         'geo_id',
         'name',
+        'with_nds',
         'phone',
         'email',
         'type',

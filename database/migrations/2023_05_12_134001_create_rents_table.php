@@ -27,6 +27,7 @@ return new class extends Migration {
             $table->string('email')->nullable();
             $table->string('type');
             $table->text('text');
+            $table->boolean('with_nds');
             $table->timestamp('active_until');
             $table->timestamps();
         });
