@@ -50,13 +50,11 @@ class OrderController extends Controller
     public function getOrder(int $orderId): JsonResponse
     {
         $order = $this->orderService->getClientOrder($orderId);
-        $history = $this->orderService->history($orderId);
 
         return response()->json(
             [
                 'success' => true,
                 'order' => OrderClientResource::make($order),
-                'history' => OrderHistoryResource::collection($history)
             ]
         );
     }

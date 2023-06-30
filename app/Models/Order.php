@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -106,6 +107,13 @@ class Order extends Model
     public function getUpdatedAtAttribute($value)
     {
         return $value;
+    }
+
+    public function scopeManager(Builder $query, int $userId): Builder
+    {
+        return $query->whereDoesntHave('banUsers', function (\Illuminate\Database\Eloquent\Builder $query) use ($userId) {
+            $query->where('manager_order_bans.user_id', $userId);
+        });
     }
 
 }

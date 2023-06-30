@@ -23,6 +23,7 @@ class OrderResource extends JsonResource
             'phone' => $this->phone,
             'end_date' => $this->end_date,
             'geo' => GeoResource::make($this->geo),
+            'history' => OrderHistoryResource::collection($this->whenLoaded('orderHistory')),
             'inn' => $this->inn,
             'status' => $this->status,
             'created_at' => $this->created_at,

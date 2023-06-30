@@ -21,6 +21,7 @@ class OrderHistoryResource extends JsonResource
         'advance' => 'Аванс',
         'current_lessors' => 'Текущие лизингодатели',
         'months' => 'Срок лизинга',
+        'leasing' => 'Лизинг',
         'leasing_vehicles' => 'ТС лизинга',
         'dealer_vehicles' => 'ТС дилера',
     ];
@@ -38,7 +39,7 @@ class OrderHistoryResource extends JsonResource
     {
         $changes = [];
         foreach ($data as $word) {
-            $changes [] = self::TRANSLATE[$word];
+            $changes [$word] = self::TRANSLATE[$word];
         }
         return $changes;
     }

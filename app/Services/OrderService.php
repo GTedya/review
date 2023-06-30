@@ -7,7 +7,6 @@ use App\Models\Order;
 use App\Models\OrderDealerVehicle;
 use App\Models\OrderLeasingVehicle;
 use App\Models\User;
-use App\Repositories\OrderHistoryRepo;
 use App\Repositories\OrderRepo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
@@ -18,13 +17,8 @@ use Illuminate\Validation\ValidationException;
 
 class OrderService
 {
-    public function __construct(public OrderRepo $orderRepo, public OrderHistoryRepo $orderHistoryRepo)
+    public function __construct(public OrderRepo $orderRepo)
     {
-    }
-
-    public function history(int $orderId): Collection
-    {
-        return $this->orderHistoryRepo->getHistory($orderId);
     }
 
     public function createOrder(User $user, array $data): Order
