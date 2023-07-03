@@ -67,11 +67,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::middleware('role:dealer_manager|leasing_manager')->prefix('manager')->group(function () {
-        Route::prefix('orders')->group(function () {
+        Route::prefix('/orders')->group(function () {
             Route::get('/', [ManagerOrder::class, 'orders']);
-            Route::get('/{id}', [ManagerOrder::class, 'getOrder']);
+            Route::prefix('/{orderId}')->group(function () {
+                Route::post('/offer', [ManagerController::class, 'sendOffer']);
+                Route::post('/take_order', [ManagerOrder::class, 'takeOrder']);
+                Route::get('/', [ManagerOrder::class, 'getOrder']);
+            });
         });
         Route::post('/logo', [ManagerController::class, 'logoAdd']);
-        Route::post('/take_order/{orderId}', [ManagerOrder::class, 'takeOrder']);
     });
 });
