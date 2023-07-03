@@ -14,16 +14,12 @@ class OffersRelationManager extends RelationManager
 {
     protected static string $relationship = 'offers';
     protected static ?string $pluralModelLabel = 'Коммерческие предложения';
-    
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')->label('Пользователь')->getStateUsing(
-                    function (ManagerOffer $record) {
-                        return $record->manager->name;
-                    }
-                ),
+                Tables\Columns\TextColumn::make('manager.name')->label('Пользователь'),
                 IconColumn::make('Ссылка')
                     ->url(function (ManagerOffer $record) {
                         return $record->getFirstMediaUrl('offer_file');
