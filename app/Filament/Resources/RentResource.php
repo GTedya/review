@@ -64,6 +64,8 @@ class RentResource extends Resource
                             ->label('Тип')
                             ->options(RentTypeConstants::RENT_TYPES)
                             ->required(),
+
+                        Toggle::make('with_nds')->label('НДС'),
                     ]),
                     Textarea::make('text')
                         ->label('Текст')
