@@ -24,6 +24,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('admin%dev'),
                 'created_at' => $dateTime,
                 'updated_at' => $dateTime,
+                'inn' => '123456789011'
             ],
             [
                 'id' => 2,
@@ -33,6 +34,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('dealer%dev'),
                 'created_at' => $dateTime,
                 'updated_at' => $dateTime,
+                'inn' => '123456789012'
             ],
             [
                 'id' => 3,
@@ -42,6 +44,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('leasing%dev'),
                 'created_at' => $dateTime,
                 'updated_at' => $dateTime,
+                'inn' => '123456789013'
             ],
             [
                 'id' => 4,
@@ -51,6 +54,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('client%dev'),
                 'created_at' => $dateTime,
                 'updated_at' => $dateTime,
+                'inn' => '123456789014'
             ],
 
         ];

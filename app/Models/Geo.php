@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
  * @property ?Geo $parent
  * @property Collection<int, Geo> $children
  * @property Collection<int, Geo> $childrenDeep
+ * @property Collection<int, Geo> $parentDeep
  */
 class Geo extends Model
 {
@@ -44,5 +45,10 @@ class Geo extends Model
     public function childrenDeep(): HasMany
     {
         return $this->hasMany(Geo::class, 'parent_id')->with('childrenDeep');
+    }
+
+    public function parentDeep(): BelongsTo
+    {
+        return $this->belongsTo(Geo::class, 'parent_id')->with('parentDeep');
     }
 }

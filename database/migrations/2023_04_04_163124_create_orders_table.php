@@ -17,7 +17,7 @@ return new class extends Migration {
                 ->constrained()
                 ->onUpdate('cascade');
 
-            $table->string('inn')->nullable();
+            $table->string('inn');
             $table->string('org_name')->nullable();
             $table->string('phone');
             $table->string('name');

@@ -33,6 +33,9 @@ class UserResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'inn' => $this->inn,
+            'org_name' => $this->org_name,
+            'geo' => GeoResource::make($this->geo),
             'phone' => $this->phone,
             'email' => $this->email,
             'created_at' => $this->created_at,

@@ -2,11 +2,13 @@
 
 namespace App\Filament\BaseResource;
 
+use App\Models\Geo;
 use App\Models\User;
 use App\Utilities\Helpers;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -43,13 +45,35 @@ class UserResource extends Resource
                             ->label('Номер телефона')
                             ->required()
                             ->minLength(10)
+                            ->unique(ignoreRecord: true)
                             ->dehydrateStateUsing(function ($state) {
                                 return Helpers::getCleanPhone($state);
                             }),
 
                         TextInput::make('email')
                             ->label('Email')
+                            ->required()
+                            ->unique(ignoreRecord: true),
+
+                        TextInput::make('inn')
+                            ->label('ИНН')
                             ->required(),
+
+                        TextInput::make('org_name')
+                            ->label('Название организации'),
+
+
+                        Select::make('geo_id')
+                            ->label('Область')
+                            ->relationship('geo', 'name', function (Builder $query, ?User $record) {
+                                $query->doesntHave('children')->withTrashed()->where('deleted_at', null)->orWhere(
+                                    'id',
+                                    $record?->geo_id
+                                );
+                            })
+                            ->getOptionLabelFromRecordUsing(function (Geo $record) {
+                                return $record->trashed() ? "{$record->name} (область удалена)" : $record->name;
+                            }),
 
                         Password::make('password')
                             ->required(fn($context) => $context === 'create')

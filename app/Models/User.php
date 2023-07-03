@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,8 +20,11 @@ use Spatie\Permission\Traits\HasRoles;
  * @property int $id
  * @property string $name
  * @property string $email
+ * @property string $inn
+ * @property ?string $org_name
  * @property string $phone
  * @property string $password
+ * @property ?int $geo_id
  * @property ?Carbon $created_at
  * @property ?Carbon $updated_at
  * @property ?string $remember_token
@@ -48,6 +52,9 @@ class User extends Authenticatable implements FilamentUser, HasMedia
 
 
     protected $fillable = [
+        'inn',
+        'org_name',
+        'geo_id',
         'name',
         'phone',
         'email',
@@ -122,5 +129,10 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     public function getUpdatedAtAttribute($value)
     {
         return $value;
+    }
+
+    public function geo(): BelongsTo
+    {
+        return $this->belongsTo(Geo::class, 'geo_id');
     }
 }
