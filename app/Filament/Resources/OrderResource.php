@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderResource\Pages;
+use App\Filament\Resources\OrderResource\RelationManagers\ManagersRelationManager;
 use App\Models\Geo;
 use App\Models\Order;
 use App\Models\OrderDealerVehicle;
@@ -66,6 +67,9 @@ class OrderResource extends Resource
                             ->label('Email')
                             ->required(),
 
+                        TinyEditor::make('user_comment')->label('Комментарий пользователя')->dehydrated(
+                            false
+                        )->disabled(),
                         TinyEditor::make('admin_comment')->label('Коментарий администратора'),
 
                         Section::make('Лизинг')->schema([
@@ -73,7 +77,7 @@ class OrderResource extends Resource
                                 TextInput::make('advance')->label('Аванс')->numeric()->required(),
                                 TextInput::make('current_lessors')->label('Текущие лизингодатели')->nullable(),
                                 TextInput::make('months')->label('Срок лизинга')->numeric()->nullable(),
-                                TinyEditor::make('user_comment')->label('Комментарий пользователя')->nullable(),
+
                             ]),
 
                             Repeater::make('leasing_vehicles')
@@ -185,7 +189,10 @@ class OrderResource extends Resource
                         Select::make('geo_id')
                             ->label('Область')
                             ->relationship('geo', 'name', function (Builder $query, ?Order $record) {
-                                $query->withTrashed()->where('deleted_at', null)->orWhere('id', $record?->geo_id);
+                                $query->doesntHave('children')->withTrashed()->where('deleted_at', null)->orWhere(
+                                    'id',
+                                    $record?->geo_id
+                                );
                             })
                             ->getOptionLabelFromRecordUsing(function (Geo $record) {
                                 return $record->trashed() ? "{$record->name} (область удалена)" : $record->name;
@@ -272,7 +279,7 @@ class OrderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ManagersRelationManager::class,
         ];
     }
 

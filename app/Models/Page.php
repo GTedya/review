@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
@@ -64,7 +65,12 @@ class Page extends Model
         return $this->belongsTo(Page::class, 'parent_id');
     }
 
-    public function children()
+    public function parentDeep(): BelongsTo
+    {
+        return $this->belongsTo(Page::class, 'parent_id')->with('parentDeep');
+    }
+
+    public function children(): HasMany
     {
         return $this->hasMany(Page::class, 'parent_id');
     }
@@ -72,11 +78,6 @@ class Page extends Model
     public function pageVar(): hasOne
     {
         return $this->hasOne(PageVar::class);
-    }
-
-    public function parentDeep(): BelongsTo
-    {
-        return $this->belongsTo(Page::class, 'parent_id')->with('parentDeep');
     }
 
     public function fullSlug(): string
