@@ -34,6 +34,10 @@ class GeoResource extends Resource
                         TextInput::make('name')
                             ->label('Название')
                             ->required(),
+
+                        TextInput::make('region_code')
+                            ->label('Код региона')
+                            ->required(),
                     ]),
                 ]),
 
@@ -50,12 +54,12 @@ class GeoResource extends Resource
                             })->dehydrated(function (?Geo $record) {
                                 return !$record?->children()->exists();
                             }),
-                            Placeholder::make('has_children')
-                                ->label('У данной области есть дочерние области')
-                                ->visible(function (?Geo $record) {
+                        Placeholder::make('has_children')
+                            ->label('У данной области есть дочерние области')
+                            ->visible(function (?Geo $record) {
                                 return $record?->children()->exists();
                             }),
-                        ]),
+                    ]),
                 ]),
             ]);
     }

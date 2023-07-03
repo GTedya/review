@@ -12,6 +12,7 @@ use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -46,8 +47,10 @@ class RentResource extends Resource
                 Card::make()->schema([
                     Grid::make()->schema([
                         TextInput::make('name')
-                            ->label('Заголовок')
+                            ->label('ФИО')
                             ->required(),
+
+                        TextInput::make('title')->label('Заголовок')->required(),
 
                         TextInput::make('phone')
                             ->label('Номер телефона')
@@ -75,7 +78,6 @@ class RentResource extends Resource
                             ->label('Изображение')
                             ->directory('form-tmp')
                     ]),
-
                 ]),
                 Section::make('Транспортные средства')->schema([
                     Repeater::make('rent_vehicles')
@@ -128,6 +130,7 @@ class RentResource extends Resource
                         }),
 
                     Toggle::make('is_published')->label('Опубликованная запись')->default(true),
+                    Hidden::make('slug'),
 
                     DateTimePicker::make('active_until')->label('Активно до')->default(now()->addMonth()),
 

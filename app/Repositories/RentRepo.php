@@ -14,11 +14,14 @@ class RentRepo
         );
     }
 
-    public function pagination(?int $perPage, ?array $geos, ?array $types): LengthAwarePaginator
+    public function pagination(?int $perPage, ?array $geos, ?bool $with_nds, ?array $types): LengthAwarePaginator
     {
         $query = Rent::query();
         if (filled($geos)) {
             $query->whereIn('geo_id', $geos);
+        }
+        if (filled($with_nds)) {
+            $query->where('with_nds', $with_nds);
         }
         if (filled($types)) {
             $query->whereHas('rentVehicles', function ($query) use ($types) {
@@ -32,6 +35,11 @@ class RentRepo
 
     public function getRentBySlug(string $slug): Rent|null
     {
-        return Rent::query()->where('slug', $slug)->first();
+        return Rent::query()->where('slug', $slug)->whereDate('active_until', '>=', now())->orderBy(
+            'created_at',
+            'desc'
+        )->with(
+            ['rentVehicles.type', 'geo', 'user']
+        )->first();
     }
 }

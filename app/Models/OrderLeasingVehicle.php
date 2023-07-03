@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\OrderLeasingObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property ?string $state
  * @property ?int $count
  * @property VehicleType $type
+ * @property Order $order
  */
 class OrderLeasingVehicle extends Model
 {
@@ -34,5 +36,9 @@ class OrderLeasingVehicle extends Model
     public function type(): BelongsTo
     {
         return $this->belongsTo(VehicleType::class, 'type_id');
+    }
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
     }
 }

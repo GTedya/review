@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PageResource;
 use App\Repositories\PageRepo;
 use App\Services\PageService;
+use App\Utilities\Helpers;
 use Illuminate\Http\JsonResponse;
 
 class PageController extends Controller
@@ -20,10 +21,10 @@ class PageController extends Controller
 
     public function getPage($slug): JsonResponse
     {
-        $content = $this->pageService->getBySlug($slug);
+        $page = $this->pageService->getBySlug($slug);
 
         return response()->json(
-            ['success' => true, 'page' => PageResource::make($content)]
+            ['success' => true, 'page' => PageResource::make($page)]
         );
     }
 

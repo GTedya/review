@@ -50,7 +50,8 @@ class RentController extends Controller
         $perPage = $request->input('per_page');
         $geos = $request->input('geo');
         $types = $request->input('types');
-        $rents = $this->rentRepo->pagination($perPage, $geos, $types);
+        $with_nds= $request->input('with_nds');
+        $rents = $this->rentRepo->pagination($perPage, $geos, $with_nds, $types);
 
 
         return response()->json(['success' => true, 'rents' => RentResource::collection($rents)->resource]);
@@ -71,12 +72,9 @@ class RentController extends Controller
     public function single(string $slug): JsonResponse
     {
         /** @var Rent $rent */
-        $rent = $this->rentRepo->getRentBySlug($slug);
-        if ($rent == null) {
-            abort(404);
-        }
-        $active = now()->lt($rent['active_until']);
+        $rent = $this->rentService->getRent($slug);
+        $active = now()->lt($rent->getAttribute('active_until'));
 
-        return response()->json(['success' => true, 'actual' => $active, 'rent' => $rent]);
+        return response()->json(['success' => true, 'actual' => $active, 'rent' => RentResource::make($rent)]);
     }
 }

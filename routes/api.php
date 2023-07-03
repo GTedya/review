@@ -31,12 +31,18 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/claim', [ClaimController::class, 'putClaim']);
 Route::get('/partners', [PartnerController::class, 'getPartner']);
 Route::get('/faqs', [FaqController::class, 'getFaqs']);
-Route::get('/rent/list', [RentController::class, 'list']);
-Route::get('/rent/get/{slug}', [RentController::class, 'single']);
+
+Route::prefix('rent')->group(function (){
+    Route::get('/list', [RentController::class, 'list']);
+    Route::get('/{slug}', [RentController::class, 'single']);
+});
+
+
 Route::get('/menu', [MenuController::class, 'list']);
 Route::get('/leasings', [LeasingController::class, 'getLeasings']);
-Route::get('/page/{slug}', [PageController::class, 'getPage']);
+Route::get('/page/{slug}', [PageController::class, 'getPage'])->where('slug', '.*');
 Route::get('/mainPage', [PageController::class, 'getMainPage']);
+Route::get('/geos', [GeoController::class, 'list']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -46,7 +52,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{slug}', [NewsController::class, 'single']);
     });
 
-    Route::get('/geos', [GeoController::class, 'list']);
 
     Route::get('/veh_types', [VehTypeController::class, 'list']);
 
@@ -56,6 +61,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/edit/{id}', [ClientOrder::class, 'edit']);
             Route::get('/list', [UserController::class, 'orders']);
             Route::post('/create', [ClientOrder::class, 'create']);
+            Route::get('/{id}', [ClientOrder::class, 'getOrder']);
         });
 
         Route::prefix('rent')->group(function () {
@@ -67,7 +73,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::middleware('role:dealer_manager|leasing_manager')->prefix('manager')->group(function () {
-        Route::get('/orders', [ManagerOrder::class, 'orders']);
+        Route::prefix('orders')->group(function () {
+            Route::get('/', [ManagerOrder::class, 'orders']);
+            Route::get('/{id}', [ManagerOrder::class, 'getOrder']);
+        });
         Route::post('/logo', [ManagerController::class, 'logoAdd']);
+        Route::post('/take_order/{orderId}', [ManagerOrder::class, 'takeOrder']);
     });
 });
