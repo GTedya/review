@@ -33,7 +33,7 @@ Route::get('/partners', [PartnerController::class, 'getPartner']);
 Route::get('/faqs', [FaqController::class, 'getFaqs']);
 
 Route::prefix('rent')->group(function (){
-    Route::get('/list', [RentController::class, 'list']);
+    Route::get('/', [RentController::class, 'list']);
     Route::get('/{slug}', [RentController::class, 'single']);
 });
 

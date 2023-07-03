@@ -46,11 +46,17 @@ class RentResource extends Resource
 
                 Card::make()->schema([
                     Grid::make()->schema([
-                        TextInput::make('name')
-                            ->label('ФИО')
+                        TextInput::make('title')->label('Заголовок')->required(),
+
+                        Select::make('type')
+                            ->label('Тип')
+                            ->options(RentTypeConstants::RENT_TYPES)
                             ->required(),
 
-                        TextInput::make('title')->label('Заголовок')->required(),
+                        TextInput::make('name')
+                            ->label('ФИО')
+                            ->required()
+                            ->columnSpanFull(),
 
                         TextInput::make('phone')
                             ->label('Номер телефона')
@@ -59,14 +65,9 @@ class RentResource extends Resource
                         TextInput::make('email')
                             ->label('Email')
                             ->email(),
-
-                        Select::make('type')
-                            ->label('Тип')
-                            ->options(RentTypeConstants::RENT_TYPES)
-                            ->required(),
-
-                        Toggle::make('with_nds')->label('НДС'),
                     ]),
+
+
                     Textarea::make('text')
                         ->label('Текст')
                         ->required(),
@@ -131,6 +132,7 @@ class RentResource extends Resource
                             return $record->trashed() ? "{$record->name} (область удалена)" : $record->name;
                         }),
 
+                    Toggle::make('with_nds')->label('С НДС'),
                     Toggle::make('is_published')->label('Опубликованная запись')->default(true),
                     Hidden::make('slug'),
 

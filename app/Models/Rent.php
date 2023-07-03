@@ -30,6 +30,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property ?Carbon $updated_at
  * @property User $user
  * @property Geo $geo
+ * @property bool $isActive
  * @property Collection<RentVehicle> $rentVehicles
  */
 class Rent extends Model implements HasMedia
@@ -91,5 +92,10 @@ class Rent extends Model implements HasMedia
     public function getActiveUntilAttribute($value)
     {
         return $value;
+    }
+
+    public function getIsActiveAttribute()
+    {
+        return now()->lt($this->active_until);
     }
 }

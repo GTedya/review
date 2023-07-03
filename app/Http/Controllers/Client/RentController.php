@@ -71,10 +71,11 @@ class RentController extends Controller
 
     public function single(string $slug): JsonResponse
     {
-        /** @var Rent $rent */
         $rent = $this->rentService->getRent($slug);
-        $active = now()->lt($rent->getAttribute('active_until'));
-
-        return response()->json(['success' => true, 'actual' => $active, 'rent' => RentResource::make($rent)]);
+        $active = $rent->isActive;
+        if (!$active){
+            return response()->json(['success' => true, 'active' => $active]);
+        }
+        return response()->json(['success' => true, 'rent' => RentResource::make($rent)]);
     }
 }
