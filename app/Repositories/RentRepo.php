@@ -28,8 +28,18 @@ class RentRepo
                 $query->whereIn('type_id', $types);
             });
         }
-        return $query->whereDate('active_until', '>=', now())->orderBy('created_at', 'desc')->with(
+        return $query->whereDate('active_until', '>=', now())->where('is_published', true)->orderBy(
+            'created_at',
+            'desc'
+        )->with(
             ['rentVehicles.type', 'geo', 'user']
         )->paginate($perPage);
+    }
+
+    public function getRentBySlug(string $slug): Rent|null
+    {
+        return Rent::query()->where('slug', $slug)->where('is_published', true)->with(
+            ['rentVehicles.type', 'geo', 'user']
+        )->first();
     }
 }
