@@ -134,7 +134,6 @@ class RentResource extends Resource
 
                     Toggle::make('with_nds')->label('С НДС'),
                     Toggle::make('is_published')->label('Опубликованная запись')->default(true),
-                    Hidden::make('slug'),
 
                     DateTimePicker::make('active_until')->label('Активно до')->default(now()->addMonth()),
 
