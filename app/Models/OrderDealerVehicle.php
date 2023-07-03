@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property ?string $model
  * @property ?int $count
  * @property VehicleType $type
+ * @property Order $order
  */
 class OrderDealerVehicle extends Model
 {
@@ -33,5 +34,10 @@ class OrderDealerVehicle extends Model
     public function type(): BelongsTo
     {
         return $this->belongsTo(VehicleType::class);
+    }
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
     }
 }

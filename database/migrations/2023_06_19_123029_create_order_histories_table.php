@@ -10,18 +10,16 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('geos', function (Blueprint $table) {
+        Schema::create('order_histories', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('parent_id')
-                ->nullable()
-                ->constrained('geos')
+            $table->foreignId('order_id')
+                ->constrained()
                 ->onUpdate('cascade')
-                ->onDelete('set null');
+                ->onDelete('cascade');
 
-            $table->string('name');
-            $table->string('region_code');
-            $table->softDeletes();
+            $table->json('edited');
+            $table->timestamps();
         });
     }
 
@@ -30,6 +28,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('geos');
+        Schema::dropIfExists('order_histories');
     }
 };

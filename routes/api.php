@@ -34,8 +34,9 @@ Route::get('/faqs', [FaqController::class, 'getFaqs']);
 Route::get('/rent/list', [RentController::class, 'list']);
 Route::get('/menu', [MenuController::class, 'list']);
 Route::get('/leasings', [LeasingController::class, 'getLeasings']);
-Route::get('/page/{slug}', [PageController::class, 'getPage']);
+Route::get('/page/{slug}', [PageController::class, 'getPage'])->where('slug', '.*');
 Route::get('/mainPage', [PageController::class, 'getMainPage']);
+Route::get('/geos', [GeoController::class, 'list']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -45,7 +46,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{slug}', [NewsController::class, 'single']);
     });
 
-    Route::get('/geos', [GeoController::class, 'list']);
 
     Route::get('/veh_types', [VehTypeController::class, 'list']);
 
@@ -55,6 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/edit/{id}', [ClientOrder::class, 'edit']);
             Route::get('/list', [UserController::class, 'orders']);
             Route::post('/create', [ClientOrder::class, 'create']);
+            Route::get('/{id}', [ClientOrder::class, 'getOrder']);
         });
 
         Route::prefix('rent')->group(function () {
@@ -71,9 +72,9 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::prefix('/{orderId}')->group(function () {
                 Route::post('/offer', [ManagerController::class, 'sendOffer']);
                 Route::post('/take_order', [ManagerOrder::class, 'takeOrder']);
+                Route::get('/', [ManagerOrder::class, 'getOrder']);
             });
         });
-
         Route::post('/logo', [ManagerController::class, 'logoAdd']);
     });
 });

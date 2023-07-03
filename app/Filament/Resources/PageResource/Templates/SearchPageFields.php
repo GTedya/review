@@ -147,14 +147,16 @@ class SearchPageFields extends PageCustomFields
     {
         /** @var ?PageVar $pageVar */
         $pageVar = $this->page->pageVar;
-        if ($pageVar === null) return [];
+        if ($pageVar === null) {
+            return [];
+        }
 
         $repeatGroups = $this->page->pageVar->repeatVars->groupBy('name');
 
-        $steps = $repeatGroups['steps']?->map(function (RepeatVar $repeatVar) {
+        $steps = ($repeatGroups['steps'] ?? null)?->map(function (RepeatVar $repeatVar) {
             return $repeatVar->vars;
         });
-        $benefits = $repeatGroups['benefits']?->map(function (RepeatVar $repeatVar) {
+        $benefits = ($repeatGroups['benefits'] ?? null)?->map(function (RepeatVar $repeatVar) {
             return $repeatVar->vars;
         });
 
