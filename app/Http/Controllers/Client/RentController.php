@@ -24,6 +24,9 @@ class RentController extends Controller
         $this->rentRepo = $rentRepo;
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function create(RentRequest $request): JsonResponse
     {
         /** @var User $user */
@@ -31,6 +34,7 @@ class RentController extends Controller
 
         $rent = $this->rentService->create($user, $request->validated());
         $rent = $rent->fresh('rentVehicles');
+
 
         return response()->json(['success' => true, 'rent' => RentResource::make($rent)]);
     }
