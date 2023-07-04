@@ -5,7 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserFileTypeResource\Pages;
 use App\Models\UserFileType;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -31,6 +33,14 @@ class UserFileTypeResource extends Resource
                             TextInput::make('name')
                                 ->label('Название')
                                 ->required(),
+                        CheckboxList::make('user_type')
+                            ->label('Файл для')
+                            ->options([
+                                'ip' => 'ИП',
+                                'npd' => 'НПД',
+                                'ooo' => 'ООО',
+                                'nao' => 'НАО',
+                            ]),
                         ]
                     )
                 ]),

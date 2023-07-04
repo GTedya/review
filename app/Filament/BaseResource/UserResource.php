@@ -7,6 +7,7 @@ use App\Models\Geo;
 use App\Models\User;
 use App\Utilities\Helpers;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
@@ -92,6 +93,14 @@ class UserResource extends Resource
 
                     TextInput::make('org_type')
                         ->label('Тип организации'),
+                    CheckboxList::make('user_type')
+                        ->label('Файл для')
+                        ->options([
+                            'ip' => 'ИП',
+                            'npd' => 'НПД',
+                            'ooo' => 'ООО',
+                            'nao' => 'НАО',
+                        ]),
 
                     Select::make('geo_id')
                         ->label('Область')
