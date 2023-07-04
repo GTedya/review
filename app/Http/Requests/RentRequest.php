@@ -35,7 +35,6 @@ class RentRequest extends FormRequest
         return [
             'email' => ['string', 'email'],
             'phone' => ['required', 'string', 'size:11'],
-            'title' => ['required', 'string'],
             'name' => ['required', 'string', 'min:4'],
             'geo_id' => ['nullable', 'int', 'exists:geos,id'],
             'type' => ['required', Rule::in(array_keys(RentTypeConstants::RENT_TYPES))],
