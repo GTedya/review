@@ -21,6 +21,7 @@ class RentResource extends JsonResource
             'id' => $this->id,
             'user' => AuthorResource::make($this->user),
             'name' => $this->name,
+            'title' => $this->title,
             'type' => $this->type,
             'email' => $this->email,
             'preview_description' => mb_substr($this->text, 0, 150),
