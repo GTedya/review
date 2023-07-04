@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -21,8 +21,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $name
  * @property string $email
  * @property string $inn
- * @property ?string $org_type
- * @property ?string $org_name
  * @property string $phone
  * @property string $password
  * @property ?int $geo_id
@@ -34,7 +32,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property Collection<int, ManagerOffer> $offers
  * @property Collection<Rent> $rents
  * @property Collection $userFiles
- * @property ?Geo $geo
  * @property ?Order $banOrders
  */
 class User extends Authenticatable implements FilamentUser, HasMedia
@@ -55,9 +52,6 @@ class User extends Authenticatable implements FilamentUser, HasMedia
 
     protected $fillable = [
         'inn',
-        'org_type',
-        'org_name',
-        'geo_id',
         'name',
         'phone',
         'email',
@@ -91,6 +85,11 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function company(): HasOne
+    {
+        return $this->hasOne(Company::class);
     }
 
     public function rents(): HasMany
@@ -134,8 +133,5 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         return $value;
     }
 
-    public function geo(): BelongsTo
-    {
-        return $this->belongsTo(Geo::class, 'geo_id');
-    }
+
 }

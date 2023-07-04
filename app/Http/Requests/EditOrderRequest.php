@@ -36,7 +36,6 @@ class EditOrderRequest extends FormRequest
             'phone' => ['required', 'string', 'size:11'],
             'name' => ['required', 'string', 'min:4'],
             'user_comment' => ['nullable', 'string'],
-            'org_name' => ['nullable', 'string'],
             'end_date' => ['nullable', 'date'],
             'geo_id' => ['nullable', 'int', 'exists:geos,id'],
             'leasing' => ['nullable', 'array:advance,months,current_lessors,user_comment,vehicles'],

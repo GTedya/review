@@ -25,6 +25,9 @@ class RentController extends Controller
         $this->rentRepo = $rentRepo;
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function create(RentRequest $request): JsonResponse
     {
         /** @var User $user */

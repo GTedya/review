@@ -2,12 +2,14 @@
 
 namespace App\Filament\BaseResource;
 
+use App\Models\Company;
 use App\Models\Geo;
 use App\Models\User;
 use App\Utilities\Helpers;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -55,28 +57,6 @@ class UserResource extends Resource
                             ->required()
                             ->unique(ignoreRecord: true),
 
-                        TextInput::make('inn')
-                            ->label('ИНН')
-                            ->required(),
-
-                        TextInput::make('org_name')
-                            ->label('Название организации'),
-
-                        TextInput::make('org_type')
-                            ->label('Тип организации'),
-
-                        Select::make('geo_id')
-                            ->label('Область')
-                            ->relationship('geo', 'name', function (Builder $query, ?User $record) {
-                                $query->doesntHave('children')->withTrashed()->where('deleted_at', null)->orWhere(
-                                    'id',
-                                    $record?->geo_id
-                                );
-                            })
-                            ->getOptionLabelFromRecordUsing(function (Geo $record) {
-                                return $record->trashed() ? "{$record->name} (область удалена)" : $record->name;
-                            }),
-
                         Password::make('password')
                             ->required(fn($context) => $context === 'create')
                             ->dehydrated(fn($context, $state) => $context !== 'edit' || filled($state))
@@ -101,6 +81,30 @@ class UserResource extends Resource
                             ->collection('logo')
                     ]),
                 ])->visible(static::$hasLogo),
+
+                Section::make('О компании')->collapsed()->relationship('company')->schema([
+                    TextInput::make('inn')
+                        ->label('ИНН')
+                        ->required(),
+
+                    TextInput::make('org_name')
+                        ->label('Название организации'),
+
+                    TextInput::make('org_type')
+                        ->label('Тип организации'),
+
+                    Select::make('geo_id')
+                        ->label('Область')
+                        ->relationship('geo', 'name', function (Builder $query, ?Company $record) {
+                            $query->doesntHave('children')->withTrashed()->where('deleted_at', null)->orWhere(
+                                'id',
+                                $record?->geo_id
+                            );
+                        })
+                        ->getOptionLabelFromRecordUsing(function (Geo $record) {
+                            return $record->trashed() ? "{$record->name} (область удалена)" : $record->name;
+                        }),
+                ]),
             ];
     }
 
