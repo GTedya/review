@@ -21,6 +21,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $name
  * @property string $email
  * @property string $inn
+ * @property ?string $org_type
  * @property ?string $org_name
  * @property string $phone
  * @property string $password
@@ -54,6 +55,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
 
     protected $fillable = [
         'inn',
+        'org_type',
         'org_name',
         'geo_id',
         'name',

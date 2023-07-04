@@ -19,6 +19,7 @@ class AuthorResource extends JsonResource
             'name' => $this->name,
             'phone' => $this->phone,
             'inn' => $this->inn,
+            'org_type' => $this->org_type,
             'org_name' => $this->org_name,
         ];
     }

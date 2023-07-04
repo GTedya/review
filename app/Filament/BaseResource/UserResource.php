@@ -36,7 +36,7 @@ class UserResource extends Resource
 
             [
                 Grid::make()->columnSpan(2)->schema([
-                    Card::make()->schema([
+                    Card::make()->columns()->schema([
                         TextInput::make('name')
                             ->label('ФИО')
                             ->required(),
@@ -62,6 +62,8 @@ class UserResource extends Resource
                         TextInput::make('org_name')
                             ->label('Название организации'),
 
+                        TextInput::make('org_type')
+                            ->label('Тип организации'),
 
                         Select::make('geo_id')
                             ->label('Область')

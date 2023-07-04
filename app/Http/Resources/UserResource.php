@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use App\Models\UserFile;
 use App\Models\UserFileType;
 use Illuminate\Http\Request;
@@ -29,12 +30,13 @@ class UserResource extends JsonResource
                 ];
             });
         }
-
+        /** @var $this User */
         return [
             'id' => $this->id,
             'name' => $this->name,
             'inn' => $this->inn,
             'org_name' => $this->org_name,
+            'org_type' => $this->org_type,
             'geo' => GeoResource::make($this->geo),
             'phone' => $this->phone,
             'email' => $this->email,
