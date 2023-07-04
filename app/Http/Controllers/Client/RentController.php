@@ -52,7 +52,7 @@ class RentController extends Controller
     {
         $perPage = $request->input('per_page');
         $geos = $request->input('geo');
-        $vehTypes = $request->input('$vehTypes');
+        $vehTypes = $request->input('veh_types');
         $with_nds = $request->input('with_nds');
         $types = $request->input('types');
         $rents = $this->rentRepo->pagination($perPage, $geos, $with_nds, $types, $vehTypes);
