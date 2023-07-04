@@ -14,8 +14,13 @@ class RentRepo
         );
     }
 
-    public function pagination(?int $perPage, ?array $geos, ?bool $with_nds, ?array $types): LengthAwarePaginator
-    {
+    public function pagination(
+        ?int $perPage,
+        ?array $geos,
+        ?bool $with_nds,
+        ?array $types,
+        ?array $vehTypes
+    ): LengthAwarePaginator {
         $query = Rent::query();
         if (filled($geos)) {
             $query->whereIn('geo_id', $geos);
@@ -23,10 +28,13 @@ class RentRepo
         if (filled($with_nds)) {
             $query->where('with_nds', $with_nds);
         }
-        if (filled($types)) {
-            $query->whereHas('rentVehicles', function ($query) use ($types) {
-                $query->whereIn('type_id', $types);
+        if (filled($vehTypes)) {
+            $query->whereHas('rentVehicles', function ($query) use ($vehTypes) {
+                $query->whereIn('type_id', $vehTypes);
             });
+        }
+        if (filled($types)) {
+            $query->whereIn('type', $types);
         }
         return $query->whereDate('active_until', '>=', now())->where('is_published', true)->orderBy(
             'created_at',

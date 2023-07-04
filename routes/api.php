@@ -31,8 +31,9 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/claim', [ClaimController::class, 'putClaim']);
 Route::get('/partners', [PartnerController::class, 'getPartner']);
 Route::get('/faqs', [FaqController::class, 'getFaqs']);
+Route::get('/veh_types', [VehTypeController::class, 'list']);
 
-Route::prefix('rent')->group(function (){
+Route::prefix('rent')->group(function () {
     Route::get('/', [RentController::class, 'list']);
     Route::get('/{slug}', [RentController::class, 'single']);
 });
@@ -52,8 +53,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{slug}', [NewsController::class, 'single']);
     });
 
-
-    Route::get('/veh_types', [VehTypeController::class, 'list']);
 
     Route::middleware('role:client')->prefix('client')->group(function () {
         Route::get('/info', [UserController::class, 'info']);
