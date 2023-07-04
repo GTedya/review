@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('inn');
+            $table->string('org_type')->nullable();
             $table->string('org_name')->nullable();
             $table->string('email')->unique();
             $table->string('phone')->unique();

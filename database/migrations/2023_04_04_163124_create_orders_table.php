@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->string('org_name')->nullable();
             $table->string('phone');
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->date('end_date')->nullable();
 
             $table->foreignId('status_id')
