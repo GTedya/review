@@ -33,14 +33,15 @@ class UserFileTypeResource extends Resource
                             TextInput::make('name')
                                 ->label('Название')
                                 ->required(),
-                        CheckboxList::make('user_type')
+                        CheckboxList::make('org_type')
                             ->label('Файл для')
                             ->options([
                                 'ip' => 'ИП',
                                 'npd' => 'НПД',
                                 'ooo' => 'ООО',
                                 'nao' => 'НАО',
-                            ]),
+                            ])
+                            ->required(1),
                         ]
                     )
                 ]),

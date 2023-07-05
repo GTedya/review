@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('user_file_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->json('user_type');
+            $table->json('org_type');
         });
     }
 

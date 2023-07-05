@@ -7,9 +7,11 @@ use App\Models\Geo;
 use App\Models\User;
 use App\Utilities\Helpers;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -82,38 +84,6 @@ class UserResource extends Resource
                             ->collection('logo')
                     ]),
                 ])->visible(static::$hasLogo),
-
-                Section::make('О компании')->collapsed()->relationship('company')->schema([
-                    TextInput::make('inn')
-                        ->label('ИНН')
-                        ->required(),
-
-                    TextInput::make('org_name')
-                        ->label('Название организации'),
-
-                    TextInput::make('org_type')
-                        ->label('Тип организации'),
-                    CheckboxList::make('user_type')
-                        ->label('Файл для')
-                        ->options([
-                            'ip' => 'ИП',
-                            'npd' => 'НПД',
-                            'ooo' => 'ООО',
-                            'nao' => 'НАО',
-                        ]),
-
-                    Select::make('geo_id')
-                        ->label('Область')
-                        ->relationship('geo', 'name', function (Builder $query, ?Company $record) {
-                            $query->doesntHave('children')->withTrashed()->where('deleted_at', null)->orWhere(
-                                'id',
-                                $record?->geo_id
-                            );
-                        })
-                        ->getOptionLabelFromRecordUsing(function (Geo $record) {
-                            return $record->trashed() ? "{$record->name} (область удалена)" : $record->name;
-                        }),
-                ]),
             ];
     }
 

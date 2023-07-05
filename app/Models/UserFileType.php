@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property string $name
- * @property array $user_type
+ * @property array org_type
  */
 class UserFileType extends Model
 {
@@ -18,10 +18,10 @@ class UserFileType extends Model
 
     public $fillable = [
         'name',
-        'user_type'
+        'org_type'
     ];
 
     protected $casts = [
-        'user_type' => 'array',
+        'org_type' => 'array',
     ];
 }
