@@ -37,7 +37,10 @@ Route::prefix('rent')->group(function () {
     Route::get('/', [RentController::class, 'list']);
     Route::get('/{slug}', [RentController::class, 'single']);
 });
-
+Route::prefix('/news')->group(function () {
+    Route::get('/', [NewsController::class, 'pagination']);
+    Route::get('/{slug}', [NewsController::class, 'single']);
+});
 
 Route::get('/menu', [MenuController::class, 'list']);
 Route::get('/leasings', [LeasingController::class, 'getLeasings']);
@@ -48,10 +51,7 @@ Route::get('/geos', [GeoController::class, 'list']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::prefix('/news')->group(function () {
-        Route::get('/', [NewsController::class, 'pagination']);
-        Route::get('/{slug}', [NewsController::class, 'single']);
-    });
+
 
 
     Route::middleware('role:client')->prefix('client')->group(function () {
