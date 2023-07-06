@@ -7,9 +7,9 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserRepo
 {
-    public function getByEmail($email): ?User
+    public function getByPhone(string $phone): ?User
     {
-        return User::where('email', $email)->first();
+        return User::where('phone', $phone)->first();
     }
 
     public function getOrders(?User $user): LengthAwarePaginator
