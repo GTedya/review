@@ -17,10 +17,12 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        /** @var $this User|self */
+
         $typesWithFiles = null;
 
         if ($this->relationLoaded('files')) {
-            $typesWithFiles = UserFileType::all()->map(function (UserFileType $type) {
+            $typesWithFiles = UserFileType::query()->whereJsonContains('org_type',$this->company->org_type )->get()->map(function (UserFileType $type) {
                 /** @var ?UserFile $file */
                 $file = $this->files->firstWhere('type_id', $type->id);
 
@@ -30,7 +32,7 @@ class UserResource extends JsonResource
                 ];
             });
         }
-        /** @var $this User|self */
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -39,7 +41,7 @@ class UserResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'files' => $this->whenNotNull($typesWithFiles),
-            'company' => CompanyResource::make($this->company()),
+            'company' => CompanyResource::make($this->company),
         ];
     }
 }

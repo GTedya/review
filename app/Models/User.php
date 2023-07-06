@@ -28,9 +28,11 @@ use Spatie\Permission\Traits\HasRoles;
  * @property Collection<Order> $orders
  * @property Collection<int, Order> $takenOrders
  * @property Collection<int, ManagerOffer> $offers
+ * @property Collection<int, File> $files
  * @property Collection<Rent> $rents
  * @property Collection $userFiles
  * @property ?Order $banOrders
+ * @property Company $company
  */
 class User extends Authenticatable implements FilamentUser, HasMedia
 {
