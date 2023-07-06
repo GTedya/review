@@ -22,6 +22,9 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function create(CreateOrderRequest $request): JsonResponse
     {
         /** @var User $user */

@@ -51,7 +51,8 @@ class OrderResource extends Resource
 
 
                         TextInput::make('inn')
-                            ->label('ИНН'),
+                            ->label('ИНН')
+                            ->required(),
 
                         TextInput::make('org_name')
                             ->label('Название организации'),
@@ -65,8 +66,7 @@ class OrderResource extends Resource
                             }),
 
                         TextInput::make('email')
-                            ->label('Email')
-                            ->required(),
+                            ->label('Email'),
 
                         TinyEditor::make('user_comment')->label('Комментарий пользователя')->dehydrated(
                             false

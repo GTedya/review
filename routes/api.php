@@ -51,9 +51,6 @@ Route::get('/geos', [GeoController::class, 'list']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
-
-
-
     Route::middleware('role:client')->prefix('client')->group(function () {
         Route::get('/info', [UserController::class, 'info']);
         Route::prefix('order')->group(function () {
