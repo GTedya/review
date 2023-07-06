@@ -52,10 +52,10 @@ class RentController extends Controller
     {
         $perPage = $request->input('per_page');
         $geos = $request->input('geo');
-        $types = $request->input('types');
+        $vehTypes = $request->input('veh_types');
         $with_nds = $request->input('with_nds');
-        $rents = $this->rentRepo->pagination($perPage, $geos, $with_nds, $types);
-
+        $rentTypes = $request->input('types');
+        $rents = $this->rentRepo->pagination($perPage, $geos, $with_nds, $rentTypes, $vehTypes);
 
         return response()->json(['success' => true, 'rents' => RentResource::collection($rents)->resource]);
     }
