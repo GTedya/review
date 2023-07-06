@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use http\Message\Body;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,6 +23,7 @@ class UserFile extends Model implements HasMedia
 
     protected $fillable = [
         'user_id',
+        'show_in_order',
         'type_id'
     ];
 

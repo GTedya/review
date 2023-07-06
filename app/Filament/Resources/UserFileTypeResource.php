@@ -37,9 +37,7 @@ class UserFileTypeResource extends Resource
                             ->label('Типы организаций')
                             ->options([
                                 'ip' => 'ИП',
-                                'npd' => 'НПД',
                                 'ooo' => 'ООО',
-                                'nao' => 'НАО',
                             ])
                             ->required(1),
                         ]
