@@ -20,8 +20,7 @@ class CompanyResource extends JsonResource
             'id' => $this->id,
             'org_type' => $this->org_type,
             'org_name' => $this->org_name,
-            'user' => $this->user(),
-            'geo' => $this->geo(),
+            'geo' => GeoResource::make($this->geo),
         ];
     }
 }

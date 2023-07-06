@@ -34,7 +34,7 @@ class UserFileTypeResource extends Resource
                                 ->label('Название')
                                 ->required(),
                         CheckboxList::make('org_type')
-                            ->label('Файл для')
+                            ->label('Типы организаций')
                             ->options([
                                 'ip' => 'ИП',
                                 'npd' => 'НПД',

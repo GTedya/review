@@ -70,7 +70,6 @@ class EditOrderRequest extends FormRequest
             'date' => 'Неверный формат',
             'exists' => 'Указано неверное значение',
 
-            'inn.size' => 'ИНН должен содержать :size символов',
             'email.email' => 'Неверный формат email',
             'phone.size' => 'Неверный формат',
             'name.min' => 'ФИО должно содержать как минимум :min символа',

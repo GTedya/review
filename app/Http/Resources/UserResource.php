@@ -30,14 +30,10 @@ class UserResource extends JsonResource
                 ];
             });
         }
-        /** @var $this User */
+        /** @var $this User|self */
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'inn' => $this->inn,
-            'org_name' => $this->org_name,
-            'org_type' => $this->org_type,
-            'geo' => GeoResource::make($this->geo),
             'phone' => $this->phone,
             'email' => $this->email,
             'created_at' => $this->created_at,

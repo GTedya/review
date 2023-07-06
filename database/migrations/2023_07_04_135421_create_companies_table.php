@@ -23,7 +23,8 @@ return new class extends Migration
             $table->foreignId('geo_id')
                 ->nullable()
                 ->constrained()
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+                ->onDelete('set null');
         });
     }
 
