@@ -20,11 +20,11 @@ class AuthController extends Controller
         $this->userRepo = $userRepo;
     }
 
-    public function login(AuthRequest $request)
+    public function login(AuthRequest $request): JsonResponse
     {
         $req = $request->validated();
 
-        $user = $this->userRepo->getByEmail($request->input('email'));
+        $user = $this->userRepo->getByPhone($request->input('phone'));
 
         if (!Hash::check($req['password'], $user->password) || $user->hasRole('admin')) {
             throw ValidationException::withMessages(['password' => 'Неверный пароль']);

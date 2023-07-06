@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RentRequest;
 use App\Http\Resources\RentResource;
-use App\Models\Rent;
 use App\Models\User;
 use App\Repositories\RentRepo;
 use App\Services\RentService;
@@ -36,6 +35,7 @@ class RentController extends Controller
         $rent = $this->rentService->create($user, $request->validated());
         $rent = $rent->fresh('rentVehicles');
 
+
         return response()->json(['success' => true, 'rent' => RentResource::make($rent)]);
     }
 
@@ -53,7 +53,7 @@ class RentController extends Controller
         $perPage = $request->input('per_page');
         $geos = $request->input('geo');
         $types = $request->input('types');
-        $with_nds= $request->input('with_nds');
+        $with_nds = $request->input('with_nds');
         $rents = $this->rentRepo->pagination($perPage, $geos, $with_nds, $types);
 
 
@@ -76,7 +76,7 @@ class RentController extends Controller
     {
         $rent = $this->rentService->getRent($slug);
         $active = $rent->isActive;
-        if (!$active){
+        if (!$active) {
             return response()->json(['success' => true, 'active' => $active]);
         }
         return response()->json(['success' => true, 'rent' => RentResource::make($rent)]);
