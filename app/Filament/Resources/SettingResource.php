@@ -45,7 +45,7 @@ class SettingResource extends Resource
                             ->directory('form-tmp')
                             ->collection('contact_file')
                             ->panelLayout('integrated')
-                            ->label('Дополнительные файлы'),
+                            ->label('Файл контактов'),
                     ]),
                 ]),
 
