@@ -7,8 +7,8 @@ use App\Models\UserFileType;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -33,13 +33,14 @@ class UserFileTypeResource extends Resource
                             TextInput::make('name')
                                 ->label('Название')
                                 ->required(),
-                        CheckboxList::make('org_type')
-                            ->label('Типы организаций')
-                            ->options([
-                                'ip' => 'ИП',
-                                'ooo' => 'ООО',
-                            ])
-                            ->required(1),
+                            CheckboxList::make('org_type')
+                                ->label('Типы организаций')
+                                ->options([
+                                    'ip' => 'ИП',
+                                    'ooo' => 'ООО',
+                                ])
+                                ->required(1),
+                            Toggle::make('show_in_order')
                         ]
                     )
                 ]),
