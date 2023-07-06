@@ -30,7 +30,7 @@ class UserResource extends JsonResource
                 ];
             });
         }
-        /** @var $this User|self */
+        /** @var User|self $this  */
         return [
             'id' => $this->id,
             'name' => $this->name,
