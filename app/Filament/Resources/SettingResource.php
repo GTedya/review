@@ -6,6 +6,7 @@ use App\Filament\Resources\SettingResource\Pages;
 use App\Models\Setting;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -37,15 +38,28 @@ class SettingResource extends Resource
                             ->panelLayout('integrated')
                             ->label('Стандартное изображение'),
                     ]),
+                    Fieldset::make('Дополнительные файлы')->columns(1)->schema([
+                        SpatieMediaLibraryFileUpload::make('contact_file')
+                            ->enableOpen()
+                            ->disableLabel()
+                            ->directory('form-tmp')
+                            ->collection('contact_file')
+                            ->panelLayout('integrated')
+                            ->label('Дополнительные файлы'),
+                    ]),
                 ]),
 
-                Section::make('Связь')->collapsible()->schema([
-                    Grid::make()->schema([
-                        TextInput::make('phone')
-                            ->label('Телефон')
-                            ->required(),
-                        TextInput::make('email')->label('Email'),
-                    ]),
+                Section::make('Связь')->columnSpanFull()->collapsible()->schema([
+                    TextInput::make('email')->label('Email'),
+                    Repeater::make('phone')
+                        ->label('Номера телефона')
+                        ->createItemButtonLabel('Добавить')
+                        ->schema([
+                            TextInput::make('number')
+                                ->label('Телефон')
+                                ->disableLabel()
+                                ->required(),
+                        ]),
                 ]),
 
                 Section::make('Соц. сети')->collapsible()->schema([

@@ -16,8 +16,7 @@ class SettingSeeder extends Seeder
             [
                 'id' => 1,
                 'email' => 'bbidarov@gmail.com',
-                'phone' => '+7 (495) 287-42-34',
-
+                'phone' => json_encode([["number" => "+7 (495) 287-42-34"]]),
             ],
         ];
 

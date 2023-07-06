@@ -14,6 +14,7 @@ use App\Http\Controllers\Manager\ManagerController;
 use App\Http\Controllers\Manager\OrderController as ManagerOrder;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\VehTypeController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,12 +33,12 @@ Route::post('/claim', [ClaimController::class, 'putClaim']);
 Route::get('/partners', [PartnerController::class, 'getPartner']);
 Route::get('/faqs', [FaqController::class, 'getFaqs']);
 
-Route::prefix('rent')->group(function (){
+Route::prefix('rent')->group(function () {
     Route::get('/', [RentController::class, 'list']);
     Route::get('/{slug}', [RentController::class, 'single']);
 });
 
-
+Route::get('/settings', [SettingsController::class, 'getInfo']);
 Route::get('/menu', [MenuController::class, 'list']);
 Route::get('/leasings', [LeasingController::class, 'getLeasings']);
 Route::get('/page/{slug}', [PageController::class, 'getPage'])->where('slug', '.*');

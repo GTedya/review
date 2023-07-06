@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
 
-            $table->string('phone');
+            $table->json('phone');
             $table->string('email')->nullable();
 
             $table->string('telegram')->nullable();
