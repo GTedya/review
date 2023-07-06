@@ -6,7 +6,7 @@ use App\Models\Setting;
 
 class SettingsRepo
 {
-    public function getInfo(): object|null
+    public function getInfo(): ?Setting
     {
         return Setting::query()->first();
     }

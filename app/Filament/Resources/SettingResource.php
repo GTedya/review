@@ -38,7 +38,7 @@ class SettingResource extends Resource
                             ->panelLayout('integrated')
                             ->label('Стандартное изображение'),
                     ]),
-                    Fieldset::make('Дополнительные файлы')->columns(1)->schema([
+                    Fieldset::make('Файл контактов')->columns(1)->schema([
                         SpatieMediaLibraryFileUpload::make('contact_file')
                             ->enableOpen()
                             ->disableLabel()
