@@ -35,11 +35,11 @@ class RentRequest extends FormRequest
         return [
             'email' => ['string', 'email'],
             'phone' => ['required', 'string', 'size:11'],
-            'title' => ['required', 'string'],
             'name' => ['required', 'string', 'min:4'],
             'geo_id' => ['nullable', 'int', 'exists:geos,id'],
             'type' => ['required', Rule::in(array_keys(RentTypeConstants::RENT_TYPES))],
             'text' => ['required', 'string'],
+            'title' => ['required', 'string'],
             'with_nds' => ['required', 'boolean'],
             'images' => ['required', 'array', 'min:1'],
             'images.*' => ['required', 'image'],
@@ -52,7 +52,6 @@ class RentRequest extends FormRequest
     public function messages(): array
     {
         return [
-
             'required' => 'Это поле является обязательным',
             'rent_vehicles.required' => 'Вы не выбрали ни одного ТС',
             'rent_vehicles.*.type_id.required' => 'Выберите тип ТС',

@@ -27,6 +27,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property ?string $remember_token
  * @property Collection<Order> $orders
  * @property Collection<int, Order> $takenOrders
+ * @property Collection<int, File> $files
  * @property Collection<int, ManagerOffer> $offers
  * @property Collection<Rent> $rents
  * @property Collection $userFiles

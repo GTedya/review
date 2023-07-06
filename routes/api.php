@@ -32,11 +32,17 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/claim', [ClaimController::class, 'putClaim']);
 Route::get('/partners', [PartnerController::class, 'getPartner']);
 Route::get('/faqs', [FaqController::class, 'getFaqs']);
+Route::get('/veh_types', [VehTypeController::class, 'list']);
 
-Route::prefix('rent')->group(function () {
+Route::prefix('rent')->group(function (){
     Route::get('/', [RentController::class, 'list']);
     Route::get('/{slug}', [RentController::class, 'single']);
 });
+Route::prefix('/news')->group(function () {
+    Route::get('/', [NewsController::class, 'pagination']);
+    Route::get('/{slug}', [NewsController::class, 'single']);
+});
+
 
 Route::get('/settings', [SettingsController::class, 'getInfo']);
 Route::get('/menu', [MenuController::class, 'list']);
@@ -44,13 +50,9 @@ Route::get('/leasings', [LeasingController::class, 'getLeasings']);
 Route::get('/page/{slug}', [PageController::class, 'getPage'])->where('slug', '.*');
 Route::get('/mainPage', [PageController::class, 'getMainPage']);
 Route::get('/geos', [GeoController::class, 'list']);
-Route::prefix('/news')->group(function () {
-    Route::get('/', [NewsController::class, 'pagination']);
-    Route::get('/{slug}', [NewsController::class, 'single']);
-});
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/veh_types', [VehTypeController::class, 'list']);
 
     Route::middleware('role:client')->prefix('client')->group(function () {
         Route::get('/info', [UserController::class, 'info']);
