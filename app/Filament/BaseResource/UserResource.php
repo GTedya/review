@@ -2,11 +2,18 @@
 
 namespace App\Filament\BaseResource;
 
+use App\Models\Company;
+use App\Models\Geo;
 use App\Models\User;
 use App\Utilities\Helpers;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -34,7 +41,7 @@ class UserResource extends Resource
 
             [
                 Grid::make()->columnSpan(2)->schema([
-                    Card::make()->schema([
+                    Card::make()->columns()->schema([
                         TextInput::make('name')
                             ->label('ФИО')
                             ->required(),
@@ -43,13 +50,15 @@ class UserResource extends Resource
                             ->label('Номер телефона')
                             ->required()
                             ->minLength(10)
+                            ->unique(ignoreRecord: true)
                             ->dehydrateStateUsing(function ($state) {
                                 return Helpers::getCleanPhone($state);
                             }),
 
                         TextInput::make('email')
                             ->label('Email')
-                            ->required(),
+                            ->required()
+                            ->unique(ignoreRecord: true),
 
                         Password::make('password')
                             ->required(fn($context) => $context === 'create')

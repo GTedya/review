@@ -22,7 +22,7 @@ class UserController extends Controller
 
     public function info(Request $request): JsonResponse
     {
-        $user = Auth::user()->load('files');
+        $user = Auth::user()->load('files', 'company');
         return response()->json(['success' => true, 'user' => new UserResource($user)]);
     }
 

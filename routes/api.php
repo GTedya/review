@@ -44,16 +44,12 @@ Route::get('/leasings', [LeasingController::class, 'getLeasings']);
 Route::get('/page/{slug}', [PageController::class, 'getPage'])->where('slug', '.*');
 Route::get('/mainPage', [PageController::class, 'getMainPage']);
 Route::get('/geos', [GeoController::class, 'list']);
-
+Route::prefix('/news')->group(function () {
+    Route::get('/', [NewsController::class, 'pagination']);
+    Route::get('/{slug}', [NewsController::class, 'single']);
+});
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-
-    Route::prefix('/news')->group(function () {
-        Route::get('/', [NewsController::class, 'pagination']);
-        Route::get('/{slug}', [NewsController::class, 'single']);
-    });
-
-
     Route::get('/veh_types', [VehTypeController::class, 'list']);
 
     Route::middleware('role:client')->prefix('client')->group(function () {

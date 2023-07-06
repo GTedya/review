@@ -32,7 +32,6 @@ class RentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
-
     protected static ?string $modelLabel = 'Объявление аренды';
 
     protected static ?string $pluralModelLabel = 'Объявления аренды';
@@ -74,11 +73,25 @@ class RentResource extends Resource
                     Fieldset::make('Изображение')->columns(1)->schema([
                         SpatieMediaLibraryFileUpload::make('images')
                             ->image()
+                            ->minFiles(1)
                             ->disableLabel()
                             ->multiple()
                             ->collection('images')
                             ->label('Изображение')
                             ->directory('form-tmp')
+                            ->enableReordering()
+                            ->formatStateUsing(function ($state) {
+                                if ($state === null) {
+                                    return null;
+                                }
+                                return array_reverse($state);
+                            })
+                            ->beforeStateDehydrated(function ($state, callable $set) {
+                                if ($state === null) {
+                                    return;
+                                }
+                                $set('images', array_reverse($state));
+                            })
                     ]),
                 ]),
                 Section::make('Транспортные средства')->schema([
