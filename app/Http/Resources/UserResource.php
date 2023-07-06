@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use App\Models\UserFile;
 use App\Models\UserFileType;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class UserResource extends JsonResource
                 ];
             });
         }
-
+        /** @var User|self $this  */
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -38,6 +39,7 @@ class UserResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'files' => $this->whenNotNull($typesWithFiles),
+            'company' => CompanyResource::make($this->company()),
         ];
     }
 }
