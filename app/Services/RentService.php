@@ -34,6 +34,10 @@ class RentService
         $rent = $user->rents()->create($data);
         $rent->rentVehicles()->createMany($data['rent_vehicles']);
 
+        $rent->addAllMediaFromRequest()->each(function ($fileAdder) {
+            $fileAdder->toMediaCollection('images');
+        });
+
         DB::commit();
         return $rent;
     }

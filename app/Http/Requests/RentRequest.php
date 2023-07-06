@@ -35,11 +35,14 @@ class RentRequest extends FormRequest
         return [
             'email' => ['string', 'email'],
             'phone' => ['required', 'string', 'size:11'],
+            'title' => ['required', 'string'],
             'name' => ['required', 'string', 'min:4'],
             'geo_id' => ['nullable', 'int', 'exists:geos,id'],
             'type' => ['required', Rule::in(array_keys(RentTypeConstants::RENT_TYPES))],
             'text' => ['required', 'string'],
             'with_nds' => ['required', 'boolean'],
+            'images' => ['required', 'array', 'min:1'],
+            'images.*' => ['required', 'image'],
             'rent_vehicles' => ['required', 'array'],
             'rent_vehicles.*' => ['array:type_id'],
             'rent_vehicles.*.type_id' => ['required', 'int', 'exists:vehicle_types,id'],
@@ -57,12 +60,14 @@ class RentRequest extends FormRequest
             'string' => 'Неверный формат',
             'int' => 'Неверный формат',
             'array' => 'Неверный формат',
+            'image' => 'Неверный формат',
             'exists' => 'Указано неверное значение',
 
             'type.in' => 'Указано неверное значение',
             'email.email' => 'Неверный формат email',
             'phone.size' => 'Неверный формат',
             'name.min' => 'ФИО должно содержать как минимум :min символа',
+            'image.min' => 'Добавьте как минимум :min изображение',
         ];
     }
 }
