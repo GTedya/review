@@ -18,7 +18,7 @@ class RentRepo
         ?int $perPage,
         ?array $geos,
         ?array $with_nds,
-        ?array $types,
+        ?array $rentTypes,
         ?array $vehTypes
     ): LengthAwarePaginator {
         $query = Rent::query();
@@ -33,8 +33,8 @@ class RentRepo
                 $query->whereIn('type_id', $vehTypes);
             });
         }
-        if (filled($types)) {
-            $query->whereIn('type', $types);
+        if (filled($rentTypes)) {
+            $query->whereIn('type', $rentTypes);
         }
         return $query->whereDate('active_until', '>=', now())->where('is_published', true)->orderBy(
             'created_at',
