@@ -15,12 +15,12 @@ class AuthorResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        /** @var $this User */
+        /** @var User|self $this  */
         return [
             'id' => $this->id,
             'name' => $this->name,
             'phone' => $this->phone,
-            'company' => CompanyResource::make($this->company()),
+            'company' => CompanyResource::make($this->company),
         ];
     }
 }

@@ -19,7 +19,7 @@ class RentResource extends JsonResource
         /** @var Rent|self $this */
         return [
             'id' => $this->id,
-            'user' => AuthorResource::make($this->user),
+            'company' => CompanyResource::make($this->user->company),
             'name' => $this->name,
             'title' => $this->title,
             'type' => $this->type,
