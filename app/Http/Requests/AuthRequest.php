@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Utilities\Helpers;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AuthRequest extends FormRequest
@@ -13,7 +14,12 @@ class AuthRequest extends FormRequest
     {
         return true;
     }
-
+    public function prepareForValidation(): void
+    {
+        $this->merge([
+            'phone' => Helpers::getCleanPhone($this->phone),
+        ]);
+    }
     /**
      * Get the validation rules that apply to the request.
      *
@@ -22,7 +28,7 @@ class AuthRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email', 'exists:users'],
+            'phone' => ['required', 'string','size:11' ,'exists:users'],
             'password' => ['required', 'string', 'min:8'],
         ];
     }
@@ -30,13 +36,13 @@ class AuthRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required' => 'Поле email является обязательным',
+            'phone.required' => 'Поле номера телефона является обязательным',
             'password.required' => 'Поле пароля является обязательным',
 
             'string' => 'Неверный формат',
+            'size' => 'Неверный формат',
 
-            'email.email' => 'Неверный формат email',
-            'email.exists' => 'Неправильный email',
+            'phone.exists' => 'Неверный номер телефона',
             'pass.min' => 'Пароль должен содержать как минимум :min символов',
         ];
     }
