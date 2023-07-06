@@ -43,7 +43,7 @@ class AuthRequest extends FormRequest
             'size' => 'Неверный формат',
 
             'phone.exists' => 'Неверный номер телефона',
-            'pass.min' => 'Пароль должен содержать как минимум :min символов',
+            'password.min' => 'Пароль должен содержать как минимум :min символов',
         ];
     }
 }
