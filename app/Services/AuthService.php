@@ -19,9 +19,9 @@ class AuthService
     /**
      * @throws ValidationException
      */
-    public function createToken(User $user, array $data, mixed $userAgent): string
+    public function createToken(User $user, string $password, mixed $userAgent): string
     {
-        if (!Hash::check($data['password'], $user->password) || $user->hasRole('admin')) {
+        if (!Hash::check($password, $user->password) || $user->hasRole('admin')) {
             throw ValidationException::withMessages(['password' => 'Неверный пароль']);
         }
 

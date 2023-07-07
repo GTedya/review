@@ -32,7 +32,7 @@ class AuthController extends Controller
         /** @var User $user */
         $user = $this->userRepo->getByPhone($request->input('phone'));
 
-        $token = $this->authService->createToken($user, $request->validated(), $userAgent);
+        $token = $this->authService->createToken($user, $request->input('password'), $userAgent);
         $permissions = $this->authService->getPermissions($user);
         return response()->json(['token' => $token, 'permissions' => $permissions]);
     }
