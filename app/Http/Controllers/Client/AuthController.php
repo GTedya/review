@@ -6,32 +6,35 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
 use App\Models\User;
 use App\Repositories\UserRepo;
+use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public UserRepo $userRepo;
+    private UserRepo $userRepo;
+    private AuthService $authService;
 
-    public function __construct(UserRepo $userRepo)
+    public function __construct(UserRepo $userRepo, AuthService $authService)
     {
         $this->userRepo = $userRepo;
+        $this->authService = $authService;
     }
 
-    public function login(AuthRequest $request)
+    /**
+     * @throws ValidationException
+     */
+    public function login(AuthRequest $request): JsonResponse
     {
-        $req = $request->validated();
+        $userAgent = $request->header('user-agent');
+        /** @var User $user */
+        $user = $this->userRepo->getByPhone($request->input('phone'));
 
-        $user = $this->userRepo->getByEmail($request->input('email'));
-
-        if (!Hash::check($req['password'], $user->password) || $user->hasRole('admin')) {
-            throw ValidationException::withMessages(['password' => 'Неверный пароль']);
-        }
-
-        $token = $user->createToken($request->header('user-agent'))->plainTextToken;
-        return response()->json(['token' => $token]);
+        $token = $this->authService->createToken($user, $request->input('password'), $userAgent);
+        $permissions = $this->authService->getPermissions($user);
+        return response()->json(['token' => $token, 'permissions' => $permissions]);
     }
 
     public function logout(Request $request): JsonResponse
@@ -42,5 +45,13 @@ class AuthController extends Controller
         $result = $user->currentAccessToken()->delete() ?? false;
 
         return response()->json(['success' => $result]);
+    }
+
+    public function getPermissions(): JsonResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $permissions = $this->authService->getPermissions($user);
+        return response()->json(['permissions' => $permissions]);
     }
 }

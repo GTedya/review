@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Order;
+use App\Models\ManagerOffer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderClientResource extends JsonResource
+class ManagerOfferResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +15,11 @@ class OrderClientResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        /** @var Order|self $this */
-
-        $baseArray = OrderResource::make($this->resource)->toArray($request);
+        /**@var ManagerOffer|self $this */
         return [
-            ...$baseArray,
-            'user_comment' => $this->user_comment,
+            'manager' => ManagerResource::make($this->manager),
+            'file' => $this->resource->getFirstMediaUrl('offer_file'),
+            'created_at' => $this->created_at
         ];
     }
 }

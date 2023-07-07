@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers\ManagersRelationManager;
+use App\Filament\Resources\OrderResource\RelationManagers\OffersRelationManager;
 use App\Models\Geo;
 use App\Models\Order;
 use App\Models\OrderDealerVehicle;
@@ -50,7 +51,8 @@ class OrderResource extends Resource
 
 
                         TextInput::make('inn')
-                            ->label('ИНН'),
+                            ->label('ИНН')
+                            ->required(),
 
                         TextInput::make('org_name')
                             ->label('Название организации'),
@@ -64,8 +66,7 @@ class OrderResource extends Resource
                             }),
 
                         TextInput::make('email')
-                            ->label('Email')
-                            ->required(),
+                            ->label('Email'),
 
                         TinyEditor::make('user_comment')->label('Комментарий пользователя')->dehydrated(
                             false
@@ -280,6 +281,7 @@ class OrderResource extends Resource
     {
         return [
             ManagersRelationManager::class,
+            OffersRelationManager::class,
         ];
     }
 

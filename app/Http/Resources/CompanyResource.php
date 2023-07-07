@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Order;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderClientResource extends JsonResource
+class CompanyResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +15,13 @@ class OrderClientResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        /** @var Order|self $this */
-
-        $baseArray = OrderResource::make($this->resource)->toArray($request);
+        /** @var $this Company */
         return [
-            ...$baseArray,
-            'user_comment' => $this->user_comment,
+            'id' => $this->id,
+            'inn' => $this->inn,
+            'org_type' => $this->org_type,
+            'org_name' => $this->org_name,
+            'geo' => GeoResource::make($this->geo),
         ];
     }
 }

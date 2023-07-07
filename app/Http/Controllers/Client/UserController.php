@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\OrderResource;
+use App\Http\Resources\OrderListResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Repositories\UserRepo;
@@ -22,7 +22,7 @@ class UserController extends Controller
 
     public function info(Request $request): JsonResponse
     {
-        $user = Auth::user()->load('files');
+        $user = Auth::user()->load('files', 'company');
         return response()->json(['success' => true, 'user' => new UserResource($user)]);
     }
 
@@ -32,6 +32,6 @@ class UserController extends Controller
         $user = Auth::user();
 
         $orders = $this->userRepo->getOrders($user);
-        return response()->json(['success' => true, 'orders' => OrderResource::collection($orders)->resource]);
+        return response()->json(['success' => true, 'orders' => OrderListResource::collection($orders)->resource]);
     }
 }

@@ -39,6 +39,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder manager(int $userId)
  * @method Builder manager(int $userId)
  * @property Collection<int, User> $managers
+ * @property Collection<int, ManagerOffer> $offers
  *
  */
 class Order extends Model
@@ -103,9 +104,14 @@ class Order extends Model
         return $this->hasMany(OrderHistory::class);
     }
 
-    public function managers()
+    public function managers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'taken_orders', 'order_id', 'user_id');
+    }
+
+    public function offers(): HasMany
+    {
+        return $this->hasMany(ManagerOffer::class);
     }
 
     public function getCreatedAtAttribute($value)

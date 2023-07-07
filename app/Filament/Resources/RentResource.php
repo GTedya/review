@@ -32,7 +32,6 @@ class RentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
-
     protected static ?string $modelLabel = 'Объявление аренды';
 
     protected static ?string $pluralModelLabel = 'Объявления аренды';
@@ -45,9 +44,17 @@ class RentResource extends Resource
 
                 Card::make()->schema([
                     Grid::make()->schema([
-                        TextInput::make('name')
-                            ->label('Заголовок')
+                        TextInput::make('title')->label('Заголовок')->required(),
+
+                        Select::make('type')
+                            ->label('Тип')
+                            ->options(RentTypeConstants::RENT_TYPES)
                             ->required(),
+
+                        TextInput::make('name')
+                            ->label('ФИО')
+                            ->required()
+                            ->columnSpanFull(),
 
                         TextInput::make('phone')
                             ->label('Номер телефона')
@@ -56,12 +63,9 @@ class RentResource extends Resource
                         TextInput::make('email')
                             ->label('Email')
                             ->email(),
-
-                        Select::make('type')
-                            ->label('Тип')
-                            ->options(RentTypeConstants::RENT_TYPES)
-                            ->required(),
                     ]),
+
+
                     Textarea::make('text')
                         ->label('Текст')
                         ->required(),
@@ -69,13 +73,26 @@ class RentResource extends Resource
                     Fieldset::make('Изображение')->columns(1)->schema([
                         SpatieMediaLibraryFileUpload::make('images')
                             ->image()
+                            ->minFiles(1)
                             ->disableLabel()
                             ->multiple()
                             ->collection('images')
                             ->label('Изображение')
                             ->directory('form-tmp')
+                            ->enableReordering()
+                            ->formatStateUsing(function ($state) {
+                                if ($state === null) {
+                                    return null;
+                                }
+                                return array_reverse($state);
+                            })
+                            ->beforeStateDehydrated(function ($state, callable $set) {
+                                if ($state === null) {
+                                    return;
+                                }
+                                $set('images', array_reverse($state));
+                            })
                     ]),
-
                 ]),
                 Section::make('Транспортные средства')->schema([
                     Repeater::make('rent_vehicles')
@@ -127,7 +144,10 @@ class RentResource extends Resource
                             return $record->trashed() ? "{$record->name} (область удалена)" : $record->name;
                         }),
 
+                    Toggle::make('with_nds')->label('С НДС'),
                     Toggle::make('is_published')->label('Опубликованная запись')->default(true),
+
+                    DateTimePicker::make('active_until')->label('Активно до')->default(now()->addMonth()),
 
                     DateTimePicker::make('created_at')
                         ->label('Дата создания')
