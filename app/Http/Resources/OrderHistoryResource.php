@@ -40,7 +40,7 @@ class OrderHistoryResource extends JsonResource
     {
         $changes = [];
         foreach ($data as $word) {
-            $changes [$word] = self::TRANSLATE[$word];
+            $changes [$word] = self::TRANSLATE[$word] ?? $word;
         }
         return $changes;
     }
