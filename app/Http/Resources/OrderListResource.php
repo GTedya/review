@@ -22,7 +22,7 @@ class OrderListResource extends JsonResource
             'status' => $this->status,
             'created_at' => $this->created_at,
             'leasing' => OrderLeasingResource::make($this->whenLoaded('leasing')),
-            'kp_count' => $this->offers->count(),
+            'offer_count' => $this->offers()->count(),
         ];
     }
 }
