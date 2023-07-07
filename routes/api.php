@@ -15,6 +15,7 @@ use App\Http\Controllers\Manager\OrderController as ManagerOrder;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\VehTypeController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/sitemap', [SitemapController::class, 'index']);
 Route::post('/claim', [ClaimController::class, 'putClaim']);
 Route::get('/partners', [PartnerController::class, 'getPartner']);
 Route::get('/faqs', [FaqController::class, 'getFaqs']);

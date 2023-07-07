@@ -86,6 +86,11 @@ class PageResource extends Resource
                                 ->pluck('title', 'id');
                         })
                         ->disabled(fn(?Page $record) => $record?->id === 1),
+
+                    TextInput::make('priority')
+                        ->label('Приоритет')
+                        ->default(50),
+
                     DateTimePicker::make('created_at')
                         ->label('Дата создания')
                         ->default('now')

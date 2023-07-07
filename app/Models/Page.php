@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
@@ -13,14 +14,15 @@ use Illuminate\Support\Carbon;
  * @property string $title
  * @property string $slug
  * @property ?int $parent_id
+ * @property int $priority
+ * @property ?Page $parentDeep
+ * @property ?Page $children
  * @property string $template
  * @property ?Carbon $created_at
  * @property ?Carbon $updated_at
  * @property ?array $meta
  * @property ?PageVar $pageVar
  * @property ?Page $parent
- * @property ?Page $parentDeep
- * @property ?Page $children
  */
 class Page extends Model
 {
@@ -41,6 +43,7 @@ class Page extends Model
     protected $fillable = [
         'title',
         'parent_id',
+        'priority',
         'template',
         'slug',
         'meta',
@@ -67,7 +70,7 @@ class Page extends Model
         return $this->belongsTo(Page::class, 'parent_id')->with('parentDeep');
     }
 
-    public function children()
+    public function children(): HasMany
     {
         return $this->hasMany(Page::class, 'parent_id');
     }
@@ -93,5 +96,10 @@ class Page extends Model
         $fullSlug = implode('/', $slugs);
 
         return trim($fullSlug, '/');
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return $value;
     }
 }
