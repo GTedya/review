@@ -18,7 +18,6 @@ class SitemapController extends Controller
         $host = $request->getSchemeAndHttpHost();
         $pages = $this->sitemapService->getPages($host);
         return response()
-            ->json(['pages' => $pages])
-            ->header('Content-Type', 'application/xml');
+            ->json(['pages' => $pages]);
     }
 }

@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/sitemap', [SitemapController::class, 'index']);
 Route::post('/claim', [ClaimController::class, 'putClaim']);
 Route::get('/partners', [PartnerController::class, 'getPartner']);
 Route::get('/faqs', [FaqController::class, 'getFaqs']);
@@ -38,7 +39,6 @@ Route::get('/leasings', [LeasingController::class, 'getLeasings']);
 Route::get('/page/{slug}', [PageController::class, 'getPage'])->where('slug', '.*');
 Route::get('/mainPage', [PageController::class, 'getMainPage']);
 Route::get('/geos', [GeoController::class, 'list']);
-Route::get('/sitemap.xml', [SitemapController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
