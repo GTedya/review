@@ -46,8 +46,10 @@ class RentRepo
 
     public function getRentBySlug(string $slug): Rent|null
     {
-        return Rent::query()->where('slug', $slug)->where('is_published', true)->with(
+        /** @var Rent $rent */
+        $rent = Rent::query()->where('slug', $slug)->where('is_published', true)->with(
             ['rentVehicles.type', 'geo', 'user']
         )->first();
+        return $rent;
     }
 }

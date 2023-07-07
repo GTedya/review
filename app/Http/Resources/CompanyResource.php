@@ -18,6 +18,7 @@ class CompanyResource extends JsonResource
         /** @var $this Company */
         return [
             'id' => $this->id,
+            'inn' => $this->inn,
             'org_type' => $this->org_type,
             'org_name' => $this->org_name,
             'geo' => GeoResource::make($this->geo),

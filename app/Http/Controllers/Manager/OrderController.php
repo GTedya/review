@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderListResource;
 use App\Http\Resources\OrderManagersResource;
 use App\Models\User;
 use App\Repositories\ManagerRepo;
@@ -25,7 +26,7 @@ class OrderController extends Controller
     {
         $orders = $this->managerRepo->getOrders(Auth::id());
 
-        return response()->json(['success' => true, 'orders' => OrderManagersResource::collection($orders)->resource]);
+        return response()->json(['success' => true, 'orders' => OrderListResource::collection($orders)->resource]);
     }
 
     public function getOrder(int $orderId): JsonResponse
