@@ -30,8 +30,16 @@ class AuthController extends Controller
             throw ValidationException::withMessages(['password' => 'Неверный пароль']);
         }
 
+        $permissions = [];
+        if ($user->hasRole('client')) {
+            $permissions = User::ROLE_PERMISSION['client'];
+        }
+        if ($user->hasAnyRole(['leasing_manager', 'dealer_manager'])) {
+            $permissions = User::ROLE_PERMISSION['manager'];
+        }
+
         $token = $user->createToken($request->header('user-agent'))->plainTextToken;
-        return response()->json(['token' => $token]);
+        return response()->json(['token' => $token, 'permissions' => $permissions]);
     }
 
     public function logout(Request $request): JsonResponse
