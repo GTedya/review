@@ -35,12 +35,9 @@ class UserFileTypeResource extends Resource
                                 ->required(),
                             CheckboxList::make('org_type')
                                 ->label('Типы организаций')
-                                ->options([
-                                    'ip' => 'ИП',
-                                    'ooo' => 'ООО',
-                                ])
+                                ->options(UserFileType::ORG_TYPES)
                                 ->required(1),
-                            Toggle::make('show_in_order')
+                            Toggle::make('show_in_order')->label('Показывать в заказах')
                         ]
                     )
                 ]),

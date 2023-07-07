@@ -40,7 +40,7 @@ class ManagerController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if (blank($this->managerRepo->takeOrder($user->id, $orderId))) {
+        if (blank($this->managerRepo->takeOrder($user, $orderId))) {
             throw ValidationException::withMessages(
                 ['order' => 'Некорректные данные заказа']
             );

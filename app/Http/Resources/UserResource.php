@@ -3,8 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\User;
-use App\Models\UserFile;
-use App\Models\UserFileType;
+use App\Utilities\Helpers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,30 +16,16 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        /** @var $this User|self */
-
-        $typesWithFiles = null;
-
-        if ($this->relationLoaded('files')) {
-            $typesWithFiles = UserFileType::query()->whereJsonContains('org_type',$this->company->org_type )->get()->map(function (UserFileType $type) {
-                /** @var ?UserFile $file */
-                $file = $this->files->firstWhere('type_id', $type->id);
-
-                return [
-                    'type' => $type,
-                    'files' => $file !== null ? UserFileResource::make($file) : [],
-                ];
-            });
-        }
+        /** @var User|self $this */
 
         return [
             'id' => $this->id,
             'name' => $this->name,
             'phone' => $this->phone,
-            'email' => $this->email,
+            'email' => $this->email ?? $this->user->email,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'files' => $this->whenNotNull($typesWithFiles),
+            'files' => $this->whenNotNull(Helpers::userFiles($this->resource, false)),
             'company' => CompanyResource::make($this->company),
         ];
     }

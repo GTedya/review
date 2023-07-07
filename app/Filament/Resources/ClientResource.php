@@ -6,6 +6,7 @@ use App\Filament\BaseResource\UserResource;
 use App\Filament\Resources\ClientResource\Pages;
 use App\Models\Company;
 use App\Models\Geo;
+use App\Models\UserFileType;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
@@ -41,12 +42,7 @@ class ClientResource extends UserResource
 
                 Radio::make('org_type')
                     ->label('Тип организации')
-                    ->options([
-                        'ip' => 'ИП',
-                        'npd' => 'НПД',
-                        'ooo' => 'ООО',
-                        'nao' => 'НАО',
-                    ])
+                    ->options(UserFileType::ORG_TYPES)
                     ->required()
                     ->reactive(),
 

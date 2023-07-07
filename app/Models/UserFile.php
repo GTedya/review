@@ -11,7 +11,6 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * @property int $id
  * @property int $type_id
- * @property bool $show_in_order
  * @property UserFileType $type
  */
 class UserFile extends Model implements HasMedia
@@ -23,7 +22,6 @@ class UserFile extends Model implements HasMedia
 
     protected $fillable = [
         'user_id',
-        'show_in_order',
         'type_id'
     ];
 

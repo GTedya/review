@@ -22,8 +22,9 @@ class OrderHistoryResource extends JsonResource
         'current_lessors' => 'Текущие лизингодатели',
         'months' => 'Срок лизинга',
         'leasing' => 'Лизинг',
-        'leasing_vehicles' => 'ТС лизинга',
-        'dealer_vehicles' => 'ТС дилера',
+        'order_leasing_vehicles' => 'ТС лизинга',
+        'order_dealer_vehicles' => 'ТС дилера',
+        'end_date' => 'Дата окончания заявки'
     ];
 
     public function toArray(Request $request): array
@@ -35,7 +36,7 @@ class OrderHistoryResource extends JsonResource
         ];
     }
 
-    public function translate($data)
+    public function translate($data): array
     {
         $changes = [];
         foreach ($data as $word) {

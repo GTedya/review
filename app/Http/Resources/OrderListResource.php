@@ -6,7 +6,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderClientResource extends JsonResource
+class OrderListResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,13 @@ class OrderClientResource extends JsonResource
     public function toArray(Request $request): array
     {
         /** @var Order|self $this */
-
-        $baseArray = OrderResource::make($this->resource)->toArray($request);
         return [
-            ...$baseArray,
-            'user_comment' => $this->user_comment,
+            'id' => $this->id,
+            'geo' => GeoResource::make($this->geo),
+            'status' => $this->status,
+            'created_at' => $this->created_at,
+            'leasing' => OrderLeasingResource::make($this->whenLoaded('leasing')),
+            'kp_count' => $this->offers->count(),
         ];
     }
 }

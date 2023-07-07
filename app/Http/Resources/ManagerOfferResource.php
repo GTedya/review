@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\User;
+use App\Models\ManagerOffer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AuthorResource extends JsonResource
+class ManagerOfferResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +15,11 @@ class AuthorResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        /** @var $this User */
+        /**@var ManagerOffer|self $this */
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'phone' => $this->phone,
-            'company' => CompanyResource::make($this->company()),
+            'manager' => $this->manager,
+            'file' => $this->resource->getFirstMediaUrl('offer_file'),
+            'created_at' => $this->created_at
         ];
     }
 }
