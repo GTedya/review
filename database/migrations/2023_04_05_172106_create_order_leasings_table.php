@@ -19,6 +19,7 @@ return new class extends Migration {
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
+            $table->decimal('sum', 12);
             $table->decimal('advance', 12);
             $table->text('current_lessors')->nullable();
             $table->integer('months')->nullable();

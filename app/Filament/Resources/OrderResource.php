@@ -75,7 +75,16 @@ class OrderResource extends Resource
 
                         Section::make('Лизинг')->schema([
                             Grid::make()->columns(1)->relationship('leasing')->schema([
-                                TextInput::make('advance')->label('Аванс')->numeric()->required(),
+                                TextInput::make('sum')
+                                    ->label('Необходимая сумма')
+                                    ->numeric()
+                                    ->required(),
+
+                                TextInput::make('advance')->label('Размер аванса')
+                                    ->numeric()
+                                    ->required()
+                                    ->minValue(0)
+                                    ->maxValue(100),
                                 TextInput::make('current_lessors')->label('Текущие лизингодатели')->nullable(),
                                 TextInput::make('months')->label('Срок лизинга')->numeric()->nullable(),
 

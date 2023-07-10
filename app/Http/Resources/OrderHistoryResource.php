@@ -12,7 +12,7 @@ class OrderHistoryResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    const TRANSLATE = [
+    public const TRANSLATE = [
         'name' => 'ФИО',
         'phone' => 'Номер телефона',
         'email' => 'Email',
@@ -24,7 +24,8 @@ class OrderHistoryResource extends JsonResource
         'leasing' => 'Лизинг',
         'order_leasing_vehicles' => 'ТС лизинга',
         'order_dealer_vehicles' => 'ТС дилера',
-        'end_date' => 'Дата окончания заявки'
+        'end_date' => 'Дата окончания заявки',
+        'sum' => 'Необходимая сумма',
     ];
 
     public function toArray(Request $request): array
