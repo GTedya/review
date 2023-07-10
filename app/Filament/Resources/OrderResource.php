@@ -159,13 +159,15 @@ class OrderResource extends Resource
                             ->disabledOn('edit')
                             ->beforeStateDehydrated(function ($state, callable $get, callable $set) {
                                 if (blank($state)) {
-                                    $phone = $get('phone');
+                                    $phone = Helpers::getCleanPhone($get('phone'));
                                     $email = $get('email');
 
                                     /** @var ?User $user */
                                     $user = User::query()
                                         ->where('phone', $phone)
-                                        ->orWhere('email', $email)
+                                        ->when(filled($email), function (Builder $query) use ($email) {
+                                            $query->orWhere('email', $email);
+                                        })
                                         ->first();
 
                                     if ($user === null) {
