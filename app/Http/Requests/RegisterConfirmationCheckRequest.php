@@ -30,7 +30,7 @@ class RegisterConfirmationCheckRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => ['required', 'string', 'size:11','exists:users'],
+            'phone' => ['required', 'string', 'size:11', 'exists:users'],
             'code' => ['required', 'string', 'size:4'],
         ];
     }

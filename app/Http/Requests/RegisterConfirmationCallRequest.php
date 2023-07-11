@@ -14,6 +14,7 @@ class RegisterConfirmationCallRequest extends FormRequest
     {
         return true;
     }
+
     public function prepareForValidation(): void
     {
         $this->merge([
@@ -28,10 +29,11 @@ class RegisterConfirmationCallRequest extends FormRequest
      */
     public function rules(): array
     {
-            return [
-                'phone' => ['required', 'string', 'size:11','exists:users'],
+        return [
+            'phone' => ['required', 'string', 'size:11', 'exists:users'],
         ];
     }
+
     public function messages(): array
     {
         return [

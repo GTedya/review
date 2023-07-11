@@ -14,6 +14,7 @@ class RegistrationRequest extends FormRequest
     {
         return true;
     }
+
     public function prepareForValidation(): void
     {
         $this->merge([
@@ -30,8 +31,8 @@ class RegistrationRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'min:4'],
-            'phone' => ['required', 'string', 'size:11','unique:users'],
-            'password' => ['required', 'string' , 'min:8'],
+            'phone' => ['required', 'string', 'size:11', 'unique:users'],
+            'password' => ['required', 'string', 'min:8'],
             'inn' => ['required', 'string', 'size:12', 'unique:companies']
         ];
     }
