@@ -14,7 +14,7 @@ class OrderLeasingVehicleObserver
      */
     public function created(OrderLeasingVehicle $orderLeasingVehicle): void
     {
-        View::share('order_leasing_vehicle_observer', 'order_leasing_vehicle');
+        View::share('order_leasing_vehicle_observer', 'order_leasing_vehicles');
     }
 
     /**
@@ -22,7 +22,7 @@ class OrderLeasingVehicleObserver
      */
     public function updated(OrderLeasingVehicle $orderLeasingVehicle): void
     {
-        View::share('order_leasing_vehicle_observer', 'order_leasing_vehicle');
+        View::share('order_leasing_vehicle_observer', 'order_leasing_vehicles');
     }
 
     /**
@@ -30,12 +30,11 @@ class OrderLeasingVehicleObserver
      */
     public function deleted(OrderLeasingVehicle $orderLeasingVehicle): void
     {
-        View::share('order_leasing_vehicle_observer', 'order_leasing_vehicle');
+        View::share('order_leasing_vehicle_observer', 'order_leasing_vehicles');
     }
 
     public function forceDeleted(OrderLeasingVehicle $orderLeasingVehicle): void
     {
-        View::share('order_leasing_vehicle_observer', 'order_leasing_vehicle');
+        View::share('order_leasing_vehicle_observer', 'order_leasing_vehicles');
     }
-
 }
