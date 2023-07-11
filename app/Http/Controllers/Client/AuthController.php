@@ -54,9 +54,4 @@ class AuthController extends Controller
         $permissions = $this->authService->getPermissions($user);
         return response()->json(['permissions' => $permissions]);
     }
-
-    public function registration(): JsonResponse
-    {
-        return response()->json([]);
-    }
 }
