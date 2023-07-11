@@ -10,6 +10,7 @@ use App\Repositories\ManagerRepo;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
@@ -31,21 +32,29 @@ class OrderController extends Controller
 
     public function getOrder(int $orderId): JsonResponse
     {
-        $order = $this->managerRepo->getById(Auth::id(), $orderId);
+        $id = Auth::id();
+        $order = $this->managerRepo->getById($id, $orderId);
+        $already_taken = $order->managers->contains('id', $id);
 
         return response()->json(
             [
                 'success' => true,
                 'order' => OrderManagersResource::make($order),
+                'already_taken' => $already_taken,
             ]
         );
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function takeOrder(int $orderId): JsonResponse
     {
         /** @var User $user */
         $user = Auth::user();
-
+        if ($user->takenOrders->contains('id', $orderId)) {
+            throw ValidationException::withMessages(['order' => 'Вы уже взяли в работу данный заказ']);
+        }
         $this->orderService->managerTakeOrder($user, $orderId);
 
         return response()->json(['success' => true]);
