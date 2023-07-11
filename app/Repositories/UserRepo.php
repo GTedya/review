@@ -9,11 +9,22 @@ class UserRepo
 {
     public function getByPhone(string $phone): ?User
     {
-        return User::where('phone', $phone)->first();
+        /** @var User $user */
+        $user = User::query()->where('phone', $phone)->first();
+
+        return $user;
     }
 
     public function getOrders(?User $user): LengthAwarePaginator
     {
         return $user->orders()->orderBy('created_at', 'desc')->with(['geo', 'user'])->paginate();
+    }
+
+    public function create(array $data): bool
+    {
+        /** @var User $user */
+        $user = User::query()->create($data);
+        $user->assignRole('client');
+        return true;
     }
 }
