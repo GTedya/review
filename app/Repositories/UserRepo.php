@@ -9,7 +9,10 @@ class UserRepo
 {
     public function getByPhone(string $phone): ?User
     {
-        return User::where('phone', $phone)->first();
+        /** @var User $user */
+        $user = User::query()->where('phone', $phone)->first();
+
+        return $user;
     }
 
     public function getOrders(?User $user): LengthAwarePaginator

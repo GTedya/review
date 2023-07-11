@@ -22,8 +22,10 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $email
  * @property string $phone
  * @property string $password
+ * @property string $phone_confirmation_code
  * @property ?Carbon $created_at
  * @property ?Carbon $updated_at
+ * @property ?Carbon $phone_verified_at
  * @property ?string $remember_token
  * @property Collection<Order> $orders
  * @property Collection<int, Order> $takenOrders
@@ -60,6 +62,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         'phone',
         'email',
         'password',
+        'phone_confirmation_code',
     ];
 
     /**
@@ -79,6 +82,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'phone_verified_at' => 'datetime',
     ];
 
     public function canAccessFilament(): bool

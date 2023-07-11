@@ -6,6 +6,7 @@ use App\Http\Controllers\Client\FaqController;
 use App\Http\Controllers\Client\NewsController;
 use App\Http\Controllers\Client\OrderController as ClientOrder;
 use App\Http\Controllers\Client\PartnerController;
+use App\Http\Controllers\Client\RegistrationController;
 use App\Http\Controllers\Client\RentController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\GeoController;
@@ -30,6 +31,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::prefix('registration')->group(function (){
+    Route::post('/', [RegistrationController::class, 'registration']);
+    Route::post('/call', [RegistrationController::class, 'confirmationCall']);
+    Route::post('/confirmation',[RegistrationController::class, 'confirmationCheck']);
+});
+
 Route::get('/sitemap', [SitemapController::class, 'index']);
 Route::post('/claim', [ClaimController::class, 'putClaim']);
 Route::get('/partners', [PartnerController::class, 'getPartner']);
@@ -40,6 +48,7 @@ Route::prefix('rent')->group(function (){
     Route::get('/', [RentController::class, 'list']);
     Route::get('/{slug}', [RentController::class, 'single']);
 });
+
 Route::prefix('/news')->group(function () {
     Route::get('/', [NewsController::class, 'pagination']);
     Route::get('/{slug}', [NewsController::class, 'single']);
