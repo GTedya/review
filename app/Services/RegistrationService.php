@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\Http\Requests\RegisterConfirmationCallRequest;
-use App\Http\Requests\RegisterConfirmationCheckRequest;
 use App\Repositories\UserRepo;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -20,9 +18,6 @@ class RegistrationService
     {
     }
 
-    /**
-     * @throws ValidationException
-     */
     public function registration(array $data): bool
     {
         $data['password'] = Hash::make($data['password']);
@@ -38,9 +33,9 @@ class RegistrationService
      * @throws ValidationException
      * @throws Exception
      */
-    public function confirmationCall(RegisterConfirmationCallRequest $request): void
+    public function confirmationCall(array $data): void
     {
-        $user = $this->userRepo->getByPhone($request->validated('phone'));
+        $user = $this->userRepo->getByPhone($data['phone']);
 
         if (filled($user->phone_verified_at)) {
             throw ValidationException::withMessages(
@@ -68,9 +63,9 @@ class RegistrationService
     /**
      * @throws ValidationException
      */
-    public function confirmationCheck(RegisterConfirmationCheckRequest $request): void
+    public function confirmationCheck(array $data): void
     {
-        $user = $this->userRepo->getByPhone($request->validated('phone'));
+        $user = $this->userRepo->getByPhone($data['phone']);
 
         if (filled($user->phone_verified_at)) {
             throw ValidationException::withMessages(
@@ -78,7 +73,7 @@ class RegistrationService
             );
         };
 
-        if ($request->input('code') != $user->phone_confirmation_code) {
+        if ($data['code'] != $user->phone_confirmation_code) {
             throw ValidationException::withMessages(
                 ['user' => 'Неверный код']
             );
