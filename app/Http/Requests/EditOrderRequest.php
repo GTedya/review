@@ -39,7 +39,8 @@ class EditOrderRequest extends FormRequest
             'end_date' => ['nullable', 'date'],
             'geo_id' => ['nullable', 'int', 'exists:geos,id'],
             'leasing' => ['nullable', 'array:advance,months,current_lessors,user_comment,vehicles'],
-            'leasing.advance' => ['required_with:leasing', 'numeric'],
+            'leasing.sum' => ['required_with:leasing', 'numeric'],
+            'leasing.advance' => ['required_with:leasing', 'numeric', 'between:0,100'],
             'leasing.vehicles' => ['required_with:leasing', 'array'],
             'leasing.vehicles.*' => ['array:id,type_id,brand,model,count,state'],
             'leasing.vehicles.*.type_id' => ['required', 'int', 'exists:vehicle_types,id'],
@@ -58,6 +59,8 @@ class EditOrderRequest extends FormRequest
 
             'required' => 'Это поле является обязательным',
             'leasing.advance.required_with' => 'Поле аванса является обязательным',
+            'leasing.advance.between' => 'Поле аванса принимает значения от 0 до 100',
+            'leasing.sum.required_with' => 'Поле необходимая сумма является обязательным',
             'leasing.vehicles.required_with' => 'Вы не выбрали ни одного ТС',
             'dealer.vehicles.required_with' => 'Вы не выбрали ни одного ТС',
             'leasing.vehicles.*.type_id.required' => 'Выберите тип ТС',
