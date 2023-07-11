@@ -11,11 +11,12 @@ use Illuminate\Validation\ValidationException;
 
 class RegistrationService
 {
-    private const CALL_BASE_URL = "https://api.unibell.ru/apps/flash/calls/flash";
-    private const ACCESS_KEY = "Basic pQv29uazeivPZwAQGo9PHl8tA6H4lkeG";
 
-    public function __construct(private readonly UserRepo $userRepo,)
-    {
+
+    public function __construct(
+        private readonly UserRepo $userRepo,
+        private readonly CallService $callService,
+    ) {
     }
 
     public function registration(array $data): bool
@@ -46,18 +47,7 @@ class RegistrationService
         $user->phone_confirmation_code = random_int(1000, 9999);
         $user->save();
 
-        Http::withHeaders([
-            'Authorization' => self::ACCESS_KEY,
-            'Content-Type' => 'application/json',
-        ])
-            ->post(
-                self::CALL_BASE_URL,
-                [
-                    'number' => $user->phone,
-                    'code' => $user->phone_confirmation_code,
-                    'timeout' => 10000
-                ]
-            );
+        $this->callService->flashCall($user->phone, $user->phone_confirmation_code);
     }
 
     /**
