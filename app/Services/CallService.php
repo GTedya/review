@@ -9,7 +9,7 @@ class CallService
     private const CALL_BASE_URL = "https://api.unibell.ru/apps/flash/calls/flash";
     private const ACCESS_KEY = "Basic pQv29uazeivPZwAQGo9PHl8tA6H4lkeG";
 
-    public function flashCall(string $phone, string $code)
+    public function flashCall(string $phone, string $code): void
     {
         Http::withHeaders([
             'Authorization' => self::ACCESS_KEY,
