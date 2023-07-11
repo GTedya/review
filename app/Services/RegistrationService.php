@@ -33,9 +33,9 @@ class RegistrationService
      * @throws ValidationException
      * @throws Exception
      */
-    public function confirmationCall(array $data): void
+    public function confirmationCall(string $phone): void
     {
-        $user = $this->userRepo->getByPhone($data['phone']);
+        $user = $this->userRepo->getByPhone($phone);
 
         if (filled($user->phone_verified_at)) {
             throw ValidationException::withMessages(
@@ -63,9 +63,9 @@ class RegistrationService
     /**
      * @throws ValidationException
      */
-    public function confirmationCheck(array $data): void
+    public function confirmationCheck(string $phone, string $code): void
     {
-        $user = $this->userRepo->getByPhone($data['phone']);
+        $user = $this->userRepo->getByPhone($phone);
 
         if (filled($user->phone_verified_at)) {
             throw ValidationException::withMessages(
@@ -73,7 +73,7 @@ class RegistrationService
             );
         };
 
-        if ($data['code'] != $user->phone_confirmation_code) {
+        if ($code != $user->phone_confirmation_code) {
             throw ValidationException::withMessages(
                 ['user' => 'Неверный код']
             );

@@ -24,7 +24,8 @@ class RegistrationController extends Controller
      */
     public function registration(RegistrationRequest $request): JsonResponse
     {
-        $this->service->registration($request->validated());
+        $data = $request->validated();
+        $this->service->registration($data);
         return response()->json(['success' => true]);
     }
 
@@ -33,7 +34,8 @@ class RegistrationController extends Controller
      */
     public function confirmationCall(RegisterConfirmationCallRequest $request): JsonResponse
     {
-        $this->service->confirmationCall($request->validated());
+        $phone = $request->validated('phone');
+        $this->service->confirmationCall($phone);
         return response()->json(['success' => true]);
     }
 
@@ -42,7 +44,10 @@ class RegistrationController extends Controller
      */
     public function confirmationCheck(RegisterConfirmationCheckRequest $request): JsonResponse
     {
-        $this->service->confirmationCheck($request->validated());
+        $phone = $request->validated('phone');
+        $code = $request->validated('code');
+
+        $this->service->confirmationCheck($phone, $code);
         return response()->json(['success' => true]);
     }
 }
