@@ -15,7 +15,11 @@ class ManagerRepo
 
     public function getById(int $userId, int $orderId): ?Order
     {
-        return Order::manager($userId)->where('id', $orderId)->with(['geo', 'user', 'leasing', 'leasingVehicles', 'dealerVehicles', 'orderHistory'])->first();
+        /** @var ?Order $order */
+        $order = Order::manager($userId)->where('id', $orderId)->with(
+            ['geo', 'user', 'leasing', 'leasingVehicles', 'dealerVehicles', 'orderHistory', 'managers']
+        )->first();
+        return $order;
     }
 
     public function takeOrder(User $user, int $orderId): array
