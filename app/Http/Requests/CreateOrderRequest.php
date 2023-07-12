@@ -28,7 +28,7 @@ class CreateOrderRequest extends FormRequest
             'user_comment' => ['nullable', 'string'],
             'end_date' => ['nullable', 'date'],
             'geo_id' => ['nullable', 'int', 'exists:geos,id'],
-            'leasing' => ['nullable', 'array:advance,months,current_lessors,user_comment,vehicles'],
+            'leasing' => ['nullable', 'array:advance,months,current_lessors,vehicles,sum'],
             'leasing.sum' => ['required_with:leasing', 'numeric'],
             'leasing.advance' => ['required_with:leasing', 'numeric', 'between:0,100'],
             'leasing.vehicles' => ['required_with:leasing', 'array'],

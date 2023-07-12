@@ -28,9 +28,14 @@ class OrderService
      */
     public function createOrder(User $user, array $data): Order
     {
-        // TODO: добавить поле инн
-        $data['inn'] = $user->inn;
-        $geo_id = $data['geo_id'];
+        $data['inn'] = $user->company?->inn;
+        if (blank($data['inn'])) {
+            throw ValidationException::withMessages(
+                ['inn' => 'Вы не заполнили поле ИНН в личном кабинете']
+            );
+        };
+
+        $geo_id = $data['geo_id'] ?? null;
 
         if ($this->geoRepo->hasChildren($geo_id)) {
             throw ValidationException::withMessages(

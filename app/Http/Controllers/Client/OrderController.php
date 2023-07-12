@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateOrderRequest;
 use App\Http\Requests\EditOrderRequest;
 use App\Http\Resources\OrderClientResource;
-use App\Http\Resources\OrderHistoryResource;
 use App\Models\User;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
