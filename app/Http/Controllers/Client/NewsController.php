@@ -22,7 +22,7 @@ class NewsController extends Controller
 
     public function pagination(Request $request): JsonResponse
     {
-        $perPage = $request->input('per_page');
+        $perPage = $request->integer('per_page', 15);
 
         return response()->json(['success' => true, 'news' => NewsResource::collection($this->newsRepo->pagination($perPage))->resource]);
     }
