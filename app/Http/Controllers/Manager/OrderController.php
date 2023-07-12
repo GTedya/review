@@ -39,7 +39,6 @@ class OrderController extends Controller
             [
                 'success' => true,
                 'order' => OrderManagersResource::make($order),
-                'already_taken' => $already_taken,
             ]
         );
     }
