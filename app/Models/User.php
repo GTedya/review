@@ -22,7 +22,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $email
  * @property string $phone
  * @property string $password
- * @property string $phone_confirmation_code
+ * @property ?string $phone_confirmation_code
  * @property ?Carbon $created_at
  * @property ?Carbon $updated_at
  * @property ?Carbon $phone_verified_at
