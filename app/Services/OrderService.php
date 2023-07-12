@@ -19,7 +19,7 @@ use Illuminate\Validation\ValidationException;
 
 class OrderService
 {
-    public function __construct(public OrderRepo $orderRepo,public GeoRepo $geoRepo, public ManagerRepo $managerRepo)
+    public function __construct(public OrderRepo $orderRepo, public GeoRepo $geoRepo, public ManagerRepo $managerRepo)
     {
     }
 
@@ -184,10 +184,16 @@ class OrderService
         }
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function managerTakeOrder(User $user, int $orderId): void
     {
         if (blank($this->managerRepo->getById($user->id, $orderId))) {
             abort(403);
+        }
+        if ($user->takenOrders->contains('id', $orderId)) {
+            throw ValidationException::withMessages(['order' => 'Вы уже взяли в работу данный заказ']);
         }
         $this->managerRepo->takeOrder($user, $orderId);
     }

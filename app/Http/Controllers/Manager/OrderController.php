@@ -10,6 +10,7 @@ use App\Repositories\ManagerRepo;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
@@ -31,7 +32,8 @@ class OrderController extends Controller
 
     public function getOrder(int $orderId): JsonResponse
     {
-        $order = $this->managerRepo->getById(Auth::id(), $orderId);
+        $id = Auth::id();
+        $order = $this->managerRepo->getById($id, $orderId);
 
         return response()->json(
             [
@@ -41,6 +43,9 @@ class OrderController extends Controller
         );
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function takeOrder(int $orderId): JsonResponse
     {
         /** @var User $user */
