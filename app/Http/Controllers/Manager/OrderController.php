@@ -34,7 +34,6 @@ class OrderController extends Controller
     {
         $id = Auth::id();
         $order = $this->managerRepo->getById($id, $orderId);
-        $already_taken = $order->managers->contains('id', $id);
 
         return response()->json(
             [
@@ -52,9 +51,7 @@ class OrderController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        if ($user->takenOrders->contains('id', $orderId)) {
-            throw ValidationException::withMessages(['order' => 'Вы уже взяли в работу данный заказ']);
-        }
+
         $this->orderService->managerTakeOrder($user, $orderId);
 
         return response()->json(['success' => true]);
