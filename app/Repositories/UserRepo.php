@@ -20,11 +20,12 @@ class UserRepo
         return $user->orders()->orderBy('created_at', 'desc')->with(['geo', 'user'])->paginate();
     }
 
-    public function create(array $data): bool
+    public function create(array $data, array $companyData): bool
     {
         /** @var User $user */
         $user = User::query()->create($data);
         $user->assignRole('client');
+        $user->company()->create($companyData);
         return true;
     }
 }

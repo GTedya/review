@@ -52,7 +52,16 @@ class OrderResource extends Resource
 
                         TextInput::make('inn')
                             ->label('ИНН')
-                            ->required(),
+                            ->dehydrated(
+                                function ($get) {
+                                    dd($get('user_id'));
+                                }
+                            )->disabled(function ($get) {
+                                filled($get('user_id'));
+                            })
+                            ->required(function ($get) {
+                                blank($get('user_id'));
+                            })->reactive(),
 
                         TextInput::make('org_name')
                             ->label('Название организации'),
@@ -196,7 +205,7 @@ class OrderResource extends Resource
                             })
                             ->relationship('user', 'name', function ($query) {
                                 $query->whereHas('roles', fn($query) => $query->where('name', 'client'));
-                            }),
+                            })->reactive(),
 
                         Select::make('geo_id')
                             ->label('Область')

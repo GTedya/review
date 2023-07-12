@@ -13,8 +13,6 @@ use Illuminate\Validation\ValidationException;
 
 class RegistrationController extends Controller
 {
-
-
     public function __construct(private readonly RegistrationService $service)
     {
     }
@@ -26,6 +24,8 @@ class RegistrationController extends Controller
     {
         $data = $request->validated();
         $this->service->registration($data);
+
+
         return response()->json(['success' => true]);
     }
 
