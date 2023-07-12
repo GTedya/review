@@ -7,6 +7,7 @@ use App\Http\Resources\NewsResource;
 use App\Repositories\NewsRepo;
 use App\Services\NewsService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
@@ -19,9 +20,11 @@ class NewsController extends Controller
         $this->newsRepo = $newsRepo;
     }
 
-    public function pagination(): JsonResponse
+    public function pagination(Request $request): JsonResponse
     {
-        return response()->json(['success' => true, 'news' => NewsResource::collection($this->newsRepo->pagination())->resource]);
+        $perPage = $request->input('per_page');
+
+        return response()->json(['success' => true, 'news' => NewsResource::collection($this->newsRepo->pagination($perPage))->resource]);
     }
 
     public function single(string $slug): JsonResponse
