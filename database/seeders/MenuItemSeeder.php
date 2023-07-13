@@ -16,14 +16,20 @@ class MenuItemSeeder extends Seeder
         $inserts = [
             [
                 'id' => 1,
-                'name' => 'Тракторы',
-                'link' => '/traktori',
+                'name' => 'Страница подбора',
+                'link' => '/search',
                 'group_id' => 1,
             ],
             [
                 'id' => 2,
-                'name' => 'Ne Тракторы',
-                'link' => '/netraktori',
+                'name' => 'О компаннии',
+                'link' => '/about',
+                'group_id' => 2,
+            ],
+            [
+                'id' => 3,
+                'name' => 'Лизинг',
+                'link' => '/leasings',
                 'group_id' => 2,
             ],
 
