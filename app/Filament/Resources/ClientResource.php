@@ -43,11 +43,11 @@ class ClientResource extends UserResource
                     ->required()
                     ->rule(new InnSize())
                     ->debounce('600ms')
-                    ->rule(function (?string $state, callable $fail) use ($dadata){
+                    ->rule(function (?string $state, callable $fail) use ($dadata) {
                         $data = $dadata->dadataCompanyInfo($state);
-                            if (blank($data)){
-                                $fail('ИНН не найден');
-                            };
+                        if (blank($data)) {
+                            $fail('ИНН не найден');
+                        };
                     })
                     ->afterStateUpdated(function (callable $set, ?string $state, TextInput $component) use ($dadata) {
                         $data = $dadata->dadataCompanyInfo($state);
