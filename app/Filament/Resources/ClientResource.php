@@ -39,14 +39,17 @@ class ClientResource extends UserResource
             ...static::baseFields(),
             Section::make('О компании')->collapsed()->relationship('company')->schema([
                 TextInput::make('inn')
+                    ->unique(ignoreRecord: true)
                     ->label('ИНН')
                     ->required()
                     ->rule(new InnSize())
                     ->debounce('600ms')
-                    ->rule(function (?string $state, callable $fail) use ($dadata) {
-                        $data = $dadata->dadataCompanyInfo($state);
-                        if (blank($data)) {
-                            $fail('ИНН не найден');
+                    ->rule(function () use ($dadata) {
+                        return function (string $attribute, ?string $value, callable $fail) use ($dadata) {
+                            $data = $dadata->dadataCompanyInfo($value);
+                            if (blank($data)) {
+                                $fail('ИНН не найден');
+                            };
                         };
                     })
                     ->afterStateUpdated(function (callable $set, ?string $state) use ($dadata) {

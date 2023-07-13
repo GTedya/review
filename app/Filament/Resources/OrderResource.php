@@ -61,7 +61,7 @@ class OrderResource extends Resource
                                 }),
                         ]),
                     ]),
-                    Wizard\Step::make('order')->label('Создание заказа')->schema([
+                    Wizard\Step::make('order')->label('Создание заказа')->columns(3)->schema([
                         Grid::make()->columnSpan(2)->schema([
                             Card::make()->schema([
                                 TextInput::make('name')
