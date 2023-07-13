@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateOrderRequest;
 use App\Http\Requests\EditOrderRequest;
-use App\Http\Resources\OrderResource;
+use App\Http\Resources\OrderClientResource;
 use App\Models\User;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
@@ -21,6 +21,9 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function create(CreateOrderRequest $request): JsonResponse
     {
         /** @var User $user */
@@ -28,7 +31,7 @@ class OrderController extends Controller
         $order = $this->orderService->createOrder($user, $request->validated());
         $order = $order->fresh('leasing', 'dealerVehicles', 'leasingVehicles');
 
-        return response()->json(['success' => true, 'order' => OrderResource::make($order)]);
+        return response()->json(['success' => true, 'order' => OrderClientResource::make($order)]);
     }
 
     /**
@@ -40,6 +43,21 @@ class OrderController extends Controller
 
         $order = $this->orderService->editOrder($userId, $orderId, $request->validated())->refresh();
 
-        return response()->json(['success' => true, 'order' => OrderResource::make($order)]);
+        return response()->json(['success' => true, 'order' => OrderClientResource::make($order)]);
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    public function getOrder(int $orderId): JsonResponse
+    {
+        $order = $this->orderService->getClientOrder($orderId);
+
+        return response()->json(
+            [
+                'success' => true,
+                'order' => OrderClientResource::make($order),
+            ]
+        );
     }
 }

@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AuthorResource extends JsonResource
+class OrderClientResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,9 +15,12 @@ class AuthorResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        /** @var Order|self $this */
+
+        $baseArray = OrderResource::make($this->resource)->toArray($request);
         return [
-            'id' => $this->id,
-            'name' => $this->name,
+            ...$baseArray,
+            'user_comment' => $this->user_comment,
         ];
     }
 }

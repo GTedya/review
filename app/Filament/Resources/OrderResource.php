@@ -3,6 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderResource\Pages;
+use App\Filament\Resources\OrderResource\RelationManagers\ManagersRelationManager;
+use App\Filament\Resources\OrderResource\RelationManagers\OffersRelationManager;
 use App\Models\Geo;
 use App\Models\Order;
 use App\Models\OrderDealerVehicle;
@@ -49,7 +51,8 @@ class OrderResource extends Resource
 
 
                         TextInput::make('inn')
-                            ->label('ИНН'),
+                            ->label('ИНН')
+                            ->required(),
 
                         TextInput::make('org_name')
                             ->label('Название организации'),
@@ -63,17 +66,28 @@ class OrderResource extends Resource
                             }),
 
                         TextInput::make('email')
-                            ->label('Email')
-                            ->required(),
+                            ->label('Email'),
 
+                        TinyEditor::make('user_comment')->label('Комментарий пользователя')->dehydrated(
+                            false
+                        )->disabled(),
                         TinyEditor::make('admin_comment')->label('Коментарий администратора'),
 
                         Section::make('Лизинг')->schema([
                             Grid::make()->columns(1)->relationship('leasing')->schema([
-                                TextInput::make('advance')->label('Аванс')->numeric()->required(),
+                                TextInput::make('sum')
+                                    ->label('Необходимая сумма')
+                                    ->numeric()
+                                    ->required(),
+
+                                TextInput::make('advance')->label('Размер аванса')
+                                    ->numeric()
+                                    ->required()
+                                    ->minValue(0)
+                                    ->maxValue(100),
                                 TextInput::make('current_lessors')->label('Текущие лизингодатели')->nullable(),
                                 TextInput::make('months')->label('Срок лизинга')->numeric()->nullable(),
-                                TinyEditor::make('user_comment')->label('Комментарий пользователя')->nullable(),
+
                             ]),
 
                             Repeater::make('leasing_vehicles')
@@ -154,13 +168,15 @@ class OrderResource extends Resource
                             ->disabledOn('edit')
                             ->beforeStateDehydrated(function ($state, callable $get, callable $set) {
                                 if (blank($state)) {
-                                    $phone = $get('phone');
+                                    $phone = Helpers::getCleanPhone($get('phone'));
                                     $email = $get('email');
 
                                     /** @var ?User $user */
                                     $user = User::query()
                                         ->where('phone', $phone)
-                                        ->orWhere('email', $email)
+                                        ->when(filled($email), function (Builder $query) use ($email) {
+                                            $query->orWhere('email', $email);
+                                        })
                                         ->first();
 
                                     if ($user === null) {
@@ -185,7 +201,10 @@ class OrderResource extends Resource
                         Select::make('geo_id')
                             ->label('Область')
                             ->relationship('geo', 'name', function (Builder $query, ?Order $record) {
-                                $query->withTrashed()->where('deleted_at', null)->orWhere('id', $record?->geo_id);
+                                $query->doesntHave('children')->withTrashed()->where('deleted_at', null)->orWhere(
+                                    'id',
+                                    $record?->geo_id
+                                );
                             })
                             ->getOptionLabelFromRecordUsing(function (Geo $record) {
                                 return $record->trashed() ? "{$record->name} (область удалена)" : $record->name;
@@ -272,7 +291,8 @@ class OrderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ManagersRelationManager::class,
+            OffersRelationManager::class,
         ];
     }
 

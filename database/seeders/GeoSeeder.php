@@ -18,17 +18,21 @@ class GeoSeeder extends Seeder
             [
                 'id' => 1,
                 'name' => 'СКФО',
+                'region_code' => 'RU-SKFO',
+                'parent_id' => null,
+
             ],
             [
                 'id' => 2,
                 'name' => 'Респ. Северная Осетия-Алания',
                 'region_code' => 'RU-SE',
-                'parent_id' => 1
+                'parent_id' => 1,
             ],
             [
                 'id' => 3,
                 'name' => 'Москва',
-                'region_code' => 'RU-MOS'
+                'region_code' => 'RU-MOS',
+                'parent_id' => null,
             ],
 
         ];

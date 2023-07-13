@@ -17,6 +17,7 @@ class OrderSeeder extends Seeder
             [
                 'id' => 1,
                 'user_id' => '4',
+                'name' => 'Аркадий Вячеславович',
                 'inn' => '151501533302',
                 'phone' => '88005553535',
                 'email' => 'georgi@mail.ru',

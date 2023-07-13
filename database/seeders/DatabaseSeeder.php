@@ -17,14 +17,16 @@ class DatabaseSeeder extends Seeder
             StatusSeeder::class,
             RolesAndPermissionsSeeder::class,
             PageSeeder::class,
-            CompanySeeder::class,
+            SettingSeeder::class,
             GeoSeeder::class,
-            MenuItemSeeder::class,
+            CompanySeeder::class,
             MenuGroupSeeder::class,
+            MenuItemSeeder::class,
             FaqSeeder::class,
             VehicleTypeSeeder::class,
             NewsSeeder::class,
             OrderSeeder::class,
+            PartnerSeeder::class,
         ]);
     }
 }

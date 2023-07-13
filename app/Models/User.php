@@ -6,6 +6,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -14,19 +15,26 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
+
 /**
  * @property int $id
  * @property string $name
  * @property string $email
  * @property string $phone
  * @property string $password
+ * @property ?string $phone_confirmation_code
  * @property ?Carbon $created_at
  * @property ?Carbon $updated_at
+ * @property ?Carbon $phone_verified_at
  * @property ?string $remember_token
  * @property Collection<Order> $orders
+ * @property Collection<int, Order> $takenOrders
+ * @property Collection<int, File> $files
+ * @property Collection<int, ManagerOffer> $offers
  * @property Collection<Rent> $rents
  * @property Collection $userFiles
  * @property ?Order $banOrders
+ * @property Company $company
  */
 class User extends Authenticatable implements FilamentUser, HasMedia
 {
@@ -43,12 +51,18 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         'client' => 'Клиент',
     ];
 
+    public const ROLE_PERMISSION = [
+        'client' => ['edit_order', 'create_order'],
+        'manager' => ['send_offer', 'view_all_orders', 'take_order']
+    ];
+
 
     protected $fillable = [
         'name',
         'phone',
         'email',
         'password',
+        'phone_confirmation_code',
     ];
 
     /**
@@ -68,6 +82,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'phone_verified_at' => 'datetime',
     ];
 
     public function canAccessFilament(): bool
@@ -78,6 +93,11 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function company(): HasOne
+    {
+        return $this->hasOne(Company::class);
     }
 
     public function rents(): HasMany
@@ -95,6 +115,16 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         return $this->hasMany(UserFile::class);
     }
 
+    public function takenOrders(): BelongsToMany
+    {
+        return $this->belongsToMany(Order::class, 'taken_orders', 'user_id', 'order_id');
+    }
+
+    public function offers(): HasMany
+    {
+        return $this->hasMany(ManagerOffer::class);
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('logo')
@@ -110,4 +140,6 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     {
         return $value;
     }
+
+
 }

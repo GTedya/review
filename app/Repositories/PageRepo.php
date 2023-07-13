@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Page;
+use Illuminate\Support\Collection;
 
 class PageRepo
 {
@@ -11,9 +12,21 @@ class PageRepo
         return Page::query()->where('slug', $slug)->first();
     }
 
+    public function pageBySlugWithParents(string $slug): ?Page
+    {
+        return Page::query()->where('slug', $slug)
+            ->with('parentDeep')
+            ->first();
+    }
+
     public function pageByTemplate(string $template): ?Page
     {
         return Page::query()->where('template', $template)->first();
+    }
+
+    public function pages(): Collection
+    {
+        return Page::query()->orderByDesc('priority')->get();
     }
 
 

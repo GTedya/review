@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $order_id
  * @property float $advance
+ * @property float $sum
  * @property ?int $months
  * @property ?string $current_lessors
- * @property ?string $user_comment
  * @property Order $order
  */
 class OrderLeasing extends Model
@@ -25,13 +25,16 @@ class OrderLeasing extends Model
         'order_id',
         'advance',
         'months',
+        'sum',
         'current_lessors',
-        'user_comment',
     ];
-
+    protected $casts = [
+        'advance' => 'float',
+        'sum' => 'float',
+    ];
 
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::class, 'id', 'order_id');
+        return $this->belongsTo(Order::class);
     }
 }

@@ -4,11 +4,17 @@ namespace App\Filament\Resources;
 
 use App\Filament\BaseResource\UserResource;
 use App\Filament\Resources\ClientResource\Pages;
+use App\Models\Company;
+use App\Models\Geo;
+use App\Models\UserFileType;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
+use Illuminate\Database\Eloquent\Builder;
 
 class ClientResource extends UserResource
 {
@@ -26,6 +32,32 @@ class ClientResource extends UserResource
     {
         return $form->columns(3)->schema([
             ...static::baseFields(),
+            Section::make('О компании')->collapsed()->relationship('company')->schema([
+                TextInput::make('inn')
+                    ->label('ИНН')
+                    ->required(),
+
+                TextInput::make('org_name')
+                    ->label('Название организации'),
+
+                Radio::make('org_type')
+                    ->label('Тип организации')
+                    ->options(UserFileType::ORG_TYPES)
+                    ->required()
+                    ->reactive(),
+
+                Select::make('geo_id')
+                    ->label('Область')
+                    ->relationship('geo', 'name', function (Builder $query, ?Company $record) {
+                        $query->doesntHave('children')->withTrashed()->where('deleted_at', null)->orWhere(
+                            'id',
+                            $record?->geo_id
+                        );
+                    })
+                    ->getOptionLabelFromRecordUsing(function (Geo $record, $get) {
+                        return $record->trashed() ? "{$record->name} (область удалена)" : $record->name;
+                    }),
+            ]),
 
             Section::make('Файлы')->collapsed()->schema([
                 Repeater::make('files')
@@ -36,7 +68,10 @@ class ClientResource extends UserResource
                     ->schema([
                         Select::make('type_id')
                             ->label('Тип файлов')
-                            ->relationship('type', 'name', fn($query) => $query->orderBy('id'))
+                            ->reactive()
+                            ->relationship('type', 'name', function (Builder $query, callable $get) {
+                                $query->whereJsonContains('org_type', $get('data.company.org_type', true))->get();
+                            })
                             ->required(),
 
                         SpatieMediaLibraryFileUpload::make('files')
@@ -65,6 +100,7 @@ class ClientResource extends UserResource
                             };
                         }
                     ]),
+
             ]),
         ]);
     }

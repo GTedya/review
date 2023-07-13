@@ -23,10 +23,13 @@ return new class extends Migration {
 
             $table->boolean('is_published')->default(true);
             $table->string('name');
+            $table->string('title');
+            $table->string('slug')->unique();
             $table->string('phone');
             $table->string('email')->nullable();
             $table->string('type');
             $table->text('text');
+            $table->boolean('with_nds');
             $table->timestamp('active_until');
             $table->timestamps();
         });

@@ -2,6 +2,13 @@
 
 namespace App\Utilities;
 
+use App\Http\Resources\UserFileResource;
+use App\Models\Page;
+use App\Models\User;
+use App\Models\UserFile;
+use App\Models\UserFileType;
+use Illuminate\Database\Eloquent\Builder;
+
 class Helpers
 {
     public static function getCleanPhone(?string $phone): ?string
@@ -34,5 +41,43 @@ class Helpers
         }
 
         return $clean;
+    }
+
+    public static function getBreadcrumbs(
+        Page $page,
+        ?string $title = null,
+    ): array {
+        $breadcrumbs = [['text' => $title ?? $page->title ?? '_']];
+
+        $parent = $page->parent;
+
+        while ($parent !== null) {
+            $title = $parent->title ?? '_';
+            $slug = $parent->fullSlug();
+
+            $breadcrumbs[] = ['text' => $title, 'link' => "/{$slug}"];
+
+            $parent = $parent->parent;
+        }
+
+        $breadcrumbs[] = ['text' => 'Главная', 'link' => '/'];
+
+        return array_reverse($breadcrumbs);
+    }
+
+    public static function userFiles(User $user, bool $show_in_order)
+    {
+        return UserFileType::query()->when($show_in_order == true, function (Builder $query) {
+            $query->where('show_in_order', true);
+        })->whereJsonContains('org_type', $user->company->org_type)->get()->map(
+            function (UserFileType $type) use ($user) {
+                /** @var ?UserFile $file */
+                $file = $user->files->firstWhere('type_id', $type->id);
+                return [
+                    'type' => $type,
+                    'files' => $file !== null ? UserFileResource::make($file) : [],
+                ];
+            }
+        );
     }
 }

@@ -2,25 +2,46 @@
 
 namespace App\Services;
 
+use App\Events\OrderUpdate;
 use App\Models\Order;
 use App\Models\OrderDealerVehicle;
 use App\Models\OrderLeasingVehicle;
 use App\Models\User;
+use App\Repositories\GeoRepo;
+use App\Repositories\ManagerRepo;
 use App\Repositories\OrderRepo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class OrderService
 {
-    public function __construct(public OrderRepo $orderRepo)
+    public function __construct(public OrderRepo $orderRepo, public GeoRepo $geoRepo, public ManagerRepo $managerRepo)
     {
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function createOrder(User $user, array $data): Order
     {
+        $data['inn'] = $user->company?->inn;
+        if (blank($data['inn'])) {
+            throw ValidationException::withMessages(
+                ['inn' => 'Вы не заполнили поле ИНН в личном кабинете']
+            );
+        };
+
+        $geo_id = $data['geo_id'] ?? null;
+
+        if ($this->geoRepo->hasChildren($geo_id)) {
+            throw ValidationException::withMessages(
+                ['geo_id' => 'Некорректные данные области']
+            );
+        };
         DB::beginTransaction();
         /** @var Order $order */
         $order = $user->orders()->create($data);
@@ -41,16 +62,34 @@ class OrderService
     /**
      * @throws ValidationException
      */
+    public function getClientOrder($id): Order
+    {
+        $usersOrder = $this->orderRepo->usersOrder($id, Auth::id());
+        if ($usersOrder == null) {
+            abort(403);
+        }
+        return $usersOrder;
+    }
+
+    /**
+     * @throws ValidationException
+     */
     public function editOrder(int $userId, int $orderId, array $data): Order
     {
         /** @var Order $order */
         $order = $this->orderRepo->usersOrder($orderId, $userId);
 
         if ($order == null) {
-            throw ValidationException::withMessages(
-                ['order' => 'Некорректные данные заказа']
-            );
+            abort(403);
         }
+
+        $geo_id = $data['geo_id'];
+
+        if ($this->geoRepo->hasChildren($geo_id)) {
+            throw ValidationException::withMessages(
+                ['geo_id' => 'Некорректные данные области']
+            );
+        };
 
         if (filled($data['leasing'] ?? null)) {
             $oldItems = $order->leasingVehicles()->get();
@@ -123,6 +162,8 @@ class OrderService
 
         $order->update($data);
 
+        OrderUpdate::dispatch($order);
+
         return $order;
     }
 
@@ -141,5 +182,19 @@ class OrderService
         foreach ($toUpdate as $vehicle) {
             $vehicle->update($newItems[$vehicle->id] ?? []);
         }
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    public function managerTakeOrder(User $user, int $orderId): void
+    {
+        if (blank($this->managerRepo->getById($user->id, $orderId))) {
+            abort(403);
+        }
+        if ($user->takenOrders->contains('id', $orderId)) {
+            throw ValidationException::withMessages(['order' => 'Вы уже взяли в работу данный заказ']);
+        }
+        $this->managerRepo->takeOrder($user, $orderId);
     }
 }

@@ -19,9 +19,9 @@ return new class extends Migration {
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->decimal('advance');
+            $table->decimal('sum', 12);
+            $table->decimal('advance', 12);
             $table->text('current_lessors')->nullable();
-            $table->text('user_comment')->nullable();
             $table->integer('months')->nullable();
         });
     }

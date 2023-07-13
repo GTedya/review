@@ -24,12 +24,17 @@ class RentController extends Controller
         $this->rentRepo = $rentRepo;
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function create(RentRequest $request): JsonResponse
     {
         /** @var User $user */
         $user = Auth::user();
+
         $rent = $this->rentService->create($user, $request->validated());
         $rent = $rent->fresh('rentVehicles');
+
 
         return response()->json(['success' => true, 'rent' => RentResource::make($rent)]);
     }
@@ -47,9 +52,10 @@ class RentController extends Controller
     {
         $perPage = $request->input('per_page');
         $geos = $request->input('geo');
-        $types = $request->input('types');
-        $rents = $this->rentRepo->pagination($perPage, $geos, $types);
-
+        $vehTypes = $request->input('veh_types');
+        $with_nds = $request->input('with_nds');
+        $rentTypes = $request->input('types');
+        $rents = $this->rentRepo->pagination($perPage, $geos, $with_nds, $rentTypes, $vehTypes);
 
         return response()->json(['success' => true, 'rents' => RentResource::collection($rents)->resource]);
     }
@@ -64,5 +70,15 @@ class RentController extends Controller
         $this->rentService->extend($userId, $rentId);
 
         return response()->json(['success' => true]);
+    }
+
+    public function single(string $slug): JsonResponse
+    {
+        $rent = $this->rentService->getRent($slug);
+        $active = $rent->isActive;
+        if (!$active) {
+            return response()->json(['success' => true, 'active' => $active]);
+        }
+        return response()->json(['success' => true, 'rent' => RentResource::make($rent)]);
     }
 }

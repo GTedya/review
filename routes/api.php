@@ -6,6 +6,7 @@ use App\Http\Controllers\Client\FaqController;
 use App\Http\Controllers\Client\NewsController;
 use App\Http\Controllers\Client\OrderController as ClientOrder;
 use App\Http\Controllers\Client\PartnerController;
+use App\Http\Controllers\Client\RegistrationController;
 use App\Http\Controllers\Client\RentController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\GeoController;
@@ -14,6 +15,8 @@ use App\Http\Controllers\Manager\ManagerController;
 use App\Http\Controllers\Manager\OrderController as ManagerOrder;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\VehTypeController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,26 +31,40 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::prefix('registration')->group(function (){
+    Route::post('/', [RegistrationController::class, 'registration']);
+    Route::post('/call', [RegistrationController::class, 'confirmationCall']);
+    Route::post('/confirmation',[RegistrationController::class, 'confirmationCheck']);
+});
+
+Route::get('/sitemap', [SitemapController::class, 'index']);
 Route::post('/claim', [ClaimController::class, 'putClaim']);
 Route::get('/partners', [PartnerController::class, 'getPartner']);
 Route::get('/faqs', [FaqController::class, 'getFaqs']);
-Route::get('/rent/list', [RentController::class, 'list']);
+Route::get('/veh_types', [VehTypeController::class, 'list']);
+
+Route::prefix('rent')->group(function (){
+    Route::get('/', [RentController::class, 'list']);
+    Route::get('/{slug}', [RentController::class, 'single']);
+});
+
+Route::prefix('/news')->group(function () {
+    Route::get('/', [NewsController::class, 'pagination']);
+    Route::get('/{slug}', [NewsController::class, 'single']);
+});
+
+
+Route::get('/settings', [SettingsController::class, 'getInfo']);
 Route::get('/menu', [MenuController::class, 'list']);
 Route::get('/leasings', [LeasingController::class, 'getLeasings']);
-Route::get('/page/{slug}', [PageController::class, 'getPage']);
+Route::get('/page/{slug}', [PageController::class, 'getPage'])->where('slug', '.*');
 Route::get('/mainPage', [PageController::class, 'getMainPage']);
+Route::get('/geos', [GeoController::class, 'list']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-
-    Route::prefix('/news')->group(function () {
-        Route::get('/', [NewsController::class, 'pagination']);
-        Route::get('/{slug}', [NewsController::class, 'single']);
-    });
-
-    Route::get('/geos', [GeoController::class, 'list']);
-
-    Route::get('/veh_types', [VehTypeController::class, 'list']);
+    Route::get('/permissions', [AuthController::class, 'getPermissions']);
 
     Route::middleware('role:client')->prefix('client')->group(function () {
         Route::get('/info', [UserController::class, 'info']);
@@ -55,6 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/edit/{id}', [ClientOrder::class, 'edit']);
             Route::get('/list', [UserController::class, 'orders']);
             Route::post('/create', [ClientOrder::class, 'create']);
+            Route::get('/{id}', [ClientOrder::class, 'getOrder']);
         });
 
         Route::prefix('rent')->group(function () {
@@ -66,7 +84,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::middleware('role:dealer_manager|leasing_manager')->prefix('manager')->group(function () {
-        Route::get('/orders', [ManagerOrder::class, 'orders']);
+        Route::prefix('/orders')->group(function () {
+            Route::get('/', [ManagerOrder::class, 'orders']);
+            Route::prefix('/{orderId}')->group(function () {
+                Route::post('/offer', [ManagerController::class, 'sendOffer']);
+                Route::post('/take_order', [ManagerOrder::class, 'takeOrder']);
+                Route::get('/', [ManagerOrder::class, 'getOrder']);
+            });
+        });
         Route::post('/logo', [ManagerController::class, 'logoAdd']);
     });
 });
