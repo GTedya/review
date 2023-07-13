@@ -49,7 +49,7 @@ class ClientResource extends UserResource
                             $fail('ИНН не найден');
                         };
                     })
-                    ->afterStateUpdated(function (callable $set, ?string $state, TextInput $component) use ($dadata) {
+                    ->afterStateUpdated(function (callable $set, ?string $state) use ($dadata) {
                         $data = $dadata->dadataCompanyInfo($state);
                         if (blank($data)) {
                             $set('org_name', '');
