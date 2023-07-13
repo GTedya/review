@@ -42,18 +42,19 @@ class ClientResource extends UserResource
                     ->label('ИНН')
                     ->required()
                     ->rule(new InnSize())
-                    ->debounce('1200ms')
+                    ->debounce('600ms')
+                    ->rule(function (?string $state, callable $fail) use ($dadata){
+                        $data = $dadata->dadataCompanyInfo($state);
+                            if (blank($data)){
+                                $fail('ИНН не найден');
+                            };
+                    })
                     ->afterStateUpdated(function (callable $set, ?string $state, TextInput $component) use ($dadata) {
                         $data = $dadata->dadataCompanyInfo($state);
                         if (blank($data)) {
                             $set('org_name', '');
                             $set('org_type', null);
                             $set('geo_id', null);
-                            Notification::make()
-                                ->title('Ошибка')
-                                ->danger()
-                                ->body('ИНН не найден')
-                                ->send();
                             return true;
                         }
                         $set('org_name', $data['org_name']);

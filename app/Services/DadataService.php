@@ -3,17 +3,22 @@
 namespace App\Services;
 
 use App\Models\Geo;
+use Dadata\DadataClient;
 use Illuminate\Validation\ValidationException;
 
 class DadataService
 {
-    private const token = "1e45a9955cb8d843e18ef0785d14843b9eb5170e";
+    private const token = '1e45a9955cb8d843e18ef0785d14843b9eb5170e';
     private const secret = '5e12f08b7ab18fd70d3b225d745340949e9b0280';
+    private DadataClient $dadata;
+
+    public function __construct(){
+        $this->dadata = new \Dadata\DadataClient(self::token, self::secret);
+    }
 
     public function findByInn(?string $inn): mixed
     {
-        $dadata = new \Dadata\DadataClient(self::token, self::secret);
-        return $dadata->findById("party", $inn, 1);
+        return $this->dadata->findById('party', $inn, 1);
     }
 
     public function dadataCompanyInfo(?string $inn): array
@@ -40,8 +45,8 @@ class DadataService
                 'org_type' => $type,
                 'geo_id' => $geo?->id,
             ];
-        } catch (ValidationException $exception) {
-            throw $exception::withMessages(['Что-то пошло не так']);
+        } catch (\Exception) {
+            return [];
         }
     }
 }
