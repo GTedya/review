@@ -45,7 +45,7 @@ class DadataService
                 'org_type' => $type,
                 'geo_id' => $geo?->id,
             ];
-        } catch (\Exception) {
+        } catch (\Throwable) {
             return [];
         }
     }
