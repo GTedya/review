@@ -18,6 +18,15 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
             PageSeeder::class,
             SettingSeeder::class,
+            GeoSeeder::class,
+            CompanySeeder::class,
+            MenuGroupSeeder::class,
+            MenuItemSeeder::class,
+            FaqSeeder::class,
+            VehicleTypeSeeder::class,
+            NewsSeeder::class,
+            OrderSeeder::class,
+            PartnerSeeder::class,
         ]);
     }
 }
