@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class OrderSeeder extends Seeder
+class CompanySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,15 +16,14 @@ class OrderSeeder extends Seeder
         $inserts = [
             [
                 'id' => 1,
-                'user_id' => '4',
                 'inn' => '151501533302',
-                'phone' => '88005553535',
-                'email' => 'georgi@mail.ru',
-                'created_at' => now(),
-                'updated_at' => now()->addMonth(),
+                'org_type' => 'ИП',
+                'org_name' => 'ИП Тотров Аркадий Вячеславович',
+                'user_id' => 4,
+                'geo_id' => 1
             ],
-
         ];
-        DB::table('orders')->insert($inserts);
+
+        DB::table('companies')->insert($inserts);
     }
 }

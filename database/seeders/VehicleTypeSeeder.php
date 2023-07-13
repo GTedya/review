@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class VehicleTypeSeeder extends Seeder
 {
@@ -12,6 +12,22 @@ class VehicleTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $inserts = [
+            [
+                'id' => 1,
+                'name' => 'Тракторы',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Самосвалы',
+            ],
+            [
+                'id' => 3,
+                'name' => 'Погрузочные машины',
+            ],
+
+        ];
+
+        DB::table('vehicle_types')->insert($inserts);
     }
 }

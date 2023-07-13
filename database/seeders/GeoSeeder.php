@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class GeoSeeder extends Seeder
 {
@@ -12,6 +14,25 @@ class GeoSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $inserts = [
+            [
+                'id' => 1,
+                'name' => 'СКФО',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Респ. Северная Осетия-Алания',
+                'region_code' => 'RU-SE',
+                'parent_id' => 1
+            ],
+            [
+                'id' => 3,
+                'name' => 'Москва',
+                'region_code' => 'RU-MOS'
+            ],
+
+        ];
+
+        DB::table('geos')->insert($inserts);
     }
 }
