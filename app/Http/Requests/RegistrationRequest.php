@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\InnSize;
 use App\Utilities\Helpers;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -33,7 +34,7 @@ class RegistrationRequest extends FormRequest
             'name' => ['required', 'string', 'min:4'],
             'phone' => ['required', 'string', 'size:11', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
-            'inn' => ['required', 'string', 'size:12', 'unique:companies']
+            'inn' => ['required', 'string', 'unique:companies', new InnSize()]
         ];
     }
 
@@ -47,7 +48,6 @@ class RegistrationRequest extends FormRequest
             'inn.unique' => 'Пользователь с таким инн уже существует',
             'email.email' => 'Неверный формат email',
             'phone.size' => 'Неверный формат',
-            'inn.size' => 'Неверный формат',
 
             'name.min' => 'ФИО должно содержать как минимум :min символа',
             'password.min' => 'Пароль должен содержать как минимум :min символов',

@@ -40,7 +40,7 @@ class UserResource extends Resource
         return
 
             [
-                Grid::make()->columnSpan(2)->schema([
+                Grid::make()->columnSpan(static::$hasLogo ? 2 : 3)->schema([
                     Card::make()->columns()->schema([
                         TextInput::make('name')
                             ->label('ФИО')
