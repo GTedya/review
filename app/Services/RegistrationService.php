@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Geo;
 use App\Repositories\UserRepo;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -20,27 +19,17 @@ class RegistrationService
     ) {
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function registration(array $data): bool
     {
         $inn = $data['inn'];
         $data['password'] = Hash::make($data['password']);
-        $dadataInfo = current($this->dadataService->findByInn($inn));
-
-
-        $type = strstr($dadataInfo['value'], ' ', true);
-        if ($type != 'ИП') {
-            $type = 'ООО';
+        $companyData = $this->dadataService->dadataCompanyInfo($inn);
+        if (blank($companyData)) {
+            throw ValidationException::withMessages(['inn' => 'Проверьте корректность ввода данных']);
         }
-
-        $iso = $dadataInfo['data']['address']['data']['region_iso_code'];
-
-        $companyData = [
-            'org_name' => $dadataInfo['value'],
-            'inn' => $inn,
-            'org_type' => $type,
-            'geo_id' => Geo::query()->where('region_code', $iso)->first()->id,
-        ];
-
         DB::beginTransaction();
         $user = $this->userRepo->create($data, $companyData);
         DB::commit();
@@ -90,4 +79,6 @@ class RegistrationService
         $user->phone_verified_at = now();
         $user->save();
     }
+
+
 }

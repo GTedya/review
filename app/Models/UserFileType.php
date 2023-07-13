@@ -16,8 +16,8 @@ class UserFileType extends Model
     use HasFactory;
 
     public const ORG_TYPES = [
-        'ip' => 'ИП',
-        'ooo' => 'ООО',
+        'ИП' => 'ИП',
+        'ООО' => 'ООО',
     ];
 
     public $timestamps = false;

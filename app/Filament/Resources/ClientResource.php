@@ -7,12 +7,15 @@ use App\Filament\Resources\ClientResource\Pages;
 use App\Models\Company;
 use App\Models\Geo;
 use App\Models\UserFileType;
+use App\Rules\InnSize;
+use App\Services\DadataService;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Resources\Form;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -30,12 +33,33 @@ class ClientResource extends UserResource
 
     public static function form(Form $form): Form
     {
+        $dadata = new DadataService();
+
         return $form->columns(3)->schema([
             ...static::baseFields(),
             Section::make('О компании')->collapsed()->relationship('company')->schema([
                 TextInput::make('inn')
                     ->label('ИНН')
-                    ->required(),
+                    ->required()
+                    ->rule(new InnSize())
+                    ->debounce('1200ms')
+                    ->afterStateUpdated(function (callable $set, ?string $state, TextInput $component) use ($dadata) {
+                        $data = $dadata->dadataCompanyInfo($state);
+                        if (blank($data)) {
+                            $set('org_name', '');
+                            $set('org_type', null);
+                            $set('geo_id', null);
+                            Notification::make()
+                                ->title('Ошибка')
+                                ->danger()
+                                ->body('ИНН не найден')
+                                ->send();
+                            return true;
+                        }
+                        $set('org_name', $data['org_name']);
+                        $set('org_type', $data['org_type']);
+                        $set('geo_id', $data['geo_id']);
+                    }),
 
                 TextInput::make('org_name')
                     ->label('Название организации'),
