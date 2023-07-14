@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Events\OrderManualUpdated;
+use App\Events\OrderOfferCreated;
 use App\Events\OrderUpdated;
+use App\Listeners\OrderOfferListener;
 use App\Listeners\OrderStatusListener;
 use App\Listeners\OrderUpdateListener;
 use App\Models\Order;
@@ -34,7 +36,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderUpdated::class => [
             OrderStatusListener::class,
-        ]
+        ],
+        OrderOfferCreated::class => [
+            OrderOfferListener::class,
+        ],
     ];
 
     /**

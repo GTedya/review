@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Events\OrderOfferCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SendOfferRequest;
 use App\Models\ManagerOffer;
@@ -54,7 +55,7 @@ class ManagerController extends Controller
         $offer->addMedia($file)->toMediaCollection('offer_file');
 
         DB::commit();
-
+        OrderOfferCreated::dispatch($offer);
         return response()->json(['success' => true]);
     }
 }
