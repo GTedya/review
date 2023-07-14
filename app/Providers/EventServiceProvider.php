@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
-use App\Events\OrderUpdate;
+use App\Events\OrderManualUpdated;
+use App\Events\OrderUpdated;
+use App\Listeners\OrderStatusListener;
 use App\Listeners\OrderUpdateListener;
 use App\Models\Order;
 use App\Models\OrderDealerVehicle;
@@ -27,8 +29,11 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        OrderUpdate::class => [
+        OrderManualUpdated::class => [
             OrderUpdateListener::class,
+        ],
+        OrderUpdated::class => [
+            OrderStatusListener::class,
         ]
     ];
 

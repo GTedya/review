@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\OrderResource\Pages;
 
-use App\Events\OrderUpdate;
+use App\Events\OrderManualUpdated;
 use App\Filament\Resources\OrderResource;
 use App\Models\Order;
 use Filament\Pages\Actions;
@@ -30,6 +30,6 @@ class EditOrder extends EditRecord
 
     protected function afterSave()
     {
-        OrderUpdate::dispatch($this->record);
+        OrderManualUpdated::dispatch($this->record);
     }
 }

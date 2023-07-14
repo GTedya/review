@@ -28,4 +28,9 @@ class UserRepo
         $user->company()->create($companyData);
         return true;
     }
+
+    public function saveDeviceKey(?string $key, User $user): bool
+    {
+        return $user->update(['device_key' => $key]);
+    }
 }
