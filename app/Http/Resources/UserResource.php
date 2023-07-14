@@ -22,7 +22,7 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'phone' => $this->phone,
-            'email' => $this->email ?? $this->user->email,
+            'email' => $this->email,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'files' => $this->whenNotNull(Helpers::userFiles($this->resource, false)),
