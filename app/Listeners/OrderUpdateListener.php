@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\OrderUpdate;
+use App\Events\OrderManualUpdated;
 use Illuminate\Support\Facades\View;
 
 class OrderUpdateListener
@@ -18,7 +18,7 @@ class OrderUpdateListener
     /**
      * Handle the event.
      */
-    public function handle(OrderUpdate $event): void
+    public function handle(OrderManualUpdated $event): void
     {
         $changes = [];
         $order = View::shared('order_observer_update');

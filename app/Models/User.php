@@ -27,6 +27,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property ?Carbon $updated_at
  * @property ?Carbon $phone_verified_at
  * @property ?string $remember_token
+ * @property ?string $device_key
  * @property Collection<Order> $orders
  * @property Collection<int, Order> $takenOrders
  * @property Collection<int, File> $files
@@ -63,6 +64,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         'email',
         'password',
         'phone_confirmation_code',
+        'device_key',
     ];
 
     /**

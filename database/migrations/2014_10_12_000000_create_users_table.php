@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->string('phone_confirmation_code')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->string('device_key')->nullable();
             $table->timestamps();
         });
     }

@@ -34,6 +34,9 @@ class AuthController extends Controller
 
         $token = $this->authService->createToken($user, $request->input('password'), $userAgent);
         $permissions = $this->authService->getPermissions($user);
+
+        $this->authService->saveDeviceKey($request->input('device_key'), $user);
+
         return response()->json(['token' => $token, 'permissions' => $permissions]);
     }
 

@@ -24,6 +24,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('admin%dev'),
                 'created_at' => $dateTime,
                 'updated_at' => $dateTime,
+                'device_key' => 'faCyn5rwSG-WAD22jppfWL:APA91bGWW-T2tfYNHcLpBj1MeeoLRlaJ4HMpM50dEQTtXkH3HRgNfEGeaFs16lcbAUo5g-5Gedh_DJzV1tM9rWPtXdmuMOhV5BXdsCGsKplAlmSmgzl2J6ir54HfGFlNS1TEuJpzjOqJ'
             ],
             [
                 'id' => 2,
@@ -33,6 +34,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('dealer%dev'),
                 'created_at' => $dateTime,
                 'updated_at' => $dateTime,
+                'device_key' => 'faCyn5rwSG-WAD22jppfWL:APA91bGWW-T2tfYNHcLpBj1MeeoLRlaJ4HMpM50dEQTtXkH3HRgNfEGeaFs16lcbAUo5g-5Gedh_DJzV1tM9rWPtXdmuMOhV5BXdsCGsKplAlmSmgzl2J6ir54HfGFlNS1TEuJpzjOqJ'
             ],
             [
                 'id' => 3,
@@ -42,6 +44,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('leasing%dev'),
                 'created_at' => $dateTime,
                 'updated_at' => $dateTime,
+                'device_key' => 'faCyn5rwSG-WAD22jppfWL:APA91bGWW-T2tfYNHcLpBj1MeeoLRlaJ4HMpM50dEQTtXkH3HRgNfEGeaFs16lcbAUo5g-5Gedh_DJzV1tM9rWPtXdmuMOhV5BXdsCGsKplAlmSmgzl2J6ir54HfGFlNS1TEuJpzjOqJ'
             ],
             [
                 'id' => 4,
@@ -51,6 +54,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('client%dev'),
                 'created_at' => $dateTime,
                 'updated_at' => $dateTime,
+                'device_key' => 'faCyn5rwSG-WAD22jppfWL:APA91bGWW-T2tfYNHcLpBj1MeeoLRlaJ4HMpM50dEQTtXkH3HRgNfEGeaFs16lcbAUo5g-5Gedh_DJzV1tM9rWPtXdmuMOhV5BXdsCGsKplAlmSmgzl2J6ir54HfGFlNS1TEuJpzjOqJ'
             ],
 
         ];

@@ -39,4 +39,12 @@ class AuthService
         }
         return $permissions;
     }
+
+    public function saveDeviceKey(?string $key, User $user): void
+    {
+        if (blank($key)) {
+            return;
+        }
+        $this->userRepo->saveDeviceKey($key, $user);
+    }
 }

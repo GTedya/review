@@ -30,6 +30,7 @@ class AuthRequest extends FormRequest
         return [
             'phone' => ['required', 'string','size:11' ,'exists:users'],
             'password' => ['required', 'string', 'min:8'],
+            'device_key' => ['nullable', 'string'],
         ];
     }
 

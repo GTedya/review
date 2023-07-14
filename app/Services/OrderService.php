@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Events\OrderUpdate;
+use App\Events\OrderManualUpdated;
 use App\Models\Order;
 use App\Models\OrderDealerVehicle;
 use App\Models\OrderLeasingVehicle;
@@ -162,7 +162,7 @@ class OrderService
 
         $order->update($data);
 
-        OrderUpdate::dispatch($order);
+        OrderManualUpdated::dispatch($order);
 
         return $order;
     }
