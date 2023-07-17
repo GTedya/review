@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use App\Constants\StatusesConstants;
+use App\Events\OrderDealerCreated;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers\ManagersRelationManager;
 use App\Filament\Resources\OrderResource\RelationManagers\OffersRelationManager;
@@ -177,7 +179,11 @@ class OrderResource extends Resource
                                         ])
                                 ])->visible(function ($get) {
                                     return $get('hasDealer');
-                                })->collapsible(),
+                                })->collapsible()->afterStateHydrated(function (?Order $record) {
+                                    if (filled($record)) {
+                                        OrderDealerCreated::dispatch($record);
+                                    }
+                                }),
                             ]),
                         ]),
 
@@ -215,9 +221,9 @@ class OrderResource extends Resource
                             ]),
 
                             Card::make()->columns(1)->schema([
-                                Select::make('status')
+                                Select::make('status_id')
                                     ->label('Статус')
-                                    ->relationship('status', 'name')
+                                    ->options(StatusesConstants::STATUSES)
                                     ->default(1)
                                     ->required(),
 

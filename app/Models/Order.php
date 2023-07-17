@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Events\OrderManualUpdated;
 use App\Events\OrderUpdated;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Builder;
 
 /**
  * @property int $id
@@ -137,8 +136,11 @@ class Order extends Model
      */
     public function scopeManager(Builder $query, int $userId): Builder
     {
-       return $query->whereDoesntHave('banUsers', function (\Illuminate\Database\Eloquent\Builder $query) use ($userId) {
-            $query->where('manager_order_bans.user_id', $userId);
-        });
+        return $query->whereDoesntHave(
+            'banUsers',
+            function (\Illuminate\Database\Eloquent\Builder $query) use ($userId) {
+                $query->where('manager_order_bans.user_id', $userId);
+            }
+        );
     }
 }
