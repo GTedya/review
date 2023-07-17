@@ -46,11 +46,11 @@ class OrderUpdateListener
 
         if (filled($changes)) {
             $event->order->orderHistory()->create(['edited' => $changes]);
-            $this->nottificationsToManagers($event->order);
+            $this->notificationsToManagers($event->order);
         }
     }
 
-    private function nottificationsToManagers(Order $order): void
+    private function notificationsToManagers(Order $order): void
     {
         $tokens = $order->managers->whereNotNull('device_key')->pluck('device_key');
         $message = CloudMessage::new()

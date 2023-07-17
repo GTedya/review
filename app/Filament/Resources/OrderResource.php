@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Constants\StatusesConstants;
-use App\Events\OrderDealerCreated;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers\ManagersRelationManager;
 use App\Filament\Resources\OrderResource\RelationManagers\OffersRelationManager;
@@ -179,11 +178,7 @@ class OrderResource extends Resource
                                         ])
                                 ])->visible(function ($get) {
                                     return $get('hasDealer');
-                                })->collapsible()->afterStateHydrated(function (?Order $record) {
-                                    if (filled($record)) {
-                                        OrderDealerCreated::dispatch($record);
-                                    }
-                                }),
+                                })->collapsible(),
                             ]),
                         ]),
 
