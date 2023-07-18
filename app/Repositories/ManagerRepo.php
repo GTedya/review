@@ -10,7 +10,7 @@ class ManagerRepo
 {
     public function getOrders($userId): LengthAwarePaginator
     {
-        return Order::manager($userId)->with(['geo', 'user'])->paginate();
+        return Order::manager($userId)->with(['geo', 'user', 'leasing'])->paginate();
     }
 
     public function getById(int $userId, int $orderId): ?Order
