@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\OrderLeasingCreated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +22,9 @@ class OrderLeasing extends Model
 
     public $timestamps = false;
 
+    protected $dispatchesEvents = [
+        'created' => OrderLeasingCreated::class,
+    ];
     protected $fillable = [
         'order_id',
         'advance',

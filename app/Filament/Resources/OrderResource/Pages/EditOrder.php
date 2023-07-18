@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\OrderResource\Pages;
 
+use App\Events\OrderDealerCreated;
 use App\Events\OrderManualUpdated;
 use App\Filament\Resources\OrderResource;
 use App\Models\Order;
@@ -31,5 +32,14 @@ class EditOrder extends EditRecord
     protected function afterSave()
     {
         OrderManualUpdated::dispatch($this->record);
+    }
+
+    protected function beforeValidate()
+    {
+        if (blank($this->record->dealerVehicles)) {
+            if (filled($this->data['dealer_vehicles'])) {
+                OrderDealerCreated::dispatch($this->record);
+            }
+        }
     }
 }

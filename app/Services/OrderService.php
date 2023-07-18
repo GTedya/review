@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\OrderDealerCreated;
 use App\Events\OrderManualUpdated;
 use App\Models\Order;
 use App\Models\OrderDealerVehicle;
@@ -54,6 +55,7 @@ class OrderService
         if (filled($data['dealer'] ?? null)) {
             $dataDealer = $data['dealer'];
             $order->dealerVehicles()->createMany($dataDealer['vehicles']);
+            OrderDealerCreated::dispatch($order);
         }
         DB::commit();
         return $order;
@@ -93,7 +95,7 @@ class OrderService
 
         if (filled($data['leasing'] ?? null)) {
             $oldItems = $order->leasingVehicles()->get();
-            $oldIds = $oldItems->map(fn (OrderLeasingVehicle $item) => $item->id);
+            $oldIds = $oldItems->map(fn(OrderLeasingVehicle $item) => $item->id);
 
             $newItems = collect($data['leasing']['vehicles'])->mapWithKeys(function ($item) {
                 return [$item['id'] ?? Str::random() => $item];
@@ -131,7 +133,7 @@ class OrderService
         if (filled($data['dealer'] ?? null)) {
             $oldItems = $order->dealerVehicles()->get();
 
-            $oldIds = $oldItems->map(fn (OrderDealerVehicle $item) => $item->id);
+            $oldIds = $oldItems->map(fn(OrderDealerVehicle $item) => $item->id);
 
             $newItems = collect($data['dealer']['vehicles'])->mapWithKeys(function ($item) {
                 return [$item['id'] ?? Str::random() => $item];
@@ -169,7 +171,7 @@ class OrderService
 
     private function deleteVehicles(Collection $toDelete): void
     {
-        $toDelete->each(fn ($vehicle) => $vehicle->delete());
+        $toDelete->each(fn($vehicle) => $vehicle->delete());
     }
 
     private function createVehicles(HasMany $connection, Collection $data): void

@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Events\OrderDealerCreated;
+use App\Events\OrderLeasingCreated;
 use App\Events\OrderManualUpdated;
 use App\Events\OrderOfferCreated;
 use App\Events\OrderUpdated;
+use App\Listeners\OrderDealerCreatedListener;
+use App\Listeners\OrderLeasingCreatedListener;
 use App\Listeners\OrderOfferListener;
 use App\Listeners\OrderStatusListener;
 use App\Listeners\OrderUpdateListener;
@@ -39,6 +43,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderOfferCreated::class => [
             OrderOfferListener::class,
+        ],
+        OrderLeasingCreated::class => [
+            OrderLeasingCreatedListener::class,
+        ],
+        OrderDealerCreated::class => [
+            OrderDealerCreatedListener::class,
         ],
     ];
 
