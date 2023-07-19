@@ -48,17 +48,6 @@ class OrderService
         /** @var Order $order */
         $order = $user->orders()->create($data);
 
-        if (filled($data['leasing'] ?? null)) {
-            $dataLeasing = $data['leasing'];
-            $order->leasing()->create($dataLeasing);
-            $order->leasingVehicles()->createMany($dataLeasing['vehicles']);
-        }
-        if (filled($data['dealer'] ?? null)) {
-            $dataDealer = $data['dealer'];
-            $order->dealerVehicles()->createMany($dataDealer['vehicles']);
-            OrderDealerCreated::dispatch($order);
-        }
-
         if (filled($data['files'] ?? null)) {
             $repeats = $user->files->pluck('type_id')->intersect(array_keys($data['files']));
             if (filled($repeats)) {
@@ -76,7 +65,25 @@ class OrderService
                 }
             }
         };
+
+        if (filled($data['leasing'] ?? null)) {
+            $dataLeasing = $data['leasing'];
+            $order->leasing()->create($dataLeasing);
+            $order->leasingVehicles()->createMany($dataLeasing['vehicles']);
+        }
+
+        if (filled($data['dealer'] ?? null)) {
+            $dataDealer = $data['dealer'];
+            $order->dealerVehicles()->createMany($dataDealer['vehicles']);
+            $dispatchEvent = true;
+        }
+
         DB::commit();
+
+        if ($dispatchEvent ?? false) {
+            OrderDealerCreated::dispatch($order);
+        }
+
         return $order;
     }
 
