@@ -166,6 +166,7 @@ class OrderService
                 return [$item['id'] ?? Str::random() => $item];
             });
 
+
             $toDelete = $oldItems->whereNotIn('id', $newItems->keys());
             $toCreate = $newItems->whereNotIn('id', $oldIds);
             $toUpdate = $oldItems->whereIn('id', $newItems->keys());
@@ -185,6 +186,10 @@ class OrderService
                 $this->updateVehicles($toUpdate, $newItems);
             }
             DB::commit();
+
+            if (blank($oldItems) && filled($newItems)) {
+                OrderDealerCreated::dispatch($order);
+            }
         } else {
             $order->dealerVehicles()->delete();
         }
