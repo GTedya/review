@@ -44,6 +44,7 @@ class OrderService
                 ['geo_id' => 'Некорректные данные области']
             );
         };
+        $dispatchEvent = false;
         DB::beginTransaction();
         /** @var Order $order */
         $order = $user->orders()->create($data);
