@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderDealerVehicle;
 use App\Models\OrderLeasingVehicle;
 use App\Models\User;
+use App\Models\UserFile;
 use App\Repositories\GeoRepo;
 use App\Repositories\ManagerRepo;
 use App\Repositories\OrderRepo;
@@ -43,21 +44,47 @@ class OrderService
                 ['geo_id' => 'Некорректные данные области']
             );
         };
+        $dispatchEvent = false;
         DB::beginTransaction();
         /** @var Order $order */
         $order = $user->orders()->create($data);
+
+        if (filled($data['files'] ?? null)) {
+            $repeats = $user->files->pluck('type_id')->intersect(array_keys($data['files']));
+            if (filled($repeats)) {
+                $messages = $repeats->mapWithKeys(function ($id) {
+                    return ["files.$id" => 'Файл этого типа уже загружен'];
+                })->toArray();
+                throw ValidationException::withMessages($messages);
+            }
+
+            foreach ($data['files'] as $id => $files) {
+                /** @var UserFile $userFile */
+                $userFile = $user->files()->create(['type_id' => $id]);
+                foreach ($files as $file) {
+                    $userFile->addMedia($file)->toMediaCollection();
+                }
+            }
+        };
 
         if (filled($data['leasing'] ?? null)) {
             $dataLeasing = $data['leasing'];
             $order->leasing()->create($dataLeasing);
             $order->leasingVehicles()->createMany($dataLeasing['vehicles']);
         }
+
         if (filled($data['dealer'] ?? null)) {
             $dataDealer = $data['dealer'];
             $order->dealerVehicles()->createMany($dataDealer['vehicles']);
+            $dispatchEvent = true;
+        }
+
+        DB::commit();
+
+        if ($dispatchEvent ?? false) {
             OrderDealerCreated::dispatch($order);
         }
-        DB::commit();
+
         return $order;
     }
 
@@ -139,6 +166,7 @@ class OrderService
                 return [$item['id'] ?? Str::random() => $item];
             });
 
+
             $toDelete = $oldItems->whereNotIn('id', $newItems->keys());
             $toCreate = $newItems->whereNotIn('id', $oldIds);
             $toUpdate = $oldItems->whereIn('id', $newItems->keys());
@@ -158,6 +186,10 @@ class OrderService
                 $this->updateVehicles($toUpdate, $newItems);
             }
             DB::commit();
+
+            if (blank($oldItems) && filled($newItems)) {
+                OrderDealerCreated::dispatch($order);
+            }
         } else {
             $order->dealerVehicles()->delete();
         }

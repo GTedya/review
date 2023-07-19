@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\FileTypeRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateOrderRequest extends FormRequest
@@ -38,6 +39,9 @@ class CreateOrderRequest extends FormRequest
             'dealer.vehicles' => ['required_with:dealer', 'array'],
             'dealer.vehicles.*' => ['array:type_id,brand,model,count'],
             'dealer.vehicles.*.type_id' => ['required', 'int', 'exists:vehicle_types,id'],
+            'files' => ['nullable', 'array'],
+            'files.*' => ['nullable', 'array', new FileTypeRule()],
+            'files.*.*' => ['required', 'file'],
         ];
     }
 
@@ -60,6 +64,7 @@ class CreateOrderRequest extends FormRequest
             'array' => 'Неверный формат',
             'date' => 'Неверный формат',
             'exists' => 'Указано неверное значение',
+            'file' => 'Это поле должно быть файлом',
 
             'email.email' => 'Неверный формат email',
             'phone.size' => 'Неверный формат',

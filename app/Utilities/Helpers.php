@@ -69,15 +69,18 @@ class Helpers
     {
         return UserFileType::query()->when($show_in_order == true, function (Builder $query) {
             $query->where('show_in_order', true);
-        })->whereJsonContains('org_type', $user->company->org_type)->get()->map(
-            function (UserFileType $type) use ($user) {
-                /** @var ?UserFile $file */
-                $file = $user->files->firstWhere('type_id', $type->id);
-                return [
-                    'type' => $type,
-                    'files' => $file !== null ? UserFileResource::make($file) : [],
-                ];
-            }
-        );
+        })
+            ->whereJsonContains('org_type', $user->company->org_type)
+            ->get()
+            ->map(
+                function (UserFileType $type) use ($user) {
+                    /** @var ?UserFile $file */
+                    $file = $user->files->firstWhere('type_id', $type->id);
+                    return [
+                        'type' => $type,
+                        'files' => $file !== null ? UserFileResource::make($file) : [],
+                    ];
+                }
+            );
     }
 }
