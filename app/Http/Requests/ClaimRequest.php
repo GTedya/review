@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Utilities\Helpers;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ClaimRequest extends FormRequest
@@ -12,6 +13,13 @@ class ClaimRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    public function prepareForValidation(): void
+    {
+        $this->merge([
+            'phone' => Helpers::getCleanPhone($this->phone),
+        ]);
     }
 
     /**
@@ -25,7 +33,7 @@ class ClaimRequest extends FormRequest
             'email' => ['nullable', 'string', 'email'],
             'name' => ['nullable', 'string', 'min:4'],
             'text' => ['nullable', 'string'],
-            'phone' => ['required', 'string'],
+            'phone' => ['required', 'string', 'size:11'],
         ];
     }
 
@@ -40,6 +48,7 @@ class ClaimRequest extends FormRequest
 
             'email.email' => 'Неверный формат email',
             'name.min' => 'ФИО должно содержать как минимум :min символа',
+            'phone.size' => 'Неверный формат',
         ];
     }
 }
