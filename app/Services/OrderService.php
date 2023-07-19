@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderDealerVehicle;
 use App\Models\OrderLeasingVehicle;
 use App\Models\User;
+use App\Models\UserFile;
 use App\Repositories\GeoRepo;
 use App\Repositories\ManagerRepo;
 use App\Repositories\OrderRepo;
@@ -57,6 +58,24 @@ class OrderService
             $order->dealerVehicles()->createMany($dataDealer['vehicles']);
             OrderDealerCreated::dispatch($order);
         }
+
+        if (filled($data['files'] ?? null)) {
+            $repeats = $user->files->pluck('type_id')->intersect(array_keys($data['files']));
+            if (filled($repeats)) {
+                $messages = $repeats->mapWithKeys(function ($id) {
+                    return ["files.$id" => 'Файл этого типа уже загружен'];
+                })->toArray();
+                throw ValidationException::withMessages($messages);
+            }
+
+            foreach ($data['files'] as $id => $files) {
+                /** @var UserFile $userFile */
+                $userFile = $user->files()->create(['type_id' => $id]);
+                foreach ($files as $file) {
+                    $userFile->addMedia($file)->toMediaCollection();
+                }
+            }
+        };
         DB::commit();
         return $order;
     }
