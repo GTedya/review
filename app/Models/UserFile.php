@@ -29,4 +29,10 @@ class UserFile extends Model implements HasMedia
     {
         return $this->belongsTo(UserFileType::class);
     }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('default')
+            ->singleFile();
+    }
 }

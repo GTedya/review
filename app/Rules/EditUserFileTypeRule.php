@@ -8,7 +8,7 @@ use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\Auth;
 
-class FileTypeRule implements ValidationRule
+class EditUserFileTypeRule implements ValidationRule
 {
     /**
      * Run the validation rule.
@@ -22,16 +22,11 @@ class FileTypeRule implements ValidationRule
 
         $fileType = explode('.', $attribute)[1] ?? null;
         $fileTypes = UserFileType::query()
-            ->where('show_in_order', 1)
             ->whereJsonContains('org_type', $user->company->org_type)
             ->pluck('id');
 
         if (!$fileTypes->contains($fileType)) {
             $fail('Неверный тип файла');
-        }
-
-        if ($user->files->pluck('type_id')->contains($fileType)) {
-            $fail('Файл этого типа уже загружен');
         }
     }
 }

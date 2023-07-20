@@ -94,20 +94,19 @@ class ClientResource extends UserResource
                     ->createItemButtonLabel('Добавить')
                     ->schema([
                         Select::make('type_id')
-                            ->label('Тип файлов')
+                            ->label('Тип файла')
                             ->reactive()
                             ->relationship('type', 'name', function (Builder $query, callable $get) {
                                 $query->whereJsonContains('org_type', $get('data.company.org_type', true))->get();
                             })
                             ->required(),
 
-                        SpatieMediaLibraryFileUpload::make('files')
-                            ->label('Файлы')
+                        SpatieMediaLibraryFileUpload::make('file')
+                            ->label('Файл')
                             ->collection('default')
                             ->directory('form-tmp')
                             ->enableDownload()
                             ->enableOpen()
-                            ->multiple()
                             ->required(),
                     ])
                     ->rules([

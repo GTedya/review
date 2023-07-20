@@ -40,8 +40,7 @@ class CreateOrderRequest extends FormRequest
             'dealer.vehicles.*' => ['array:type_id,brand,model,count'],
             'dealer.vehicles.*.type_id' => ['required', 'int', 'exists:vehicle_types,id'],
             'files' => ['nullable', 'array'],
-            'files.*' => ['nullable', 'array', new FileTypeRule()],
-            'files.*.*' => ['required', 'file'],
+            'files.*' => ['nullable', 'file', new FileTypeRule()],
         ];
     }
 

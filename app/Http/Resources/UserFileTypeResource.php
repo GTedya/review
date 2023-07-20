@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\UserFileType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class UserFileResource extends JsonResource
+class UserFileTypeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +15,10 @@ class UserFileResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        /** @var self|UserFileType $this */
         return [
-            ...$this->getMedia()->map(function (Media $media) {
-                    return $media->getUrl();
-                }) ?? [],
+            'id' => $this->id,
+            'name' => $this->name,
         ];
     }
 }

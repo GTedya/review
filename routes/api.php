@@ -68,6 +68,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('role:client')->prefix('client')->group(function () {
         Route::get('/info', [UserController::class, 'info']);
+        Route::post('/edit', [UserController::class, 'edit']);
 
         Route::prefix('order')->group(function () {
             Route::get('/list', [UserController::class, 'orders']);

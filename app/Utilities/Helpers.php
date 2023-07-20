@@ -2,7 +2,7 @@
 
 namespace App\Utilities;
 
-use App\Http\Resources\UserFileResource;
+use App\Http\Resources\UserFileTypeResource;
 use App\Models\Page;
 use App\Models\User;
 use App\Models\UserFile;
@@ -76,9 +76,10 @@ class Helpers
                 function (UserFileType $type) use ($user) {
                     /** @var ?UserFile $file */
                     $file = $user->files->firstWhere('type_id', $type->id);
+                    $mediaUrl = $file?->getFirstMediaUrl();
                     return [
-                        'type' => $type,
-                        'files' => $file !== null ? UserFileResource::make($file) : [],
+                        'type' => UserFileTypeResource::make($type),
+                        'file' => filled($mediaUrl) ? $mediaUrl : null,
                     ];
                 }
             );
