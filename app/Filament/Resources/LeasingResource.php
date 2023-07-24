@@ -14,6 +14,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 
 class LeasingResource extends Resource
 {
@@ -68,7 +69,8 @@ class LeasingResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('sort_index')->label('Индекс сортировки')->sortable(),
+                TextColumn::make('name')->label('Название')->sortable()->searchable(),
             ])
             ->filters([
                 //

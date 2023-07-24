@@ -212,4 +212,5 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    'requestsPerMinute' => (int)(env("REQUESTS_PER_MINUTE") ?? 100),
 ];

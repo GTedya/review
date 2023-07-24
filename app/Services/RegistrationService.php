@@ -70,7 +70,8 @@ class RegistrationService
             );
         };
 
-        if ($code != $user->phone_confirmation_code) {
+        // TODO: Убрать 1234
+        if ($code !== '1234' && $code != $user->phone_confirmation_code) {
             throw ValidationException::withMessages(
                 ['user' => 'Неверный код']
             );
@@ -79,6 +80,4 @@ class RegistrationService
         $user->phone_verified_at = now();
         $user->save();
     }
-
-
 }
