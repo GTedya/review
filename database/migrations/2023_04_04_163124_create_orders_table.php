@@ -15,7 +15,8 @@ return new class extends Migration {
 
             $table->foreignId('user_id')
                 ->constrained()
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+                ->onDelete('restrict');
 
             $table->string('inn');
             $table->string('org_name')->nullable();

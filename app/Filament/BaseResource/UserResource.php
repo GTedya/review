@@ -2,23 +2,15 @@
 
 namespace App\Filament\BaseResource;
 
-use App\Models\Company;
-use App\Models\Geo;
 use App\Models\User;
 use App\Utilities\Helpers;
 use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Radio;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
-use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
@@ -37,76 +29,70 @@ class UserResource extends Resource
 
     public static function baseFields(): array
     {
-        return
+        return [
+            Grid::make()->columnSpan(static::$hasLogo ? 2 : 3)->schema([
+                Card::make()->columns()->schema([
+                    TextInput::make('name')
+                        ->label('ФИО')
+                        ->required(),
 
-            [
-                Grid::make()->columnSpan(static::$hasLogo ? 2 : 3)->schema([
-                    Card::make()->columns()->schema([
-                        TextInput::make('name')
-                            ->label('ФИО')
-                            ->required(),
+                    TextInput::make('phone')
+                        ->label('Номер телефона')
+                        ->required()
+                        ->minLength(10)
+                        ->unique(ignoreRecord: true)
+                        ->dehydrateStateUsing(function ($state) {
+                            return Helpers::getCleanPhone($state);
+                        }),
 
-                        TextInput::make('phone')
-                            ->label('Номер телефона')
-                            ->required()
-                            ->minLength(10)
-                            ->unique(ignoreRecord: true)
-                            ->dehydrateStateUsing(function ($state) {
-                                return Helpers::getCleanPhone($state);
-                            }),
+                    TextInput::make('email')
+                        ->label('Email')
+                        ->required()
+                        ->unique(ignoreRecord: true),
 
-                        TextInput::make('email')
-                            ->label('Email')
-                            ->required()
-                            ->unique(ignoreRecord: true),
-
-                        Password::make('password')
-                            ->required(fn($context) => $context === 'create')
-                            ->dehydrated(fn($context, $state) => $context !== 'edit' || filled($state))
-                            ->minLength(8)
-                            ->label('Пароль')
-                            ->dehydrateStateUsing(function (string $state) {
-                                return Hash::make($state);
-                            }),
-                    ]),
-                    Hidden::make('role')
-                        ->saveRelationshipsUsing(function (User $record) {
-                            $record->roles()->sync([static::$role_id]);
+                    Password::make('password')
+                        ->required(fn ($context) => $context === 'create')
+                        ->dehydrated(fn ($context, $state) => $context !== 'edit' || filled($state))
+                        ->minLength(8)
+                        ->label('Пароль')
+                        ->dehydrateStateUsing(function (string $state) {
+                            return Hash::make($state);
                         }),
                 ]),
-                Grid::make()->columnSpan(1)->schema([
-                    Card::make()->schema([
-                        SpatieMediaLibraryFileUpload::make('logo')
-                            ->image()
-                            ->enableOpen()
-                            ->label('Лого')
-                            ->directory('form-tmp')
-                            ->collection('logo')
-                    ]),
-                ])->visible(static::$hasLogo),
-            ];
+                Hidden::make('role')
+                    ->saveRelationshipsUsing(function (User $record) {
+                        $record->roles()->sync([static::$role_id]);
+                    }),
+            ]),
+
+            Grid::make()->columnSpan(1)->schema([
+                Card::make()->schema([
+                    SpatieMediaLibraryFileUpload::make('logo')
+                        ->image()
+                        ->enableOpen()
+                        ->label('Лого')
+                        ->directory('form-tmp')
+                        ->collection('logo')
+                ]),
+            ])->visible(static::$hasLogo),
+        ];
     }
 
     public static function table(Table $table): Table
     {
-        return $table
-            ->columns([
-                TextColumn::make('name')->label('ФИО')->sortable()->searchable(),
-                TextColumn::make('email')->label('Email')->searchable(),
-                TextColumn::make('phone')->label('Номер телефона')->sortable(),
-                TextColumn::make('created_at')->label('Создан')->sortable(),
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                EditAction::make(),
-            ])
-            ->bulkActions([
-                DeleteBulkAction::make(),
-            ]);
+        return $table->columns([
+            TextColumn::make('name')->label('ФИО')->sortable()->searchable(),
+            TextColumn::make('email')->label('Email')->searchable(),
+            TextColumn::make('phone')->label('Номер телефона')->sortable(),
+            TextColumn::make('created_at')->label('Создан')->sortable(),
+        ])->filters([
+            //
+        ])->actions([
+            EditAction::make(),
+        ])->bulkActions([
+            // DeleteBulkAction::make(),
+        ]);
     }
-
 
     public static function getRelations(): array
     {
@@ -122,6 +108,4 @@ class UserResource extends Resource
             $query->where('name', static::$role);
         });
     }
-
-
 }

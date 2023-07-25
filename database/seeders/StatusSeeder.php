@@ -23,7 +23,11 @@ class StatusSeeder extends Seeder
             ],
             [
                 'id' => 3,
-                'name' => 'Подтвержден',
+                'name' => 'Сбор заявок',
+            ],
+            [
+                'id' => 4,
+                'name' => 'Отменен',
             ],
         ];
 

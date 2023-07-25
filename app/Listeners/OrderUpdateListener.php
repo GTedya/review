@@ -11,7 +11,6 @@ use Kreait\Firebase\Messaging\Notification;
 
 class OrderUpdateListener
 {
-
     /**
      * Create the event listener.
      */

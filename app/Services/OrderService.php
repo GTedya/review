@@ -122,7 +122,7 @@ class OrderService
 
         if (filled($data['leasing'] ?? null)) {
             $oldItems = $order->leasingVehicles()->get();
-            $oldIds = $oldItems->map(fn(OrderLeasingVehicle $item) => $item->id);
+            $oldIds = $oldItems->map(fn (OrderLeasingVehicle $item) => $item->id);
 
             $newItems = collect($data['leasing']['vehicles'])->mapWithKeys(function ($item) {
                 return [$item['id'] ?? Str::random() => $item];
@@ -160,7 +160,7 @@ class OrderService
         if (filled($data['dealer'] ?? null)) {
             $oldItems = $order->dealerVehicles()->get();
 
-            $oldIds = $oldItems->map(fn(OrderDealerVehicle $item) => $item->id);
+            $oldIds = $oldItems->map(fn (OrderDealerVehicle $item) => $item->id);
 
             $newItems = collect($data['dealer']['vehicles'])->mapWithKeys(function ($item) {
                 return [$item['id'] ?? Str::random() => $item];
@@ -203,7 +203,7 @@ class OrderService
 
     private function deleteVehicles(Collection $toDelete): void
     {
-        $toDelete->each(fn($vehicle) => $vehicle->delete());
+        $toDelete->each(fn ($vehicle) => $vehicle->delete());
     }
 
     private function createVehicles(HasMany $connection, Collection $data): void
@@ -216,6 +216,22 @@ class OrderService
         foreach ($toUpdate as $vehicle) {
             $vehicle->update($newItems[$vehicle->id] ?? []);
         }
+    }
+
+    public function cancelOrder($userId, $orderId): bool
+    {
+        /** @var Order $order */
+        $order = $this->orderRepo->usersOrder($orderId, $userId);
+
+        if ($order == null) {
+            abort(403);
+        }
+
+        $this->orderRepo->cancel($order);
+
+        OrderManualUpdated::dispatch($order);
+
+        return true;
     }
 
     /**

@@ -30,12 +30,13 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::prefix('registration')->group(function (){
+Route::prefix('registration')->group(function () {
     Route::post('/', [RegistrationController::class, 'registration']);
     Route::post('/call', [RegistrationController::class, 'confirmationCall']);
-    Route::post('/confirmation',[RegistrationController::class, 'confirmationCheck']);
+    Route::post('/confirmation', [RegistrationController::class, 'confirmationCheck']);
 });
 
 Route::get('/sitemap', [SitemapController::class, 'index']);
@@ -44,7 +45,7 @@ Route::get('/partners', [PartnerController::class, 'getPartner']);
 Route::get('/faqs', [FaqController::class, 'getFaqs']);
 Route::get('/veh_types', [VehTypeController::class, 'list']);
 
-Route::prefix('rent')->group(function (){
+Route::prefix('rent')->group(function () {
     Route::get('/', [RentController::class, 'list']);
     Route::get('/{slug}', [RentController::class, 'single']);
 });
@@ -53,7 +54,6 @@ Route::prefix('/news')->group(function () {
     Route::get('/', [NewsController::class, 'pagination']);
     Route::get('/{slug}', [NewsController::class, 'single']);
 });
-
 
 Route::get('/settings', [SettingsController::class, 'getInfo']);
 Route::get('/menu', [MenuController::class, 'list']);
@@ -68,11 +68,17 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('role:client')->prefix('client')->group(function () {
         Route::get('/info', [UserController::class, 'info']);
+
         Route::prefix('order')->group(function () {
-            Route::post('/edit/{id}', [ClientOrder::class, 'edit']);
             Route::get('/list', [UserController::class, 'orders']);
             Route::post('/create', [ClientOrder::class, 'create']);
-            Route::get('/{id}', [ClientOrder::class, 'getOrder']);
+
+            Route::prefix('{id}')->group(function () {
+                Route::get('/', [ClientOrder::class, 'getOrder']);
+
+                Route::post('edit', [ClientOrder::class, 'edit']);
+                Route::post('cancel', [ClientOrder::class, 'cancel']);
+            });
         });
 
         Route::prefix('rent')->group(function () {
@@ -92,6 +98,7 @@ Route::middleware('auth:sanctum')->group(function () {
                 Route::get('/', [ManagerOrder::class, 'getOrder']);
             });
         });
+
         Route::post('/logo', [ManagerController::class, 'logoAdd']);
     });
 });

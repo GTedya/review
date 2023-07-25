@@ -54,9 +54,8 @@ class User extends Authenticatable implements FilamentUser, HasMedia
 
     public const ROLE_PERMISSION = [
         'client' => ['edit_order', 'create_order'],
-        'manager' => ['send_offer', 'view_all_orders', 'take_order']
+        'manager' => ['send_offer', 'view_all_orders', 'take_order'],
     ];
-
 
     protected $fillable = [
         'name',
@@ -142,6 +141,4 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     {
         return $value;
     }
-
-
 }

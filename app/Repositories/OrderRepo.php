@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Constants\StatusesConstants;
 use App\Models\Order;
 
 class OrderRepo
@@ -14,5 +15,12 @@ class OrderRepo
         )->first();
 
         return $order;
+    }
+
+    public function cancel(Order $order): bool
+    {
+        return $order->update([
+            'status_id' => StatusesConstants::CANCELED_ID,
+        ]);
     }
 }

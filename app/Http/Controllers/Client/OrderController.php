@@ -46,6 +46,15 @@ class OrderController extends Controller
         return response()->json(['success' => true, 'order' => OrderClientResource::make($order)]);
     }
 
+    public function cancel(int $orderId): JsonResponse
+    {
+        $userId = Auth::id();
+
+        $this->orderService->cancelOrder($userId, $orderId);
+
+        return response()->json(['success' => true]);
+    }
+
     /**
      * @throws ValidationException
      */
