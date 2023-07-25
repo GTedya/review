@@ -41,11 +41,17 @@ class LeasingPageFields extends PageCustomFields
                     ->label('Подзаголовок')
                     ->required(),
 
-                TextInput::make('vars.leasing.benefits_title')
-                    ->label('Заголовок блока выгоды')
+                FileUpload::make('vars.leasing.image')
+                    ->label('Заглавная картинка')
+                    ->image()
+                    ->directory('form-tmp')
                     ->nullable(),
 
                 TextInput::make('vars.leasing.video_link')
+                    ->label('Ссылка на видео в заголовке')
+                    ->nullable(),
+
+                TextInput::make('vars.leasing.benefits_title')
                     ->label('Заголовок блока выгоды')
                     ->nullable(),
 
@@ -60,11 +66,39 @@ class LeasingPageFields extends PageCustomFields
                 TextInput::make('vars.leasing.cta_title')
                     ->label('Призыв к действию')
                     ->nullable(),
+            ]),
 
-                FileUpload::make('vars.leasing.image')
+            Section::make('Партнеры')->collapsed()->schema([
+                Select::make('vars.partners.ids')
+                    ->label('Партнеры')
+                    ->nullable()
+                    ->multiple()
+                    ->disableLabel()
+                    ->options(Partner::all()->pluck('name', 'id')),
+            ]),
+
+            Section::make('Блок о выгодах')->collapsed()->schema([
+                Repeater::make('vars.benefits')
+                    ->createItemButtonLabel('Добавить выгоду')
+                    ->disableLabel()
+                    ->schema([
+                        TextInput::make('title')->label('Заголовок')->required(),
+                        TextInput::make('body')->label('Текст')->required(),
+                    ])
+            ]),
+
+            Section::make('Блок описания')->collapsed()->schema([
+                TextInput::make('vars.description.title')->label('Заголовок')->required(),
+                TinyEditor::make('vars.description.body')->label('Текст')->required(),
+
+                FileUpload::make('vars.description.image')
                     ->label('Картинка')
                     ->image()
                     ->directory('form-tmp')
+                    ->nullable(),
+
+                TextInput::make('vars.description.video_link')
+                    ->label('Ссылка на видео')
                     ->nullable(),
             ]),
 
@@ -88,42 +122,6 @@ class LeasingPageFields extends PageCustomFields
                             ->required()
                             ->label('Описание'),
                     ]),
-            ]),
-
-
-            Section::make('Партнеры')->collapsed()->schema([
-                Select::make('vars.partners.ids')
-                    ->label('Партнеры')
-                    ->nullable()
-                    ->multiple()
-                    ->disableLabel()
-                    ->options(Partner::all()->pluck('name', 'id')),
-            ]),
-
-
-            Section::make('Блок о выгодах')->collapsed()->schema([
-                Repeater::make('vars.benefits')
-                    ->createItemButtonLabel('Добавить выгоду')
-                    ->disableLabel()
-                    ->schema([
-                        TextInput::make('title')->label('Заголовок')->required(),
-                        TextInput::make('body')->label('Текст')->required(),
-                    ])
-            ]),
-
-            Section::make('Блок описания')->collapsed()->schema([
-                TextInput::make('vars.description.title')->label('Заголовок')->required(),
-                TinyEditor::make('vars.description.body')->label('Текст')->required(),
-
-                TextInput::make('vars.description.video_link')
-                    ->label('Заголовок блока выгоды')
-                    ->nullable(),
-
-                FileUpload::make('vars.description.image')
-                    ->label('Картинка')
-                    ->image()
-                    ->directory('form-tmp')
-                    ->nullable(),
             ]),
         ];
     }
@@ -154,13 +152,17 @@ class LeasingPageFields extends PageCustomFields
         $saver->setPageVarFields('partners', new CustomVar(['ids']));
         $saver->setPageVarFields(
             'leasing',
-            new CustomVar(['title', 'body', 'video_link', 'benefits_title', 'steps_title', 'steps_body', 'cta_title'],
-                ['image' => 'leasing_main_image'])
+            new CustomVar(
+                ['title', 'body', 'video_link', 'benefits_title', 'steps_title', 'steps_body', 'cta_title'],
+                ['image' => 'leasing_main_image'],
+            ),
         );
         $saver->setPageVarFields(
             'description',
-            new CustomVar(['title', 'body', 'video_link'],
-                ['image' => 'leasing_description_image'])
+            new CustomVar(
+                ['title', 'body', 'video_link'],
+                ['image' => 'leasing_description_image'],
+            ),
         );
 
         $saver->setRepeatVarsFields('steps', new CustomVar(['title', 'body']));
